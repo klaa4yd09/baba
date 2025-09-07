@@ -8,7 +8,6 @@ const siteConfig = {
         { type: 'image', src: '33.jpg', caption: '💖' },
         { type: 'image', src: '26.jpg', caption: '💖' },
         { type: 'image', src: '27.jpg', caption: '💖' },
-        { type: 'video', src: '20.mp4', caption: '💖' },
         { type: 'image', src: '21.jpg', caption: '💖' },
         { type: 'image', src: '24.jpg', caption: '💖' },
         { type: 'video', src: '28.mp4', caption: '💖' },
@@ -20,6 +19,7 @@ const siteConfig = {
          { type: 'image', src: '16.jpg', caption: '💖' },
         { type: 'image', src: '19.jpg', caption: '💖' },
         { type: 'image', src: '65.jpg', caption: '💖' },
+        { type: 'video', src: '20.mp4', caption: '💖' },
         { type: 'image', src: '18.jpg', caption: '💖' },
         { type: 'image', src: '61.jpg', caption: '💖' },
         { type: 'image', src: '22.jpg', caption: '💖' },
@@ -222,5 +222,4 @@ lightbox.addEventListener('touchend',e=>{
     if(touchEndX < touchStartX - 50) nextBtn.click();
     if(touchEndX > touchStartX + 50) prevBtn.click();
 });
-
 
