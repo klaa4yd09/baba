@@ -38,7 +38,6 @@ const siteConfig = {
         { type: 'image', src: '8.jpg', caption: '💖' },
         { type: 'image', src: '9.jpg', caption: '💖' },
         { type: 'image', src: '10.jpg', caption: '💖' },
-        { type: 'image', src: '11.jpg', caption: '💖' },
         { type: 'image', src: '12.jpg', caption: '💖' },
         { type: 'image', src: '13.jpg', caption: '💖' },
         { type: 'image', src: '14.jpg', caption: '💖' },
@@ -65,6 +64,7 @@ const siteConfig = {
         { type: 'video', src: '39.mp4', caption: '💖' },
         { type: 'image', src: '40.jpg', caption: '💖' },
         { type: 'video', src: '44.mp4', caption: '💖' },
+        { type: 'image', src: '11.jpg', caption: '💖' },
     ]
 };
 
@@ -222,4 +222,5 @@ lightbox.addEventListener('touchend',e=>{
     if(touchEndX < touchStartX - 50) nextBtn.click();
     if(touchEndX > touchStartX + 50) prevBtn.click();
 });
+
 
