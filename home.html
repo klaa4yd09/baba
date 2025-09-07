@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Memory Lane</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="icon" href="heart.png">
+  <link rel="stylesheet" href="home.css">
+</head>
+<body>
+  <audio id="bg-music" src="iris.mp3" loop></audio>
+  
+  <button id="music-btn" class="music-btn">🎵</button>
+  <a href="index.html" class="back-btn">← Back to Main</a>
+
+  <section id="gallery" class="gallery-section">
+      <div class="gallery-header">
+          <h2>Our Story in Photos & Videos</h2>
+      </div>
+      <div class="gallery-grid"></div>
+  </section>
+
+  <div id="lightbox" class="lightbox">
+      <span class="close">&times;</span>
+      <div class="lightbox-content">
+          <button class="nav-btn prev-btn">‹</button>
+          <div class="media-container">
+              <img id="lightbox-img" alt="">
+              <video id="lightbox-video" controls autoplay loop playsinline></video>
+          </div>
+          <button class="nav-btn next-btn">›</button>
+      </div>
+      <div id="lightbox-caption"></div>
+  </div>
+
+  <script src="home.js"></script>
+</body>
+</html>
