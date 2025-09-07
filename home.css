@@ -47,22 +47,22 @@ body.no-scroll {
 
 /* Music Button */
 .music-btn {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  background: rgba(255,255,255,0.2);
-  backdrop-filter: blur(10px);
-  border: none;
-  padding: 10px 15px;
-  border-radius: 50px;
-  font-size: 1.5rem;
-  cursor: pointer;
-  transition: transform 0.3s ease, background 0.3s ease;
-  z-index: 900;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(255,255,255,0.2);
+    backdrop-filter: blur(10px);
+    border: none;
+    padding: 10px 15px;
+    border-radius: 50px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: transform 0.3s ease, background 0.3s ease;
+    z-index: 900;
 }
 .music-btn:hover {
-  background: rgba(255,255,255,0.4);
-  transform: scale(1.1);
+    background: rgba(255,255,255,0.4);
+    transform: scale(1.1);
 }
 
 /* Gallery Section */
@@ -248,6 +248,32 @@ body.no-scroll {
 }
 .prev-btn { margin-right: 20px; }
 .next-btn { margin-left: 20px; }
+
+/* Slideshow fade animation */
+@keyframes fadeInOut {
+    0% {opacity: 0;}
+    10% {opacity: 1;}
+    90% {opacity: 1;}
+    100% {opacity: 0;}
+}
+
+/* Heart particles */
+.heart-particle {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    background: pink;
+    opacity: 0.8;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 500;
+    animation: floatUp linear infinite;
+}
+
+@keyframes floatUp {
+    0% { transform: translateY(0) scale(1); opacity: 0.8; }
+    100% { transform: translateY(-100vh) scale(0.5); opacity: 0; }
+}
 
 /* Responsive adjustments */
 @media(max-width:600px){
