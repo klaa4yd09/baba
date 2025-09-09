@@ -1,42 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Memory Lane</title>
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="icon" href="heart.png">
-    <link rel="stylesheet" href="home.css">
-</head>
-<body>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="heart.png" />
+    <link rel="stylesheet" href="home.css" />
+  </head>
+  <body>
     <audio id="bg-music" src="iris.mp3" loop></audio>
 
     <div class="top-buttons-container">
-        <a href="index.html" class="back-btn">← Back to Main</a>
-        <button id="music-btn" class="music-btn">🎵</button>
+      <a href="index.html" class="back-btn" aria-label="Back to main page"
+        >← Back to Main</a
+      >
+      <button
+        id="music-btn"
+        class="music-btn"
+        aria-label="Toggle background music"
+      >
+        <span class="music-icon">🎵</span>
+      </button>
     </div>
 
     <section id="gallery" class="gallery-section">
-        <div class="gallery-header">
-            <h2>Our Story in Photos & Videos</h2>
-            <p class="subtitle">Swipe through our cherished moments</p>
-        </div>
-        <div class="gallery-grid"></div>
+      <div class="gallery-header">
+        <h2>Our Story in Photos & Videos</h2>
+        <p class="subtitle">Swipe through our cherished moments</p>
+      </div>
+      <div class="gallery-grid"></div>
     </section>
 
-    <div id="lightbox" class="lightbox">
-        <span class="close">&times;</span>
-        <div class="lightbox-content">
-            <button class="nav-btn prev-btn">‹</button>
-            <div class="media-container">
-                <img id="lightbox-img" alt="">
-                <video id="lightbox-video" controls autoplay loop playsinline></video>
-            </div>
-            <button class="nav-btn next-btn">›</button>
+    <div
+      id="lightbox"
+      class="lightbox"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Image and video gallery"
+    >
+      <span class="close" aria-label="Close gallery" role="button" tabindex="0"
+        >&times;</span
+      >
+      <div class="lightbox-content">
+        <button class="nav-btn prev-btn" aria-label="Previous item">‹</button>
+        <div class="media-container">
+          <img id="lightbox-img" alt="" />
+          <video id="lightbox-video" controls playsinline></video>
         </div>
-        <div id="lightbox-caption"></div>
+        <button class="nav-btn next-btn" aria-label="Next item">›</button>
+      </div>
+      <div id="lightbox-caption"></div>
     </div>
 
+    <canvas id="particle-canvas" class="background-canvas"></canvas>
+
     <script src="home.js"></script>
-</body>
+  </body>
 </html>
