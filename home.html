@@ -1,63 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Memory Lane</title>
     <link
-      href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;600;700&display=swap"
       rel="stylesheet"
     />
     <link rel="icon" href="heart.png" />
     <link rel="stylesheet" href="home.css" />
   </head>
   <body>
-    <audio id="bg-music" src="iris.mp3" loop></audio>
+    <header class="site-top">
+      <a class="back-btn" href="index.html" aria-label="Back to main">
+        ← Back to Main
+      </a>
 
-    <div class="top-buttons-container">
-      <a href="index.html" class="back-btn" aria-label="Back to main page"
-        >← Back to Main</a
-      >
-      <button
-        id="music-btn"
-        class="music-btn"
-        aria-label="Toggle background music"
-      >
-        <span class="music-icon">🎵</span>
-      </button>
-    </div>
-
-    <section id="gallery" class="gallery-section">
-      <div class="gallery-header">
-        <h2>Our Story in Photos & Videos</h2>
-        <p class="subtitle">Swipe through our cherished moments</p>
+      <div class="top-actions">
+        <button
+          id="music-btn"
+          class="music-btn"
+          aria-pressed="false"
+          aria-label="Toggle background music"
+        >
+          <span class="music-icon">🎵</span>
+        </button>
       </div>
-      <div class="gallery-grid"></div>
+    </header>
+
+    <section class="hero">
+      <div class="hero-inner">
+        <h1 class="hero-title">Memory Lane</h1>
+        <p class="hero-sub">
+          Our story in photos & videos — moments we keep close.
+        </p>
+      </div>
+      <figure class="hero-figure" aria-hidden="true">
+        <img src="profile.jpg" alt="Featured portrait" loading="lazy" />
+      </figure>
     </section>
+
+    <main>
+      <section class="gallery-section" id="gallery">
+        <div class="gallery-header">
+          <h2>Moments</h2>
+          <p class="subtitle">Swipe down</p>
+        </div>
+
+        <div class="gallery-grid" aria-live="polite" id="gallery-grid"></div>
+      </section>
+    </main>
 
     <div
       id="lightbox"
       class="lightbox"
       role="dialog"
       aria-modal="true"
-      aria-label="Image and video gallery"
+      aria-hidden="true"
+      aria-label="Media viewer"
     >
-      <span class="close" aria-label="Close gallery" role="button" tabindex="0"
-        >&times;</span
-      >
-      <div class="lightbox-content">
-        <button class="nav-btn prev-btn" aria-label="Previous item">‹</button>
-        <div class="media-container">
+      <button class="close" id="lightbox-close" aria-label="Close">×</button>
+
+      <div class="lightbox-stage">
+        <button class="nav-btn prev-btn" id="prev-btn" aria-label="Previous">
+          ‹
+        </button>
+
+        <div class="lightbox-media" id="lightbox-media" tabindex="0">
           <img id="lightbox-img" alt="" />
           <video id="lightbox-video" controls playsinline></video>
         </div>
-        <button class="nav-btn next-btn" aria-label="Next item">›</button>
+
+        <button class="nav-btn next-btn" id="next-btn" aria-label="Next">
+          ›
+        </button>
       </div>
-      <div id="lightbox-caption"></div>
+
+      <div
+        id="lightbox-caption"
+        class="lightbox-caption"
+        aria-live="polite"
+      ></div>
     </div>
 
-    <canvas id="particle-canvas" class="background-canvas"></canvas>
+    <audio id="bg-music" src="iris.mp3" loop preload="metadata"></audio>
 
-    <script src="home.js"></script>
+    <canvas
+      id="particle-canvas"
+      class="background-canvas"
+      aria-hidden="true"
+    ></canvas>
+
+    <script src="home.js" defer></script>
   </body>
 </html>
