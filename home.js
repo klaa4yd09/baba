@@ -1,4 +1,4 @@
-// ================= CONFIGURATION =================
+// ----------------- CONFIG -----------------
 const siteConfig = {
   galleryItems: [
     { type: "image", src: "23.jpg", caption: "💖" },
@@ -66,350 +66,307 @@ const siteConfig = {
     { type: "video", src: "44.mp4", caption: "💖" },
     { type: "image", src: "11.jpg", caption: "💖" },
   ],
-  // Particle configuration
   particles: {
     count: 50,
-    size: { min: 3, max: 5 },
-    speed: { min: 0.2, max: 0.8 },
-    color: "rgba(255, 182, 193, 0.4)", // Light pink with transparency
+    size: { min: 3, max: 6 },
+    speed: { min: 0.2, max: 0.9 },
+    color: "rgba(255,182,193,0.45)",
     shape: "circle",
     wander: 0.05,
   },
 };
 
-// ================= SELECTORS =================
+// ------------ DOM SELECTORS -------------
+const galleryGrid = document.getElementById("gallery-grid");
 const bgMusic = document.getElementById("bg-music");
 const musicBtn = document.getElementById("music-btn");
 const musicIcon = musicBtn.querySelector(".music-icon");
-const galleryGrid = document.querySelector(".gallery-grid");
 const lightbox = document.getElementById("lightbox");
 const lightboxImg = document.getElementById("lightbox-img");
 const lightboxVideo = document.getElementById("lightbox-video");
-const caption = document.getElementById("lightbox-caption");
-const closeBtn = document.querySelector(".close");
-const prevBtn = document.querySelector(".prev-btn");
-const nextBtn = document.querySelector(".next-btn");
-const particleCanvas = document.getElementById("particle-canvas");
-const ctx = particleCanvas.getContext("2d");
+const lightboxCaption = document.getElementById("lightbox-caption");
+const lbClose = document.getElementById("lightbox-close");
+const prevBtn = document.getElementById("prev-btn");
+const nextBtn = document.getElementById("next-btn");
 
-let currentLightboxIndex = 0;
-let particles = [];
-let animationFrameId = null;
+let currentIndex = 0;
 
-// ================= PARTICLE SYSTEM =================
-class Particle {
-  constructor(canvas, ctx, config) {
-    this.canvas = canvas;
-    this.ctx = ctx;
-    this.x = Math.random() * this.canvas.width;
-    this.y = this.canvas.height + Math.random() * this.canvas.height;
-    this.size =
-      Math.random() * (config.size.max - config.size.min) + config.size.min;
-    this.speed =
-      Math.random() * (config.speed.max - config.speed.min) + config.speed.min;
-    this.color = config.color;
-    this.shape = config.shape;
-    this.opacity = 0;
-    this.fadeDuration = 1000 + Math.random() * 2000;
-    this.spawnTime = Date.now();
-    this.wander = (Math.random() - 0.5) * config.wander;
+// ------------------ UTIL: assign spans for aesthetic layout ------------------
+function pickSpan(index) {
+  // Use a more predictable pattern for better mobile layout
+  if (window.innerWidth <= 700) {
+    return "span-4"; // Mobile devices
   }
-
-  draw() {
-    const timeElapsed = Date.now() - this.spawnTime;
-    this.opacity = Math.min(1, timeElapsed / this.fadeDuration);
-    this.ctx.globalAlpha = this.opacity;
-    this.ctx.fillStyle = this.color;
-
-    if (this.shape === "heart") {
-      this.drawHeart();
-    } else {
-      this.ctx.beginPath();
-      this.ctx.arc(this.x, this.y, this.size / 2, 0, Math.PI * 2);
-      this.ctx.fill();
-    }
-    this.ctx.globalAlpha = 1;
-  }
-
-  drawHeart() {
-    const scale = this.size * 0.08;
-    this.ctx.beginPath();
-    this.ctx.moveTo(this.x, this.y + 4 * scale);
-    this.ctx.bezierCurveTo(
-      this.x + 5 * scale,
-      this.y + 2 * scale,
-      this.x + 4 * scale,
-      this.y - 6 * scale,
-      this.x,
-      this.y - 10 * scale
-    );
-    this.ctx.bezierCurveTo(
-      this.x - 4 * scale,
-      this.y - 6 * scale,
-      this.x - 5 * scale,
-      this.y + 2 * scale,
-      this.x,
-      this.y + 4 * scale
-    );
-    this.ctx.closePath();
-    this.ctx.fill();
-  }
-
-  update() {
-    this.y -= this.speed;
-    this.x += this.wander * this.speed;
-    if (this.y < -this.size) {
-      this.y = this.canvas.height + (Math.random() * this.canvas.height) / 2;
-      this.x = Math.random() * this.canvas.width;
-      this.opacity = 0;
-      this.spawnTime = Date.now();
-    }
-  }
+  const pattern = [
+    "span-3",
+    "span-4",
+    "span-2",
+    "span-3",
+    "span-3",
+    "span-4",
+    "span-2",
+  ];
+  return pattern[index % pattern.length];
 }
 
-function initParticles() {
-  particleCanvas.width = window.innerWidth;
-  particleCanvas.height = window.innerHeight;
-  particles = [];
-  for (let i = 0; i < siteConfig.particles.count; i++) {
-    particles.push(new Particle(particleCanvas, ctx, siteConfig.particles));
-  }
-}
+// ------------------ CREATE GALLERY ------------------
+function createGalleryItem(item, idx) {
+  const el = document.createElement("div");
+  el.classList.add("gallery-item");
+  el.classList.add(pickSpan(idx));
 
-function animateParticles() {
-  ctx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
-  for (const particle of particles) {
-    particle.update();
-    particle.draw();
-  }
-  animationFrameId = requestAnimationFrame(animateParticles);
-}
+  const mediaWrap = document.createElement("div");
+  mediaWrap.className = "media-wrap";
 
-window.addEventListener("resize", () => {
-  cancelAnimationFrame(animationFrameId);
-  initParticles();
-  animateParticles();
-});
-
-// ================= INITIALIZATION =================
-document.addEventListener("DOMContentLoaded", () => {
-  loadGallery();
-  initParticles();
-  animateParticles();
-
-  const isMusicPlaying = localStorage.getItem("playMusic") === "true";
-  if (isMusicPlaying) {
-    bgMusic.play().catch(() => {});
-    musicIcon.textContent = "🔊";
-    musicBtn.classList.add("playing");
-  }
-});
-
-// ================= MUSIC CONTROL =================
-musicBtn.addEventListener("click", () => {
-  const isPlaying = !bgMusic.paused;
-  if (isPlaying) {
-    bgMusic.pause();
-    localStorage.setItem("playMusic", "false");
-    musicIcon.textContent = "🎵";
-    musicBtn.classList.remove("playing");
-  } else {
-    bgMusic.play().catch(() => {});
-    localStorage.setItem("playMusic", "true");
-    musicIcon.textContent = "🔊";
-    musicBtn.classList.add("playing");
-  }
-});
-
-// ================= GALLERY FUNCTIONS =================
-function createGalleryItem(item, index) {
-  const gridItem = document.createElement("div");
-  gridItem.classList.add("gallery-item");
-  gridItem.style.animationDelay = `${index * 0.1}s`;
-
-  let mediaElement;
   if (item.type === "image") {
-    mediaElement = new Image();
-    mediaElement.dataset.src = item.src;
-    mediaElement.alt = item.caption;
-  } else if (item.type === "video") {
-    mediaElement = document.createElement("video");
-    mediaElement.dataset.src = item.src;
-    mediaElement.preload = "metadata";
-    mediaElement.muted = true;
-    mediaElement.setAttribute("aria-label", item.caption);
-    mediaElement.playsinline = true;
+    const img = document.createElement("img");
+    img.dataset.src = item.src;
+    img.alt = item.caption || "photo";
+    img.loading = "lazy";
+    mediaWrap.appendChild(img);
+  } else {
+    const vid = document.createElement("video");
+    vid.dataset.src = item.src;
+    vid.preload = "metadata";
+    vid.muted = true;
+    vid.playsInline = true;
+    vid.setAttribute("aria-label", item.caption || "video");
+    mediaWrap.appendChild(vid);
 
-    const playIcon = document.createElement("div");
-    playIcon.classList.add("video-play-icon");
-    playIcon.textContent = "▶️";
-    gridItem.appendChild(playIcon);
+    const play = document.createElement("div");
+    play.className = "video-play";
+    play.textContent = "▶";
+    el.appendChild(play);
   }
 
-  gridItem.appendChild(mediaElement);
+  const caption = document.createElement("div");
+  caption.className = "gallery-caption";
+  caption.textContent = item.caption || "";
 
-  const captionElement = document.createElement("div");
-  captionElement.classList.add("gallery-caption");
-  captionElement.textContent = item.caption;
-  gridItem.appendChild(captionElement);
+  el.appendChild(mediaWrap);
+  el.appendChild(caption);
 
-  gridItem.addEventListener("click", () => {
-    currentLightboxIndex = index;
-    openLightbox(item);
+  // open lightbox on click
+  el.addEventListener("click", () => {
+    currentIndex = idx;
+    openLightbox(siteConfig.galleryItems[idx]);
   });
 
-  return gridItem;
+  return el;
 }
 
-const observer = new IntersectionObserver(
+// ---------- Lazy load via IntersectionObserver ----------
+const io = new IntersectionObserver(
   (entries, obs) => {
     entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        const mediaElement = entry.target;
-        const parentItem = mediaElement.closest(".gallery-item");
-
-        if (mediaElement.tagName === "IMG") {
-          mediaElement.src = mediaElement.dataset.src;
-          mediaElement.onload = () => {
-            parentItem.classList.add("loaded");
-          };
-        } else if (mediaElement.tagName === "VIDEO") {
-          mediaElement.src = mediaElement.dataset.src;
-          mediaElement.onloadeddata = () => {
-            parentItem.classList.add("loaded");
-          };
-          mediaElement.addEventListener("mouseenter", () =>
-            mediaElement.play()
-          );
-          mediaElement.addEventListener("mouseleave", () => {
-            mediaElement.pause();
-            mediaElement.currentTime = 0;
+      if (!entry.isIntersecting) return;
+      const media = entry.target.querySelector("img,video");
+      if (media) {
+        const src = media.dataset.src;
+        if (media.tagName === "IMG") {
+          media.src = src;
+          media.onload = () => entry.target.classList.add("loaded");
+        } else {
+          media.src = src;
+          media.onloadeddata = () => entry.target.classList.add("loaded");
+          // simple hover preview for larger screens
+          media.addEventListener("mouseenter", () => {
+            if (window.innerWidth > 700) media.play();
+          });
+          media.addEventListener("mouseleave", () => {
+            media.pause();
+            media.currentTime = 0;
           });
         }
-        obs.unobserve(mediaElement);
       }
+      obs.unobserve(entry.target);
     });
   },
-  { threshold: 0.1 }
+  {
+    threshold: 0.12,
+  }
 );
 
+// load gallery
 function loadGallery() {
-  siteConfig.galleryItems.forEach((item, index) => {
-    const gridItem = createGalleryItem(item, index);
-    galleryGrid.appendChild(gridItem);
-    const mediaElement = gridItem.querySelector("img, video");
-    if (mediaElement) {
-      observer.observe(mediaElement);
-    }
+  siteConfig.galleryItems.forEach((item, idx) => {
+    const tile = createGalleryItem(item, idx);
+    galleryGrid.appendChild(tile);
+    io.observe(tile);
   });
 }
 
-// ================= LIGHTBOX =================
+// --------------- LIGHTBOX ---------------
 function openLightbox(item) {
-  lightbox.style.display = "flex";
-  requestAnimationFrame(() => {
-    lightbox.classList.add("show");
-    document.body.classList.add("no-scroll");
-  });
+  lightbox.classList.add("show");
+  lightbox.setAttribute("aria-hidden", "false");
+  document.body.style.overflow = "hidden";
 
   if (item.type === "image") {
-    lightboxImg.src = item.src;
-    lightboxImg.style.display = "block";
     lightboxVideo.style.display = "none";
     lightboxVideo.pause();
-    lightboxVideo.currentTime = 0;
-  } else if (item.type === "video") {
-    lightboxVideo.src = item.src;
-    lightboxVideo.style.display = "block";
+    lightboxVideo.src = "";
+    lightboxImg.style.display = "block";
+    lightboxImg.src = item.src;
+    lightboxImg.alt = item.caption || "";
+  } else {
     lightboxImg.style.display = "none";
+    lightboxImg.src = "";
+    lightboxVideo.style.display = "block";
+    lightboxVideo.src = item.src;
     lightboxVideo.load();
-    lightboxVideo
-      .play()
-      .catch((e) => console.error("Video autoplay failed:", e));
+    lightboxVideo.play().catch(() => {
+      /* silence autoplay errors */
+    });
   }
-  caption.textContent = item.caption;
-
-  setTimeout(() => closeBtn.focus(), 500);
+  lightboxCaption.textContent = item.caption || "";
+  // focus for accessibility
+  setTimeout(() => document.getElementById("lightbox-media").focus(), 180);
 }
 
 function closeLightbox() {
   lightbox.classList.remove("show");
-  document.body.classList.remove("no-scroll");
-  setTimeout(() => {
-    lightbox.style.display = "none";
-    lightboxImg.src = "";
-    lightboxVideo.pause();
-    lightboxVideo.currentTime = 0;
-    lightboxVideo.src = "";
-    caption.textContent = "";
-  }, 400);
+  lightbox.setAttribute("aria-hidden", "true");
+  document.body.style.overflow = "";
+  // stop video
+  lightboxVideo.pause();
+  lightboxVideo.src = "";
+  lightboxImg.src = "";
+  lightboxCaption.textContent = "";
 }
 
-// ================= LIGHTBOX NAVIGATION =================
-function navigateLightbox(direction) {
-  if (lightboxVideo.style.display === "block") {
-    lightboxVideo.pause();
-    lightboxVideo.currentTime = 0;
-  }
-
-  currentLightboxIndex =
-    (currentLightboxIndex + direction + siteConfig.galleryItems.length) %
+function navigate(direction) {
+  currentIndex =
+    (currentIndex + direction + siteConfig.galleryItems.length) %
     siteConfig.galleryItems.length;
-  openLightbox(siteConfig.galleryItems[currentLightboxIndex]);
+  openLightbox(siteConfig.galleryItems[currentIndex]);
 }
 
-prevBtn.addEventListener("click", () => navigateLightbox(-1));
-nextBtn.addEventListener("click", () => navigateLightbox(1));
-closeBtn.addEventListener("click", closeLightbox);
+// lightbox event handlers
+lbClose.addEventListener("click", closeLightbox);
+prevBtn.addEventListener("click", () => navigate(-1));
+nextBtn.addEventListener("click", () => navigate(1));
 lightbox.addEventListener("click", (e) => {
   if (e.target === lightbox) closeLightbox();
 });
 
-// Keyboard navigation and focus trapping
+// keyboard nav
 document.addEventListener("keydown", (e) => {
   if (!lightbox.classList.contains("show")) return;
-  if (e.key === "ArrowLeft") {
-    e.preventDefault();
-    navigateLightbox(-1);
-  }
-  if (e.key === "ArrowRight") {
-    e.preventDefault();
-    navigateLightbox(1);
-  }
   if (e.key === "Escape") closeLightbox();
+  if (e.key === "ArrowLeft") navigate(-1);
+  if (e.key === "ArrowRight") navigate(1);
 });
 
-lightbox.addEventListener("keydown", (e) => {
-  if (e.key === "Tab") {
-    const focusableElements = lightbox.querySelectorAll(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-    );
-    if (focusableElements.length === 0) return;
-    const firstElement = focusableElements[0];
-    const lastElement = focusableElements[focusableElements.length - 1];
-
-    if (e.shiftKey) {
-      if (document.activeElement === firstElement) {
-        lastElement.focus();
-        e.preventDefault();
-      }
-    } else {
-      if (document.activeElement === lastElement) {
-        firstElement.focus();
-        e.preventDefault();
-      }
-    }
-  }
-});
-
-// Swipe support
-let touchStartX = 0,
-  touchEndX = 0;
+// swipe support
+let touchStartX = 0;
 lightbox.addEventListener("touchstart", (e) => {
   touchStartX = e.changedTouches[0].screenX;
 });
 lightbox.addEventListener("touchend", (e) => {
-  touchEndX = e.changedTouches[0].screenX;
-  if (touchEndX < touchStartX - 50) navigateLightbox(1);
-  if (touchEndX > touchStartX + 50) navigateLightbox(-1);
+  const dx = e.changedTouches[0].screenX - touchStartX;
+  if (dx < -50) navigate(1);
+  if (dx > 50) navigate(-1);
 });
+
+// ---------------- MUSIC ----------------
+musicBtn.addEventListener("click", () => {
+  if (bgMusic.paused) {
+    bgMusic.play().catch(() => {
+      /* autoplay blocked on some browsers */
+    });
+    musicBtn.classList.add("playing");
+    musicBtn.setAttribute("aria-pressed", "true");
+    localStorage.setItem("memory_playMusic", "true");
+    musicIcon.textContent = "🔊";
+  } else {
+    bgMusic.pause();
+    musicBtn.classList.remove("playing");
+    musicBtn.setAttribute("aria-pressed", "false");
+    localStorage.setItem("memory_playMusic", "false");
+    musicIcon.textContent = "🎵";
+  }
+});
+
+// persist music preference
+document.addEventListener("DOMContentLoaded", () => {
+  loadGallery();
+  const play = localStorage.getItem("memory_playMusic") === "true";
+  if (play) {
+    bgMusic.play().catch(() => {});
+    musicBtn.classList.add("playing");
+    musicBtn.setAttribute("aria-pressed", "true");
+    musicIcon.textContent = "🔊";
+  }
+  initParticles(); // start particles after DOM ready
+});
+
+// ---------------- PARTICLES (canvas) ----------------
+const canvas = document.getElementById("particle-canvas");
+const ctx = canvas.getContext("2d");
+let particles = [];
+let animId = null;
+
+class Particle {
+  constructor() {
+    this.reset();
+  }
+  reset() {
+    this.x = Math.random() * (canvas.width || window.innerWidth);
+    this.y =
+      canvas.height + Math.random() * (canvas.height || window.innerHeight);
+    this.size =
+      Math.random() *
+        (siteConfig.particles.size.max - siteConfig.particles.size.min) +
+      siteConfig.particles.size.min;
+    this.speed =
+      Math.random() *
+        (siteConfig.particles.speed.max - siteConfig.particles.speed.min) +
+      siteConfig.particles.speed.min;
+    this.color = siteConfig.particles.color;
+    this.wander = (Math.random() - 0.5) * siteConfig.particles.wander;
+    this.spawn = Date.now();
+  }
+  update() {
+    this.y -= this.speed;
+    this.x += this.wander * this.speed;
+    if (this.y < -this.size) this.reset();
+  }
+  draw() {
+    ctx.globalAlpha = 0.9;
+    ctx.beginPath();
+    ctx.fillStyle = this.color;
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+
+function initParticles() {
+  cancelAnimationFrame(animId);
+  resizeCanvas();
+  particles = [];
+  for (let i = 0; i < siteConfig.particles.count; i++) {
+    particles.push(new Particle());
+  }
+  animate();
+}
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  for (const p of particles) {
+    p.update();
+    p.draw();
+  }
+  animId = requestAnimationFrame(animate);
+}
+
+window.addEventListener("resize", () => {
+  initParticles();
+});
+
+// initialize when script loads (main call occurs on DOMContentLoaded above)
