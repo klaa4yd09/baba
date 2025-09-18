@@ -96,6 +96,9 @@ const elements = {
   lightboxClose: document.getElementById("lightbox-close"),
   prevBtn: document.getElementById("prev-btn"),
   nextBtn: document.getElementById("next-btn"),
+  heroTitle: document.getElementById("hero-title"),
+  heroBgImage: document.querySelector(".hero-bg-image"),
+  customCursor: document.getElementById("custom-cursor"),
 };
 
 // ------------------ State ------------------
@@ -103,45 +106,73 @@ const allItems = [...siteConfig.photos, ...siteConfig.videos];
 let currentIndex = 0;
 let lastScrollY = window.scrollY;
 let sparklesInterval;
+let isMusicPlaying = localStorage.getItem("playMusic") === "true";
 
 // ------------------ Helpers ------------------
-
-// Utility function to get the asset path.
 const getAssetPath = (file) => `./${file}`;
 
-// Hides the page loader once all page resources have loaded.
-const hideLoader = () => {
-  elements.loader.classList.add("hidden");
-};
+// ------------------ Core Functions ------------------
 
-// ------------------ UI: Header Scroll ------------------
-function handleScroll() {
-  if (window.scrollY > lastScrollY && window.scrollY > 100) {
+function hideLoader() {
+  if (elements.loader) {
+    elements.loader.classList.add("hidden");
+  }
+}
+
+function typeHeroTitle(text, speed = 100) {
+  let i = 0;
+  const timer = setInterval(() => {
+    if (i < text.length) {
+      elements.heroTitle.textContent += text.charAt(i);
+      i++;
+    } else {
+      clearInterval(timer);
+    }
+  }, speed);
+}
+
+function handleParallax() {
+  const scrollY = window.scrollY;
+  const parallaxSpeed = parseFloat(elements.heroBgImage.dataset.parallaxSpeed);
+  elements.heroBgImage.style.transform = `translateY(${
+    scrollY * parallaxSpeed
+  }px) scale(1.1)`;
+}
+
+// ------------------ UI: Header & Music ------------------
+
+function handleHeaderScroll() {
+  const currentScrollY = window.scrollY;
+  if (currentScrollY > lastScrollY && currentScrollY > 100) {
     elements.siteHeader.classList.add("hide");
   } else {
     elements.siteHeader.classList.remove("hide");
   }
-  lastScrollY = window.scrollY;
+  lastScrollY = currentScrollY;
 }
 
-// ------------------ UI: Music ------------------
 function toggleMusic() {
   if (elements.bgMusic.paused) {
     elements.bgMusic
       .play()
+      .then(() => {
+        elements.musicBtn.classList.add("playing");
+        elements.musicIcon.textContent = "🔊";
+        localStorage.setItem("playMusic", "true");
+        isMusicPlaying = true;
+      })
       .catch((e) => console.error("Autoplay was prevented:", e));
-    elements.musicBtn.classList.add("playing");
-    elements.musicIcon.textContent = "🔊";
-    localStorage.setItem("playMusic", "true");
   } else {
     elements.bgMusic.pause();
     elements.musicBtn.classList.remove("playing");
     elements.musicIcon.textContent = "🎵";
     localStorage.setItem("playMusic", "false");
+    isMusicPlaying = false;
   }
 }
 
 // ------------------ UI: Sparkles ------------------
+
 function createHeroSparkle() {
   const sparkle = document.createElement("div");
   sparkle.className = "hero-sparkle";
@@ -156,14 +187,21 @@ function createHeroSparkle() {
   sparkle.addEventListener("animationend", () => sparkle.remove());
 }
 
-// ------------------ UI: Gallery ------------------
+// ------------------ UI: Gallery & Lazy Loading ------------------
+
 function createGalleryItem(item, index) {
   const itemEl = document.createElement("div");
   itemEl.className = "gallery-item";
+  itemEl.tabIndex = 0; // Make it focusable for keyboard navigation
+  itemEl.setAttribute("role", "button");
+  itemEl.setAttribute(
+    "aria-label",
+    `Open ${item.type} with caption: ${item.caption}`
+  );
 
   let mediaEl;
   if (item.type === "image") {
-    mediaEl = document.createElement("img");
+    mediaEl = new Image();
     mediaEl.dataset.src = getAssetPath(item.src);
     mediaEl.alt = item.caption;
     mediaEl.loading = "lazy";
@@ -205,66 +243,49 @@ function loadGallery() {
   elements.photosGrid.appendChild(photosFragment);
   elements.videosGrid.appendChild(videosFragment);
 
-  enableLazyLoadingImages();
-  enableLazyLoadingVideos();
+  enableLazyLoading();
 }
 
-// ------------------ Lazy Loading ------------------
-function enableLazyLoadingImages() {
-  const imgs = document.querySelectorAll("img[data-src]");
+function enableLazyLoading() {
+  const lazyElements = document.querySelectorAll("[data-src]");
   const observer = new IntersectionObserver(
     (entries, obs) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          const img = entry.target;
-          img.src = img.dataset.src;
-          img.onload = () => img.classList.add("loaded");
-          obs.unobserve(img);
+          const media = entry.target;
+          media.src = media.dataset.src;
+          media.onload = () => media.classList.add("loaded");
+          media.onloadeddata = () => media.classList.add("loaded");
+          obs.unobserve(media);
         }
       });
     },
     { rootMargin: "100px" }
   );
 
-  imgs.forEach((img) => observer.observe(img));
-}
-
-function enableLazyLoadingVideos() {
-  const videos = document.querySelectorAll("video[data-src]");
-  const observer = new IntersectionObserver(
-    (entries, obs) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const video = entry.target;
-          video.src = video.dataset.src;
-          video.load();
-          video.onloadeddata = () => video.classList.add("loaded");
-          obs.unobserve(video);
-        }
-      });
-    },
-    { rootMargin: "200px" }
-  );
-
-  videos.forEach((video) => observer.observe(video));
+  lazyElements.forEach((el) => observer.observe(el));
 }
 
 // ------------------ UI: Lightbox ------------------
+
 function openLightbox(item) {
   elements.lightbox.classList.add("is-open");
   document.body.style.overflow = "hidden";
+  elements.lightbox.focus(); // Focus the lightbox for accessibility
+
+  elements.lightboxImg.style.display = "none";
+  elements.lightboxVideo.style.display = "none";
+  elements.lightboxVideo.pause();
+  elements.lightboxVideo.src = "";
+  elements.lightboxImg.src = "";
 
   if (item.type === "image") {
-    elements.lightboxVideo.style.display = "none";
-    elements.lightboxVideo.pause();
-    elements.lightboxVideo.src = "";
     elements.lightboxImg.style.display = "block";
     elements.lightboxImg.src = getAssetPath(item.src);
   } else {
-    elements.lightboxImg.style.display = "none";
-    elements.lightboxImg.src = "";
     elements.lightboxVideo.style.display = "block";
     elements.lightboxVideo.src = getAssetPath(item.src);
+    elements.lightboxVideo.load();
     elements.lightboxVideo
       .play()
       .catch((e) => console.error("Autoplay was prevented:", e));
@@ -279,6 +300,8 @@ function closeLightbox() {
   elements.lightboxVideo.pause();
   elements.lightboxVideo.src = "";
   elements.lightboxImg.src = "";
+  // Return focus to the element that opened the lightbox if possible
+  document.activeElement.blur();
 }
 
 function navigateLightbox(dir) {
@@ -287,6 +310,7 @@ function navigateLightbox(dir) {
 }
 
 // ------------------ UI: Mobile Gallery Switch ------------------
+
 function switchGallery(targetId) {
   elements.photosGrid.classList.remove("active");
   elements.videosGrid.classList.remove("active");
@@ -296,7 +320,29 @@ function switchGallery(targetId) {
   document.querySelector(`[data-target="${targetId}"]`).classList.add("active");
 }
 
-// ------------------ Event Listeners ------------------
+// ------------------ Custom Cursor ------------------
+
+function handleCursor(e) {
+  if (
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+    window.innerWidth <= 768
+  ) {
+    return;
+  }
+  elements.customCursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -50%)`;
+  const target = e.target;
+  const isHoverable =
+    target.closest("a, button, .gallery-item") ||
+    window.getComputedStyle(target).cursor === "pointer";
+  if (isHoverable) {
+    elements.customCursor.classList.add("hover");
+  } else {
+    elements.customCursor.classList.remove("hover");
+  }
+}
+
+// ------------------ Event Listeners & Init ------------------
+
 function initEvents() {
   elements.galleryToggleButtons.forEach((btn) => {
     btn.addEventListener("click", (e) =>
@@ -312,7 +358,8 @@ function initEvents() {
       .scrollIntoView({ behavior: "smooth" });
   });
 
-  window.addEventListener("scroll", handleScroll);
+  window.addEventListener("scroll", handleHeaderScroll);
+  window.addEventListener("scroll", handleParallax);
 
   elements.lightboxClose.addEventListener("click", closeLightbox);
   elements.prevBtn.addEventListener("click", () => navigateLightbox(-1));
@@ -329,7 +376,7 @@ function initEvents() {
     if (e.key === "ArrowRight") navigateLightbox(1);
   });
 
-  if (localStorage.getItem("playMusic") === "true") {
+  if (isMusicPlaying) {
     elements.bgMusic
       .play()
       .catch((e) => console.error("Autoplay was prevented:", e));
@@ -337,15 +384,27 @@ function initEvents() {
     elements.musicIcon.textContent = "🔊";
   }
 
+  // Initial gallery view for mobile
   if (window.innerWidth <= 768) {
     switchGallery("photos-grid");
+  } else {
+    elements.photosGrid.classList.add("active");
+    elements.videosGrid.classList.add("active");
+  }
+
+  // Custom cursor
+  if (window.innerWidth > 768) {
+    document.addEventListener("mousemove", handleCursor);
+    document.body.style.cursor = "none";
   }
 }
 
-// ------------------ Initialization ------------------
-document.addEventListener("DOMContentLoaded", () => {
+function initialize() {
   loadGallery();
   window.addEventListener("load", hideLoader);
   initEvents();
+  typeHeroTitle("Our Memories");
   sparklesInterval = setInterval(createHeroSparkle, 500);
-});
+}
+
+document.addEventListener("DOMContentLoaded", initialize);
