@@ -47,14 +47,24 @@
         <div class="hero-bg-image"></div>
       </section>
 
-      <section class="gallery-section" id="photos-gallery">
-        <h2 class="section-title">Photo Gallery</h2>
-        <div class="gallery-grid" aria-live="polite" id="photos-grid"></div>
-      </section>
-
-      <section class="gallery-section" id="videos-gallery">
-        <h2 class="section-title">Video Gallery</h2>
-        <div class="gallery-grid" aria-live="polite" id="videos-grid"></div>
+      <section class="gallery-section" id="gallery">
+        <div class="mobile-gallery-controls">
+          <button class="gallery-toggle-btn active" data-target="photos-grid">
+            Photos
+          </button>
+          <button class="gallery-toggle-btn" data-target="videos-grid">
+            Videos
+          </button>
+        </div>
+        <h2 class="section-title" id="gallery-title">Memories Gallery</h2>
+        <div class="gallery-grid-container">
+          <div
+            class="gallery-grid active"
+            aria-live="polite"
+            id="photos-grid"
+          ></div>
+          <div class="gallery-grid" aria-live="polite" id="videos-grid"></div>
+        </div>
       </section>
 
       <section class="about-section" id="about">
