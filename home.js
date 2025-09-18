@@ -1,311 +1,339 @@
-// Data Configuration
+// ------------------ Configuration ------------------
 const siteConfig = {
-  galleryItems: [
-    { type: "image", src: "23.jpg", caption: "❤️" },
-    { type: "image", src: "25.jpg", caption: "❤️" },
-    { type: "image", src: "17.jpg", caption: "❤️" },
-    { type: "video", src: "a.mp4", caption: "❤️" },
-    { type: "image", src: "g.jpg", caption: "❤️" },
-    { type: "image", src: "f.jpg", caption: "❤️" },
-    { type: "image", src: "e.jpg", caption: "❤️" },
-    { type: "video", src: "b.mp4", caption: "❤️" },
-    { type: "image", src: "51.jpg", caption: "❤️" },
-    { type: "image", src: "33.jpg", caption: "❤️" },
-    { type: "image", src: "26.jpg", caption: "❤️" },
-    { type: "image", src: "27.jpg", caption: "❤️" },
-    { type: "video", src: "c.mp4", caption: "❤️" },
-    { type: "video", src: "d.mp4", caption: "❤️" },
-    { type: "image", src: "21.jpg", caption: "❤️" },
-    { type: "image", src: "24.jpg", caption: "❤️" },
-    { type: "video", src: "28.mp4", caption: "❤️" },
-    { type: "video", src: "29.mp4", caption: "❤️" },
-    { type: "video", src: "30.mp4", caption: "❤️" },
-    { type: "video", src: "32.mp4", caption: "❤️" },
-    { type: "image", src: "42.jpg", caption: "❤️" },
-    { type: "image", src: "43.jpg", caption: "❤️" },
-    { type: "image", src: "16.jpg", caption: "❤️" },
-    { type: "image", src: "19.jpg", caption: "❤️" },
-    { type: "image", src: "65.jpg", caption: "❤️" },
-    { type: "video", src: "20.mp4", caption: "❤️" },
-    { type: "image", src: "18.jpg", caption: "❤️" },
-    { type: "image", src: "61.jpg", caption: "❤️" },
-    { type: "image", src: "22.jpg", caption: "❤️" },
-    { type: "image", src: "54.jpg", caption: "❤️" },
-    { type: "video", src: "49.mp4", caption: "❤️" },
-    { type: "image", src: "59.jpg", caption: "❤️" },
-    { type: "image", src: "41.jpg", caption: "❤️" },
-    { type: "image", src: "56.jpg", caption: "❤️" },
-    { type: "video", src: "1.mp4", caption: "❤️" },
-    { type: "video", src: "2.mp4", caption: "❤️" },
-    { type: "video", src: "3.mp4", caption: "❤️" },
-    { type: "image", src: "4.jpg", caption: "❤️" },
-    { type: "image", src: "5.jpg", caption: "❤️" },
-    { type: "image", src: "6.jpg", caption: "❤️" },
-    { type: "image", src: "7.jpg", caption: "❤️" },
-    { type: "image", src: "8.jpg", caption: "❤️" },
-    { type: "image", src: "9.jpg", caption: "❤️" },
-    { type: "image", src: "10.jpg", caption: "❤️" },
-    { type: "image", src: "12.jpg", caption: "❤️" },
-    { type: "image", src: "13.jpg", caption: "❤️" },
-    { type: "image", src: "14.jpg", caption: "❤️" },
-    { type: "image", src: "profile.jpg", caption: "❤️" },
-    { type: "video", src: "45.mp4", caption: "❤️" },
-    { type: "image", src: "46.jpg", caption: "❤️" },
-    { type: "video", src: "47.mp4", caption: "❤️" },
-    { type: "video", src: "48.mp4", caption: "❤️" },
-    { type: "video", src: "50.mp4", caption: "❤️" },
-    { type: "video", src: "52.mp4", caption: "❤️" },
-    { type: "video", src: "53.mp4", caption: "❤️" },
-    { type: "video", src: "55.mp4", caption: "❤️" },
-    { type: "video", src: "57.mp4", caption: "❤️" },
-    { type: "video", src: "58.mp4", caption: "❤️" },
-    { type: "video", src: "60.mp4", caption: "❤️" },
-    { type: "video", src: "62.mp4", caption: "❤️" },
-    { type: "video", src: "63.mp4", caption: "❤️" },
-    { type: "video", src: "64.mp4", caption: "❤️" },
-    { type: "video", src: "66.mp4", caption: "❤️" },
-    { type: "image", src: "31.jpg", caption: "❤️" },
-    { type: "video", src: "35.mp4", caption: "❤️" },
-    { type: "image", src: "36.jpg", caption: "❤️" },
-    { type: "video", src: "38.mp4", caption: "❤️" },
-    { type: "video", src: "39.mp4", caption: "❤️" },
-    { type: "image", src: "40.jpg", caption: "❤️" },
-    { type: "video", src: "44.mp4", caption: "❤️" },
-    { type: "image", src: "11.jpg", caption: "❤️" },
+  photos: [
+    { src: "23.jpg", caption: "❤️", type: "image" },
+    { src: "25.jpg", caption: "❤️", type: "image" },
+    { src: "17.jpg", caption: "❤️", type: "image" },
+    { src: "g.jpg", caption: "❤️", type: "image" },
+    { src: "f.jpg", caption: "❤️", type: "image" },
+    { src: "e.jpg", caption: "❤️", type: "image" },
+    { src: "51.jpg", caption: "❤️", type: "image" },
+    { src: "33.jpg", caption: "❤️", type: "image" },
+    { src: "26.jpg", caption: "❤️", type: "image" },
+    { src: "27.jpg", caption: "❤️", type: "image" },
+    { src: "21.jpg", caption: "❤️", type: "image" },
+    { src: "24.jpg", caption: "❤️", type: "image" },
+    { src: "42.jpg", caption: "❤️", type: "image" },
+    { src: "43.jpg", caption: "❤️", type: "image" },
+    { src: "16.jpg", caption: "❤️", type: "image" },
+    { src: "19.jpg", caption: "❤️", type: "image" },
+    { src: "65.jpg", caption: "❤️", type: "image" },
+    { src: "18.jpg", caption: "❤️", type: "image" },
+    { src: "61.jpg", caption: "❤️", type: "image" },
+    { src: "22.jpg", caption: "❤️", type: "image" },
+    { src: "54.jpg", caption: "❤️", type: "image" },
+    { src: "59.jpg", caption: "❤️", type: "image" },
+    { src: "41.jpg", caption: "❤️", type: "image" },
+    { src: "56.jpg", caption: "❤️", type: "image" },
+    { src: "4.jpg", caption: "❤️", type: "image" },
+    { src: "5.jpg", caption: "❤️", type: "image" },
+    { src: "6.jpg", caption: "❤️", type: "image" },
+    { src: "7.jpg", caption: "❤️", type: "image" },
+    { src: "8.jpg", caption: "❤️", type: "image" },
+    { src: "9.jpg", caption: "❤️", type: "image" },
+    { src: "10.jpg", caption: "❤️", type: "image" },
+    { src: "12.jpg", caption: "❤️", type: "image" },
+    { src: "13.jpg", caption: "❤️", type: "image" },
+    { src: "14.jpg", caption: "❤️", type: "image" },
+    { src: "profile.jpg", caption: "❤️", type: "image" },
+    { src: "46.jpg", caption: "❤️", type: "image" },
+    { src: "31.jpg", caption: "❤️", type: "image" },
+    { src: "36.jpg", caption: "❤️", type: "image" },
+    { src: "40.jpg", caption: "❤️", type: "image" },
+    { src: "11.jpg", caption: "❤️", type: "image" },
+  ],
+  videos: [
+    { src: "a.mp4", caption: "❤️", type: "video" },
+    { src: "b.mp4", caption: "❤️", type: "video" },
+    { src: "c.mp4", caption: "❤️", type: "video" },
+    { src: "d.mp4", caption: "❤️", type: "video" },
+    { src: "28.mp4", caption: "❤️", type: "video" },
+    { src: "29.mp4", caption: "❤️", type: "video" },
+    { src: "30.mp4", caption: "❤️", type: "video" },
+    { src: "32.mp4", caption: "❤️", type: "video" },
+    { src: "20.mp4", caption: "❤️", type: "video" },
+    { src: "49.mp4", caption: "❤️", type: "video" },
+    { src: "1.mp4", caption: "❤️", type: "video" },
+    { src: "2.mp4", caption: "❤️", type: "video" },
+    { src: "3.mp4", caption: "❤️", type: "video" },
+    { src: "45.mp4", caption: "❤️", type: "video" },
+    { src: "47.mp4", caption: "❤️", type: "video" },
+    { src: "48.mp4", caption: "❤️", type: "video" },
+    { src: "50.mp4", caption: "❤️", type: "video" },
+    { src: "52.mp4", caption: "❤️", type: "video" },
+    { src: "53.mp4", caption: "❤️", type: "video" },
+    { src: "55.mp4", caption: "❤️", type: "video" },
+    { src: "57.mp4", caption: "❤️", type: "video" },
+    { src: "58.mp4", caption: "❤️", type: "video" },
+    { src: "60.mp4", caption: "❤️", type: "video" },
+    { src: "62.mp4", caption: "❤️", type: "video" },
+    { src: "63.mp4", caption: "❤️", type: "video" },
+    { src: "64.mp4", caption: "❤️", type: "video" },
+    { src: "66.mp4", caption: "❤️", type: "video" },
+    { src: "35.mp4", caption: "❤️", type: "video" },
+    { src: "38.mp4", caption: "❤️", type: "video" },
+    { src: "39.mp4", caption: "❤️", type: "video" },
+    { src: "44.mp4", caption: "❤️", type: "video" },
   ],
 };
 
-// DOM Elements
-const loader = document.getElementById("loader");
-const mainContent = document.getElementById("main-content");
-const siteHeader = document.getElementById("site-header");
-const photosGrid = document.getElementById("photos-grid");
-const videosGrid = document.getElementById("videos-grid");
-const galleryToggleButtons = document.querySelectorAll(".gallery-toggle-btn");
-const galleryTitle = document.getElementById("gallery-title");
-const scrollBtn = document.getElementById("scroll-btn");
-const musicBtn = document.getElementById("music-btn");
-const bgMusic = document.getElementById("bg-music");
-const musicIcon = musicBtn.querySelector(".music-icon");
-const heroSparkleContainer = document.querySelector(".hero-sparkle-container");
+// ------------------ DOM Elements ------------------
+const elements = {
+  loader: document.getElementById("loader"),
+  siteHeader: document.getElementById("site-header"),
+  photosGrid: document.getElementById("photos-grid"),
+  videosGrid: document.getElementById("videos-grid"),
+  galleryToggleButtons: document.querySelectorAll(".gallery-toggle-btn"),
+  scrollBtn: document.getElementById("scroll-btn"),
+  musicBtn: document.getElementById("music-btn"),
+  bgMusic: document.getElementById("bg-music"),
+  musicIcon: document.getElementById("music-icon"),
+  heroSparkleContainer: document.querySelector(".hero-sparkle-container"),
+  lightbox: document.getElementById("lightbox"),
+  lightboxImg: document.getElementById("lightbox-img"),
+  lightboxVideo: document.getElementById("lightbox-video"),
+  lightboxCaption: document.getElementById("lightbox-caption"),
+  lightboxClose: document.getElementById("lightbox-close"),
+  prevBtn: document.getElementById("prev-btn"),
+  nextBtn: document.getElementById("next-btn"),
+};
 
-const lightbox = document.getElementById("lightbox");
-const lightboxImg = document.getElementById("lightbox-img");
-const lightboxVideo = document.getElementById("lightbox-video");
-const lightboxCaption = document.getElementById("lightbox-caption");
-const lightboxClose = document.getElementById("lightbox-close");
-const prevBtn = document.getElementById("prev-btn");
-const nextBtn = document.getElementById("next-btn");
-
+// ------------------ State ------------------
+const allItems = [...siteConfig.photos, ...siteConfig.videos];
 let currentIndex = 0;
 let lastScrollY = window.scrollY;
+let sparklesInterval;
 
-// --- Helper Functions ---
-function getAssetPath(filename) {
-  return `./${filename}`;
-}
+// ------------------ Helpers ------------------
 
-// --- Page & UI Logic ---
-function hideLoader() {
-  loader.classList.add("hidden");
-  mainContent.style.display = "block";
-}
+// Utility function to get the asset path.
+const getAssetPath = (file) => `./${file}`;
 
+// Hides the page loader once all page resources have loaded.
+const hideLoader = () => {
+  elements.loader.classList.add("hidden");
+};
+
+// ------------------ UI: Header Scroll ------------------
+
+// Handles header visibility on scroll to improve user experience.
 function handleScroll() {
   if (window.scrollY > lastScrollY && window.scrollY > 100) {
-    siteHeader.classList.add("hide");
+    elements.siteHeader.classList.add("hide");
   } else {
-    siteHeader.classList.remove("hide");
+    elements.siteHeader.classList.remove("hide");
   }
   lastScrollY = window.scrollY;
 }
 
+// ------------------ UI: Music ------------------
+
+// Toggles background music playback and updates button state.
 function toggleMusic() {
-  if (bgMusic.paused) {
-    bgMusic.play().catch(() => {});
-    musicBtn.classList.add("playing");
-    musicIcon.textContent = "🔊";
-    localStorage.setItem("memory_playMusic", "true");
+  if (elements.bgMusic.paused) {
+    elements.bgMusic
+      .play()
+      .catch((e) => console.error("Autoplay was prevented:", e));
+    elements.musicBtn.classList.add("playing");
+    elements.musicIcon.textContent = "🔊";
+    localStorage.setItem("playMusic", "true");
   } else {
-    bgMusic.pause();
-    musicBtn.classList.remove("playing");
-    musicIcon.textContent = "🎵";
-    localStorage.setItem("memory_playMusic", "false");
+    elements.bgMusic.pause();
+    elements.musicBtn.classList.remove("playing");
+    elements.musicIcon.textContent = "🎵";
+    localStorage.setItem("playMusic", "false");
   }
 }
 
+// ------------------ UI: Sparkles ------------------
+
+// Creates a single floating sparkle effect in the hero section.
 function createHeroSparkle() {
   const sparkle = document.createElement("div");
-  sparkle.classList.add("hero-sparkle");
-  sparkle.style.width = sparkle.style.height = `${Math.random() * 3 + 1}px`;
+  sparkle.className = "hero-sparkle";
+  sparkle.style.width = `${Math.random() * 3 + 1}px`;
+  sparkle.style.height = sparkle.style.width;
   sparkle.style.left = `${Math.random() * 100}vw`;
   sparkle.style.top = `${100 + Math.random() * 20}vh`;
   sparkle.style.animationDuration = `${10 + Math.random() * 8}s`;
   sparkle.style.animationDelay = `${Math.random() * 5}s`;
-  heroSparkleContainer.appendChild(sparkle);
+  elements.heroSparkleContainer.appendChild(sparkle);
 
-  sparkle.addEventListener("animationend", () => {
-    sparkle.remove();
-  });
+  // Clean up sparkle element after its animation ends.
+  sparkle.addEventListener("animationend", () => sparkle.remove());
 }
 
-function switchGallery(targetId) {
-  const grids = document.querySelectorAll(".gallery-grid");
-  grids.forEach((grid) => grid.classList.remove("active"));
-  document.getElementById(targetId).classList.add("active");
+// ------------------ UI: Gallery ------------------
 
-  galleryToggleButtons.forEach((btn) => btn.classList.remove("active"));
-  document.querySelector(`[data-target="${targetId}"]`).classList.add("active");
-
-  if (targetId === "photos-grid") {
-    galleryTitle.textContent = "Photo Gallery";
-  } else {
-    galleryTitle.textContent = "Video Gallery";
-  }
-}
-
-// --- Gallery & Lightbox Logic ---
-function createGalleryItem(item) {
+// Creates and returns a single gallery item element.
+function createGalleryItem(item, index) {
   const itemEl = document.createElement("div");
   itemEl.className = "gallery-item";
-  itemEl.setAttribute("tabindex", "0");
 
-  const mediaEl = document.createElement(
-    item.type === "image" ? "img" : "video"
-  );
-  mediaEl.src = getAssetPath(item.src);
-  mediaEl.alt = item.caption;
-  mediaEl.loading = "lazy";
-
-  if (item.type === "video") {
+  let mediaEl;
+  if (item.type === "image") {
+    mediaEl = document.createElement("img");
+    mediaEl.src = getAssetPath(item.src);
+    mediaEl.alt = item.caption;
+  } else {
+    mediaEl = document.createElement("video");
+    mediaEl.src = getAssetPath(item.src);
     mediaEl.muted = true;
     mediaEl.playsInline = true;
     mediaEl.preload = "metadata";
 
-    const videoIndicator = document.createElement("span");
-    videoIndicator.className = "video-indicator";
-    videoIndicator.textContent = "VIDEO";
-    itemEl.appendChild(videoIndicator);
+    const overlay = document.createElement("div");
+    overlay.className = "video-overlay";
+    itemEl.appendChild(overlay);
   }
 
   itemEl.appendChild(mediaEl);
 
   itemEl.addEventListener("click", () => {
-    const allItems = siteConfig.galleryItems;
-    const currentItem = siteConfig.galleryItems.find((i) => i.src === item.src);
-    currentIndex = allItems.indexOf(currentItem);
-    openLightbox(currentItem);
+    currentIndex = index;
+    openLightbox(allItems[currentIndex]);
   });
-
-  itemEl.dataset.item = JSON.stringify(item);
 
   return itemEl;
 }
 
+// Loads all gallery items into the DOM.
 function loadGallery() {
-  const photos = siteConfig.galleryItems.filter(
-    (item) => item.type === "image"
-  );
-  const videos = siteConfig.galleryItems.filter(
-    (item) => item.type === "video"
-  );
+  const photosFragment = document.createDocumentFragment();
+  const videosFragment = document.createDocumentFragment();
 
-  photos.forEach((item) => {
-    const galleryItem = createGalleryItem(item);
-    photosGrid.appendChild(galleryItem);
+  allItems.forEach((item, i) => {
+    const el = createGalleryItem(item, i);
+    if (item.type === "image") {
+      photosFragment.appendChild(el);
+    } else {
+      videosFragment.appendChild(el);
+    }
   });
 
-  videos.forEach((item) => {
-    const galleryItem = createGalleryItem(item);
-    videosGrid.appendChild(galleryItem);
-  });
+  elements.photosGrid.appendChild(photosFragment);
+  elements.videosGrid.appendChild(videosFragment);
 }
 
+// ------------------ UI: Lightbox ------------------
+
+// Opens the lightbox and displays the selected media item.
 function openLightbox(item) {
-  lightbox.classList.add("is-open");
-  lightbox.setAttribute("aria-hidden", "false");
+  elements.lightbox.classList.add("is-open");
   document.body.style.overflow = "hidden";
 
   if (item.type === "image") {
-    lightboxVideo.style.display = "none";
-    lightboxVideo.pause();
-    lightboxImg.style.display = "block";
-    lightboxImg.src = getAssetPath(item.src);
-    lightboxImg.alt = item.caption;
+    elements.lightboxVideo.style.display = "none";
+    elements.lightboxVideo.pause();
+    elements.lightboxVideo.src = "";
+    elements.lightboxImg.style.display = "block";
+    elements.lightboxImg.src = getAssetPath(item.src);
   } else {
-    lightboxImg.style.display = "none";
-    lightboxVideo.style.display = "block";
-    lightboxVideo.src = getAssetPath(item.src);
-    lightboxVideo.play().catch(() => {});
+    elements.lightboxImg.style.display = "none";
+    elements.lightboxImg.src = "";
+    elements.lightboxVideo.style.display = "block";
+    elements.lightboxVideo.src = getAssetPath(item.src);
+    elements.lightboxVideo
+      .play()
+      .catch((e) => console.error("Autoplay was prevented:", e));
   }
 
-  lightboxCaption.textContent = item.caption;
+  elements.lightboxCaption.textContent = item.caption;
 }
 
+// Closes the lightbox and resets the body overflow.
 function closeLightbox() {
-  lightbox.classList.remove("is-open");
-  lightbox.setAttribute("aria-hidden", "true");
+  elements.lightbox.classList.remove("is-open");
   document.body.style.overflow = "";
-  lightboxVideo.pause();
-  lightboxVideo.src = "";
-  lightboxImg.src = "";
-  lightboxCaption.textContent = "";
+  elements.lightboxVideo.pause();
+  elements.lightboxVideo.src = "";
+  elements.lightboxImg.src = "";
 }
 
-function navigateLightbox(direction) {
-  const allItems = siteConfig.galleryItems;
-  currentIndex = (currentIndex + direction + allItems.length) % allItems.length;
+// Navigates to the next or previous item in the lightbox.
+function navigateLightbox(dir) {
+  currentIndex = (currentIndex + dir + allItems.length) % allItems.length;
   openLightbox(allItems[currentIndex]);
 }
 
-// --- Event Listeners ---
-document.addEventListener("DOMContentLoaded", () => {
-  loadGallery();
+// ------------------ UI: Mobile Gallery Switch ------------------
 
-  // On page load, switch to photos grid on mobile only
+// Toggles between photo and video galleries on mobile.
+function switchGallery(targetId) {
+  elements.photosGrid.classList.remove("active");
+  elements.videosGrid.classList.remove("active");
+  document.getElementById(targetId).classList.add("active");
+
+  elements.galleryToggleButtons.forEach((b) => b.classList.remove("active"));
+  document.querySelector(`[data-target="${targetId}"]`).classList.add("active");
+}
+
+// ------------------ Event Listeners ------------------
+
+// Initializes all event listeners for the page.
+function initEvents() {
+  // Gallery toggle buttons
+  elements.galleryToggleButtons.forEach((btn) => {
+    btn.addEventListener("click", (e) =>
+      switchGallery(e.target.dataset.target)
+    );
+  });
+
+  // Music toggle
+  elements.musicBtn.addEventListener("click", toggleMusic);
+
+  // Scroll button
+  elements.scrollBtn.addEventListener("click", () => {
+    document
+      .getElementById("photos-gallery")
+      .scrollIntoView({ behavior: "smooth" });
+  });
+
+  // Header hide on scroll
+  window.addEventListener("scroll", handleScroll);
+
+  // Lightbox controls
+  elements.lightboxClose.addEventListener("click", closeLightbox);
+  elements.prevBtn.addEventListener("click", () => navigateLightbox(-1));
+  elements.nextBtn.addEventListener("click", () => navigateLightbox(1));
+
+  // Close lightbox when clicking outside the media.
+  elements.lightbox.addEventListener("click", (e) => {
+    if (e.target === elements.lightbox) closeLightbox();
+  });
+
+  // Keyboard navigation and closing.
+  document.addEventListener("keydown", (e) => {
+    if (!elements.lightbox.classList.contains("is-open")) return;
+    if (e.key === "Escape") closeLightbox();
+    if (e.key === "ArrowLeft") navigateLightbox(-1);
+    if (e.key === "ArrowRight") navigateLightbox(1);
+  });
+
+  // Initial music state check
+  if (localStorage.getItem("playMusic") === "true") {
+    elements.bgMusic
+      .play()
+      .catch((e) => console.error("Autoplay was prevented:", e));
+    elements.musicBtn.classList.add("playing");
+    elements.musicIcon.textContent = "🔊";
+  }
+
+  // Initial mobile view check
   if (window.innerWidth <= 768) {
     switchGallery("photos-grid");
   }
+}
 
-  setTimeout(hideLoader, 1000);
+// ------------------ Initialization ------------------
 
-  if (localStorage.getItem("memory_playMusic") === "true") {
-    bgMusic.play().catch(() => {});
-    musicBtn.classList.add("playing");
-    musicIcon.textContent = "🔊";
-  }
+// The main entry point for the application.
+document.addEventListener("DOMContentLoaded", () => {
+  loadGallery();
+  // Hide the loader only after all page assets have loaded
+  window.addEventListener("load", hideLoader);
+  initEvents();
 
-  setInterval(createHeroSparkle, 500);
-});
-
-galleryToggleButtons.forEach((btn) => {
-  btn.addEventListener("click", (e) => {
-    const targetId = e.target.dataset.target;
-    switchGallery(targetId);
-  });
-});
-
-musicBtn.addEventListener("click", toggleMusic);
-
-scrollBtn.addEventListener("click", () => {
-  document.getElementById("gallery").scrollIntoView({ behavior: "smooth" });
-});
-
-window.addEventListener("scroll", handleScroll);
-
-// Lightbox event listeners
-lightboxClose.addEventListener("click", closeLightbox);
-prevBtn.addEventListener("click", () => navigateLightbox(-1));
-nextBtn.addEventListener("click", () => navigateLightbox(1));
-lightbox.addEventListener("click", (e) => {
-  if (e.target === lightbox || e.target.classList.contains("lightbox-stage")) {
-    closeLightbox();
-  }
-});
-
-document.addEventListener("keydown", (e) => {
-  if (!lightbox.classList.contains("is-open")) return;
-  if (e.key === "Escape") closeLightbox();
-  if (e.key === "ArrowLeft") navigateLightbox(-1);
-  if (e.key === "ArrowRight") navigateLightbox(1);
+  // Start the sparkle effect animation
+  sparklesInterval = setInterval(createHeroSparkle, 500);
 });
