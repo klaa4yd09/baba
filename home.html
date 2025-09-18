@@ -11,12 +11,10 @@
     <link rel="stylesheet" href="home.css" />
   </head>
   <body>
-    <!-- Loader -->
     <div id="loader" class="loader-container">
       <div class="loader"></div>
     </div>
 
-    <!-- Header -->
     <header id="site-header" class="site-header">
       <a href="#" class="logo">Memory Lane</a>
       <nav class="main-nav">
@@ -25,11 +23,10 @@
         <a href="#about" class="nav-link">About</a>
       </nav>
       <button id="music-btn" class="music-btn">
-        <span class="music-icon">🎵</span>
+        <span id="music-icon" class="music-icon">🎵</span>
       </button>
     </header>
 
-    <!-- Hero -->
     <section class="hero-section">
       <div class="hero-bg-image"></div>
       <div class="hero-content">
@@ -40,7 +37,6 @@
       <div class="hero-sparkle-container"></div>
     </section>
 
-    <!-- Gallery Controls (Mobile only) -->
     <div class="mobile-gallery-controls">
       <button class="gallery-toggle-btn active" data-target="photos-grid">
         Photos
@@ -50,7 +46,6 @@
       </button>
     </div>
 
-    <!-- Photo Gallery -->
     <section id="photos-gallery" class="gallery-section">
       <h2 class="section-title">Photo Gallery</h2>
       <div class="gallery-grid-container">
@@ -58,7 +53,6 @@
       </div>
     </section>
 
-    <!-- Video Gallery -->
     <section id="videos-gallery" class="gallery-section dark">
       <h2 class="section-title">Video Gallery</h2>
       <div class="gallery-grid-container">
@@ -66,7 +60,6 @@
       </div>
     </section>
 
-    <!-- About -->
     <section id="about" class="about-section">
       <div class="about-content">
         <div class="about-text-container">
@@ -82,18 +75,15 @@
       </div>
     </section>
 
-    <!-- Footer -->
     <footer class="site-footer">
       <p>© 2025 Memory Lane</p>
       <p>Made with ❤️</p>
     </footer>
 
-    <!-- Background Music -->
     <audio id="bg-music" loop>
       <source src="iris.mp3" type="audio/mp3" />
     </audio>
 
-    <!-- Lightbox -->
     <div id="lightbox" class="lightbox" aria-hidden="true">
       <div class="lightbox-stage">
         <button id="prev-btn" class="nav-btn">❮</button>
