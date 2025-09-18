@@ -305,11 +305,21 @@ body {
   position: relative;
   overflow: hidden;
   border-radius: var(--radius);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
   cursor: pointer;
   opacity: 0;
-  transform: translateY(20px);
+  transform: perspective(1000px) rotateX(0deg) translateY(20px);
   animation: fadeUp 0.6s forwards;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.gallery-item.loaded {
+  opacity: 1;
+}
+
+.gallery-item.loaded:hover {
+  transform: perspective(1000px) rotateX(2deg) translateY(-8px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
 }
 
 .gallery-item img,
@@ -319,11 +329,6 @@ body {
   object-fit: cover;
   border-radius: var(--radius);
   transition: transform 0.4s ease;
-}
-
-.gallery-item:hover {
-  transform: translateY(-5px) scale(1.02);
-  box-shadow: 0 8px 30px rgba(0,0,0,0.2);
 }
 
 .gallery-item:hover img {
@@ -346,7 +351,7 @@ body {
 .gallery-item .video-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.4);
+  background: rgba(255, 255, 255, 0.4);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -554,7 +559,7 @@ body {
 @keyframes fadeUp {
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: perspective(1000px) rotateX(0deg) translateY(0);
   }
 }
 
@@ -577,7 +582,7 @@ body {
   .main-nav {
     display: flex;
   }
-  
+
   .music-btn {
     display: block;
   }
@@ -633,7 +638,7 @@ body {
   .main-nav {
     display: none;
   }
-  
+
   .music-btn {
     display: block;
   }
