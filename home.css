@@ -107,7 +107,7 @@ body {
 
 .main-nav {
   display: flex;
-  gap: 2rem; /* Consistent spacing for navigation links */
+  gap: 2rem;
 }
 
 .main-nav .nav-link {
@@ -250,10 +250,12 @@ body {
   display: none;
   justify-content: center;
   gap: 1rem;
-  margin-bottom: 2rem;
+  margin: 2rem 0;
+  padding: 0 1rem;
 }
 
 .gallery-toggle-btn {
+  flex: 1;
   background: var(--color-secondary);
   color: var(--color-primary);
   border: 2px solid var(--color-primary);
@@ -575,6 +577,10 @@ body {
   .main-nav {
     display: flex;
   }
+  
+  .music-btn {
+    display: block;
+  }
 
   .hero-title {
     font-size: clamp(3rem, 8vw, 6rem);
@@ -621,10 +627,15 @@ body {
 @media (max-width: 768px) {
   .site-header {
     padding: 1rem 1.5rem;
+    height: auto;
   }
 
-  .main-nav, .music-btn {
+  .main-nav {
     display: none;
+  }
+  
+  .music-btn {
+    display: block;
   }
 
   .hero-title {
