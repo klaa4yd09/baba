@@ -1,105 +1,81 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const enterBtn = document.getElementById("enter-btn");
-  const preloader = document.getElementById("preloader");
-  const particleContainer = document.querySelector(".particle-container");
-  const bgImage = document.querySelector(".bg-image");
-  const contentContainer = document.querySelector(".content-container");
-  const backgroundLayers = document.querySelector(".background-layers");
-  const audio = document.getElementById("background-audio");
-  const clickSound = document.getElementById("click-sound");
+// ======================================
+// CONFIGURATION: Customize Your Content Here
+// ======================================
+const siteConfig = {
+    specialDate: '2024-02-14T00:00:00', // YYYY-MM-DD format
+};
 
-  /* Preloader */
-  const handlePageLoad = () => {
-    preloader.classList.add("hidden");
-    setTimeout(() => preloader.remove(), 1500);
-  };
-  if (document.readyState === "complete") {
-    handlePageLoad();
-  } else {
-    window.addEventListener("load", handlePageLoad, { once: true });
-  }
+// ======================================
+// SELECTORS & STATE
+// ======================================
+const preloader = document.querySelector('.preloader');
+const enterBtn = document.getElementById('enter-btn');
+const bgMusic = document.getElementById('bg-music');
+const daysCountSpan = document.getElementById('days-count');
+const sparkleContainer = document.querySelector('.sparkle-container');
+const heartsContainer = document.querySelector('.hearts-container');
+const titleLetters = document.querySelectorAll('.title-letter');
 
-  /* Audio Fade-in */
-  const playAudio = () => {
-    if (audio) {
-      audio.volume = 0;
-      audio.play().catch((err) => console.warn("Audio blocked:", err));
-      const fadeIn = setInterval(() => {
-        if (audio.volume < 0.5) {
-          audio.volume = Math.min(audio.volume + 0.05, 0.5);
-        } else {
-          clearInterval(fadeIn);
-        }
-      }, 300);
-    }
-    if (clickSound) {
-      clickSound.volume = 0.5;
-      clickSound.play();
-    }
-  };
+// ======================================
+// PRELOADER & INITIALIZATION
+// ======================================
+document.addEventListener('DOMContentLoaded', () => {
+    window.addEventListener('load', () => {
+        // Hide preloader and show content
+        setTimeout(() => {
+            preloader.classList.add('preloader-hidden');
+            document.body.style.overflow = 'auto';
+            // Animate title letters after preloader is gone
+            titleLetters.forEach((letter, index) => {
+                letter.style.animationDelay = `${index * 0.1}s`;
+            });
+        }, 1500); // 1.5 seconds delay to let animation play
+    });
+    
+    // Create hearts on DOM content loaded
+    createHearts();
+});
 
-  /* Particle System */
-  const createParticle = () => {
-    const particle = document.createElement("div");
-    particle.classList.add("particle");
-    const size = Math.random() * 3 + 1;
-    particle.style.width = particle.style.height = `${size}px`;
-    particle.style.left = `${Math.random() * 100}vw`;
-    particle.style.top = `${100 + Math.random() * 20}vh`;
-    particle.style.animationDuration = `${12 + Math.random() * 8}s`;
-    particle.style.animationDelay = `${Math.random() * 2}s`;
-    particle.style.opacity = `${Math.random() * 0.8 + 0.2}`;
-    particleContainer.appendChild(particle);
+// ======================================
+// DYNAMIC EFFECTS
+// ======================================
 
-    particle.addEventListener("animationend", () => particle.remove());
-  };
-  setTimeout(() => setInterval(createParticle, 500), 2000);
+// Floating Hearts Background
+const heartTypes = ['💖','💕','💗','💓','💞','💝'];
 
-  /* Parallax Effect */
-  const sensitivity = 0.015;
-  let mouseX = 0,
-    mouseY = 0;
-  let animationFrameId = null;
+function createHeart() {
+    const heart = document.createElement('div');
+    heart.classList.add('heart');
+    heart.innerHTML = heartTypes[Math.floor(Math.random() * heartTypes.length)];
+    const size = Math.random() * 20 + 20; // 20px to 40px
+    heart.style.fontSize = `${size}px`;
+    heart.style.left = Math.random() * 100 + 'vw';
+    const duration = Math.random() * 6 + 4; // 4s to 10s
+    heart.style.animationDuration = `${duration}s`;
+    heartsContainer.appendChild(heart);
+    setTimeout(() => heart.remove(), duration * 1000);
+}
 
-  const animateParallax = () => {
-    const xOffset = (mouseX - window.innerWidth / 2) * sensitivity;
-    const yOffset = (mouseY - window.innerHeight / 2) * sensitivity;
+function createHearts() {
+    setInterval(createHeart, 400);
+}
 
-    bgImage.style.transform = `
-      translate3d(-50%, -50%, -50px)
-      translateX(${xOffset * -0.5}px)
-      translateY(${yOffset * -0.5}px)
-      rotateX(${yOffset * 0.05}deg)
-      rotateY(${xOffset * 0.05}deg)
-    `;
-    backgroundLayers.style.transform = `
-      rotateX(${yOffset * 0.05}deg)
-      rotateY(${xOffset * 0.05}deg)
-    `;
-    contentContainer.style.transform = `
-      translate3d(${xOffset * 0.08}px, ${yOffset * 0.08}px, 0)
-      rotateX(${yOffset * 0.03}deg)
-      rotateY(${xOffset * 0.03}deg)
-    `;
+// Sparkle Cursor Effect
+document.addEventListener('mousemove', (e) => {
+    const sparkle = document.createElement('div');
+    sparkle.classList.add('sparkle');
+    sparkle.style.left = `${e.clientX}px`;
+    sparkle.style.top = `${e.clientY}px`;
+    sparkleContainer.appendChild(sparkle);
+    setTimeout(() => sparkle.remove(), 800);
+});
 
-    animationFrameId = requestAnimationFrame(animateParallax);
-  };
+// ======================================
+// MUSIC & NAVIGATION
+// ======================================
 
-  window.addEventListener("mousemove", (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-    if (!animationFrameId) {
-      animateParallax();
-    }
-  });
-
-  /* Enter Transition */
-  enterBtn.addEventListener("click", (e) => {
-    e.preventDefault();
-    document.body.classList.add("fade-out");
-    playAudio();
-    setTimeout(() => {
-      window.location.href = "home.html";
-    }, 1000);
-  });
+// Music Play + Navigation to Gallery
+enterBtn.addEventListener('click', () => {
+    bgMusic.play().catch(err => console.log("Music play failed:", err));
+    localStorage.setItem('playMusic', 'true');
 });
