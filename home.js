@@ -115,8 +115,6 @@ const hideLoader = () => {
 };
 
 // ------------------ UI: Header Scroll ------------------
-
-// Handles header visibility on scroll to improve user experience.
 function handleScroll() {
   if (window.scrollY > lastScrollY && window.scrollY > 100) {
     elements.siteHeader.classList.add("hide");
@@ -127,8 +125,6 @@ function handleScroll() {
 }
 
 // ------------------ UI: Music ------------------
-
-// Toggles background music playback and updates button state.
 function toggleMusic() {
   if (elements.bgMusic.paused) {
     elements.bgMusic
@@ -146,8 +142,6 @@ function toggleMusic() {
 }
 
 // ------------------ UI: Sparkles ------------------
-
-// Creates a single floating sparkle effect in the hero section.
 function createHeroSparkle() {
   const sparkle = document.createElement("div");
   sparkle.className = "hero-sparkle";
@@ -159,13 +153,10 @@ function createHeroSparkle() {
   sparkle.style.animationDelay = `${Math.random() * 5}s`;
   elements.heroSparkleContainer.appendChild(sparkle);
 
-  // Clean up sparkle element after its animation ends.
   sparkle.addEventListener("animationend", () => sparkle.remove());
 }
 
 // ------------------ UI: Gallery ------------------
-
-// Creates and returns a single gallery item element.
 function createGalleryItem(item, index) {
   const itemEl = document.createElement("div");
   itemEl.className = "gallery-item";
@@ -173,11 +164,12 @@ function createGalleryItem(item, index) {
   let mediaEl;
   if (item.type === "image") {
     mediaEl = document.createElement("img");
-    mediaEl.src = getAssetPath(item.src);
+    mediaEl.dataset.src = getAssetPath(item.src);
     mediaEl.alt = item.caption;
+    mediaEl.loading = "lazy";
   } else {
     mediaEl = document.createElement("video");
-    mediaEl.src = getAssetPath(item.src);
+    mediaEl.dataset.src = getAssetPath(item.src);
     mediaEl.muted = true;
     mediaEl.playsInline = true;
     mediaEl.preload = "metadata";
@@ -197,7 +189,6 @@ function createGalleryItem(item, index) {
   return itemEl;
 }
 
-// Loads all gallery items into the DOM.
 function loadGallery() {
   const photosFragment = document.createDocumentFragment();
   const videosFragment = document.createDocumentFragment();
@@ -213,11 +204,52 @@ function loadGallery() {
 
   elements.photosGrid.appendChild(photosFragment);
   elements.videosGrid.appendChild(videosFragment);
+
+  enableLazyLoadingImages();
+  enableLazyLoadingVideos();
+}
+
+// ------------------ Lazy Loading ------------------
+function enableLazyLoadingImages() {
+  const imgs = document.querySelectorAll("img[data-src]");
+  const observer = new IntersectionObserver(
+    (entries, obs) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const img = entry.target;
+          img.src = img.dataset.src;
+          img.onload = () => img.classList.add("loaded");
+          obs.unobserve(img);
+        }
+      });
+    },
+    { rootMargin: "100px" }
+  );
+
+  imgs.forEach((img) => observer.observe(img));
+}
+
+function enableLazyLoadingVideos() {
+  const videos = document.querySelectorAll("video[data-src]");
+  const observer = new IntersectionObserver(
+    (entries, obs) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const video = entry.target;
+          video.src = video.dataset.src;
+          video.load();
+          video.onloadeddata = () => video.classList.add("loaded");
+          obs.unobserve(video);
+        }
+      });
+    },
+    { rootMargin: "200px" }
+  );
+
+  videos.forEach((video) => observer.observe(video));
 }
 
 // ------------------ UI: Lightbox ------------------
-
-// Opens the lightbox and displays the selected media item.
 function openLightbox(item) {
   elements.lightbox.classList.add("is-open");
   document.body.style.overflow = "hidden";
@@ -241,7 +273,6 @@ function openLightbox(item) {
   elements.lightboxCaption.textContent = item.caption;
 }
 
-// Closes the lightbox and resets the body overflow.
 function closeLightbox() {
   elements.lightbox.classList.remove("is-open");
   document.body.style.overflow = "";
@@ -250,15 +281,12 @@ function closeLightbox() {
   elements.lightboxImg.src = "";
 }
 
-// Navigates to the next or previous item in the lightbox.
 function navigateLightbox(dir) {
   currentIndex = (currentIndex + dir + allItems.length) % allItems.length;
   openLightbox(allItems[currentIndex]);
 }
 
 // ------------------ UI: Mobile Gallery Switch ------------------
-
-// Toggles between photo and video galleries on mobile.
 function switchGallery(targetId) {
   elements.photosGrid.classList.remove("active");
   elements.videosGrid.classList.remove("active");
@@ -269,40 +297,31 @@ function switchGallery(targetId) {
 }
 
 // ------------------ Event Listeners ------------------
-
-// Initializes all event listeners for the page.
 function initEvents() {
-  // Gallery toggle buttons
   elements.galleryToggleButtons.forEach((btn) => {
     btn.addEventListener("click", (e) =>
       switchGallery(e.target.dataset.target)
     );
   });
 
-  // Music toggle
   elements.musicBtn.addEventListener("click", toggleMusic);
 
-  // Scroll button
   elements.scrollBtn.addEventListener("click", () => {
     document
       .getElementById("photos-gallery")
       .scrollIntoView({ behavior: "smooth" });
   });
 
-  // Header hide on scroll
   window.addEventListener("scroll", handleScroll);
 
-  // Lightbox controls
   elements.lightboxClose.addEventListener("click", closeLightbox);
   elements.prevBtn.addEventListener("click", () => navigateLightbox(-1));
   elements.nextBtn.addEventListener("click", () => navigateLightbox(1));
 
-  // Close lightbox when clicking outside the media.
   elements.lightbox.addEventListener("click", (e) => {
     if (e.target === elements.lightbox) closeLightbox();
   });
 
-  // Keyboard navigation and closing.
   document.addEventListener("keydown", (e) => {
     if (!elements.lightbox.classList.contains("is-open")) return;
     if (e.key === "Escape") closeLightbox();
@@ -310,7 +329,6 @@ function initEvents() {
     if (e.key === "ArrowRight") navigateLightbox(1);
   });
 
-  // Initial music state check
   if (localStorage.getItem("playMusic") === "true") {
     elements.bgMusic
       .play()
@@ -319,21 +337,15 @@ function initEvents() {
     elements.musicIcon.textContent = "🔊";
   }
 
-  // Initial mobile view check
   if (window.innerWidth <= 768) {
     switchGallery("photos-grid");
   }
 }
 
 // ------------------ Initialization ------------------
-
-// The main entry point for the application.
 document.addEventListener("DOMContentLoaded", () => {
   loadGallery();
-  // Hide the loader only after all page assets have loaded
   window.addEventListener("load", hideLoader);
   initEvents();
-
-  // Start the sparkle effect animation
   sparklesInterval = setInterval(createHeroSparkle, 500);
 });
