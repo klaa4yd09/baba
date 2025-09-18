@@ -1,90 +1,91 @@
 // Data Configuration
 const siteConfig = {
-    galleryItems: [
-       { type: "image", src: "23.jpg", caption: "❤️" },
-        { type: "image", src: "25.jpg", caption: "❤️" },
-        { type: "image", src: "17.jpg", caption: "❤️" },
-        { type: "video", src: "a.mp4", caption: "❤️" },
-        { type: "image", src: "g.jpg", caption: "❤️" },
-        { type: "image", src: "f.jpg", caption: "❤️" },
-        { type: "image", src: "e.jpg", caption: "❤️" },
-        { type: "video", src: "b.mp4", caption: "❤️" },
-        { type: "image", src: "51.jpg", caption: "❤️" },
-        { type: "image", src: "33.jpg", caption: "❤️" },
-        { type: "image", src: "26.jpg", caption: "❤️" },
-        { type: "image", src: "27.jpg", caption: "❤️" },
-        { type: "video", src: "c.mp4", caption: "❤️" },
-        { type: "video", src: "d.mp4", caption: "❤️" },
-        { type: "image", src: "21.jpg", caption: "❤️" },
-        { type: "image", src: "24.jpg", caption: "❤️" },
-        { type: "video", src: "28.mp4", caption: "❤️" },
-        { type: "video", src: "29.mp4", caption: "❤️" },
-        { type: "video", src: "30.mp4", caption: "❤️" },
-        { type: "video", src: "32.mp4", caption: "❤️" },
-        { type: "image", src: "42.jpg", caption: "❤️" },
-        { type: "image", src: "43.jpg", caption: "❤️" },
-        { type: "image", src: "16.jpg", caption: "❤️" },
-        { type: "image", src: "19.jpg", caption: "❤️" },
-        { type: "image", src: "65.jpg", caption: "❤️" },
-        { type: "video", src: "20.mp4", caption: "❤️" },
-        { type: "image", src: "18.jpg", caption: "❤️" },
-        { type: "image", src: "61.jpg", caption: "❤️" },
-        { type: "image", src: "22.jpg", caption: "❤️" },
-        { type: "image", src: "54.jpg", caption: "❤️" },
-        { type: "video", src: "49.mp4", caption: "❤️" },
-        { type: "image", src: "59.jpg", caption: "❤️" },
-        { type: "image", src: "41.jpg", caption: "❤️" },
-        { type: "image", src: "56.jpg", caption: "❤️" },
-        { type: "video", src: "1.mp4", caption: "❤️" },
-        { type: "video", src: "2.mp4", caption: "❤️" },
-        { type: "video", src: "3.mp4", caption: "❤️" },
-        { type: "image", src: "4.jpg", caption: "❤️" },
-        { type: "image", src: "5.jpg", caption: "❤️" },
-        { type: "image", src: "6.jpg", caption: "❤️" },
-        { type: "image", src: "7.jpg", caption: "❤️" },
-        { type: "image", src: "8.jpg", caption: "❤️" },
-        { type: "image", src: "9.jpg", caption: "❤️" },
-        { type: "image", src: "10.jpg", caption: "❤️" },
-        { type: "image", src: "12.jpg", caption: "❤️" },
-        { type: "image", src: "13.jpg", caption: "❤️" },
-        { type: "image", src: "14.jpg", caption: "❤️" },
-        { type: "image", src: "profile.jpg", caption: "❤️" },
-        { type: "video", src: "45.mp4", caption: "❤️" },
-        { type: "image", src: "46.jpg", caption: "❤️" },
-        { type: "video", src: "47.mp4", caption: "❤️" },
-        { type: "video", src: "48.mp4", caption: "❤️" },
-        { type: "video", src: "50.mp4", caption: "❤️" },
-        { type: "video", src: "52.mp4", caption: "❤️" },
-        { type: "video", src: "53.mp4", caption: "❤️" },
-        { type: "video", src: "55.mp4", caption: "❤️" },
-        { type: "video", src: "57.mp4", caption: "❤️" },
-        { type: "video", src: "58.mp4", caption: "❤️" },
-        { type: "video", src: "60.mp4", caption: "❤️" },
-        { type: "video", src: "62.mp4", caption: "❤️" },
-        { type: "video", src: "63.mp4", caption: "❤️" },
-        { type: "video", src: "64.mp4", caption: "❤️" },
-        { type: "video", src: "66.mp4", caption: "❤️" },
-        { type: "image", src: "31.jpg", caption: "❤️" },
-        { type: "video", src: "35.mp4", caption: "❤️" },
-        { type: "image", src: "36.jpg", caption: "❤️" },
-        { type: "video", src: "38.mp4", caption: "❤️" },
-        { type: "video", src: "39.mp4", caption: "❤️" },
-        { type: "image", src: "40.jpg", caption: "❤️" },
-        { type: "video", src: "44.mp4", caption: "❤️" },
-        { type: "image", src: "11.jpg", caption: "❤️" },
-    ]
+  galleryItems: [
+    { type: "image", src: "23.jpg", caption: "❤️" },
+    { type: "image", src: "25.jpg", caption: "❤️" },
+    { type: "image", src: "17.jpg", caption: "❤️" },
+    { type: "video", src: "a.mp4", caption: "❤️" },
+    { type: "image", src: "g.jpg", caption: "❤️" },
+    { type: "image", src: "f.jpg", caption: "❤️" },
+    { type: "image", src: "e.jpg", caption: "❤️" },
+    { type: "video", src: "b.mp4", caption: "❤️" },
+    { type: "image", src: "51.jpg", caption: "❤️" },
+    { type: "image", src: "33.jpg", caption: "❤️" },
+    { type: "image", src: "26.jpg", caption: "❤️" },
+    { type: "image", src: "27.jpg", caption: "❤️" },
+    { type: "video", src: "c.mp4", caption: "❤️" },
+    { type: "video", src: "d.mp4", caption: "❤️" },
+    { type: "image", src: "21.jpg", caption: "❤️" },
+    { type: "image", src: "24.jpg", caption: "❤️" },
+    { type: "video", src: "28.mp4", caption: "❤️" },
+    { type: "video", src: "29.mp4", caption: "❤️" },
+    { type: "video", src: "30.mp4", caption: "❤️" },
+    { type: "video", src: "32.mp4", caption: "❤️" },
+    { type: "image", src: "42.jpg", caption: "❤️" },
+    { type: "image", src: "43.jpg", caption: "❤️" },
+    { type: "image", src: "16.jpg", caption: "❤️" },
+    { type: "image", src: "19.jpg", caption: "❤️" },
+    { type: "image", src: "65.jpg", caption: "❤️" },
+    { type: "video", src: "20.mp4", caption: "❤️" },
+    { type: "image", src: "18.jpg", caption: "❤️" },
+    { type: "image", src: "61.jpg", caption: "❤️" },
+    { type: "image", src: "22.jpg", caption: "❤️" },
+    { type: "image", src: "54.jpg", caption: "❤️" },
+    { type: "video", src: "49.mp4", caption: "❤️" },
+    { type: "image", src: "59.jpg", caption: "❤️" },
+    { type: "image", src: "41.jpg", caption: "❤️" },
+    { type: "image", src: "56.jpg", caption: "❤️" },
+    { type: "video", src: "1.mp4", caption: "❤️" },
+    { type: "video", src: "2.mp4", caption: "❤️" },
+    { type: "video", src: "3.mp4", caption: "❤️" },
+    { type: "image", src: "4.jpg", caption: "❤️" },
+    { type: "image", src: "5.jpg", caption: "❤️" },
+    { type: "image", src: "6.jpg", caption: "❤️" },
+    { type: "image", src: "7.jpg", caption: "❤️" },
+    { type: "image", src: "8.jpg", caption: "❤️" },
+    { type: "image", src: "9.jpg", caption: "❤️" },
+    { type: "image", src: "10.jpg", caption: "❤️" },
+    { type: "image", src: "12.jpg", caption: "❤️" },
+    { type: "image", src: "13.jpg", caption: "❤️" },
+    { type: "image", src: "14.jpg", caption: "❤️" },
+    { type: "image", src: "profile.jpg", caption: "❤️" },
+    { type: "video", src: "45.mp4", caption: "❤️" },
+    { type: "image", src: "46.jpg", caption: "❤️" },
+    { type: "video", src: "47.mp4", caption: "❤️" },
+    { type: "video", src: "48.mp4", caption: "❤️" },
+    { type: "video", src: "50.mp4", caption: "❤️" },
+    { type: "video", src: "52.mp4", caption: "❤️" },
+    { type: "video", src: "53.mp4", caption: "❤️" },
+    { type: "video", src: "55.mp4", caption: "❤️" },
+    { type: "video", src: "57.mp4", caption: "❤️" },
+    { type: "video", src: "58.mp4", caption: "❤️" },
+    { type: "video", src: "60.mp4", caption: "❤️" },
+    { type: "video", src: "62.mp4", caption: "❤️" },
+    { type: "video", src: "63.mp4", caption: "❤️" },
+    { type: "video", src: "64.mp4", caption: "❤️" },
+    { type: "video", src: "66.mp4", caption: "❤️" },
+    { type: "image", src: "31.jpg", caption: "❤️" },
+    { type: "video", src: "35.mp4", caption: "❤️" },
+    { type: "image", src: "36.jpg", caption: "❤️" },
+    { type: "video", src: "38.mp4", caption: "❤️" },
+    { type: "video", src: "39.mp4", caption: "❤️" },
+    { type: "image", src: "40.jpg", caption: "❤️" },
+    { type: "video", src: "44.mp4", caption: "❤️" },
+    { type: "image", src: "11.jpg", caption: "❤️" },
+  ],
 };
 
 // DOM Elements
 const loader = document.getElementById("loader");
 const mainContent = document.getElementById("main-content");
 const siteHeader = document.getElementById("site-header");
-const galleryGrid = document.getElementById("gallery-grid");
+const photosGrid = document.getElementById("photos-grid");
+const videosGrid = document.getElementById("videos-grid");
 const scrollBtn = document.getElementById("scroll-btn");
 const musicBtn = document.getElementById("music-btn");
 const bgMusic = document.getElementById("bg-music");
 const musicIcon = musicBtn.querySelector(".music-icon");
-const heroSection = document.getElementById("hero");
+const heroSparkleContainer = document.querySelector(".hero-sparkle-container");
 
 const lightbox = document.getElementById("lightbox");
 const lightboxImg = document.getElementById("lightbox-img");
@@ -99,133 +100,170 @@ let lastScrollY = window.scrollY;
 
 // --- Helper Functions ---
 function getAssetPath(filename) {
-    // Removed the '/assets/' prefix
-    return `./${filename}`;
+  return `./${filename}`;
 }
 
 // --- Page & UI Logic ---
 function hideLoader() {
-    loader.classList.add("hidden");
-    mainContent.style.display = "block";
+  loader.classList.add("hidden");
+  mainContent.style.display = "block";
 }
 
 function handleScroll() {
-    if (window.scrollY > lastScrollY && window.scrollY > 100) {
-        siteHeader.classList.add("hide");
-    } else {
-        siteHeader.classList.remove("hide");
-    }
-    lastScrollY = window.scrollY;
+  if (window.scrollY > lastScrollY && window.scrollY > 100) {
+    siteHeader.classList.add("hide");
+  } else {
+    siteHeader.classList.remove("hide");
+  }
+  lastScrollY = window.scrollY;
 }
 
 function toggleMusic() {
-    if (bgMusic.paused) {
-        bgMusic.play().catch(() => {});
-        musicBtn.classList.add("playing");
-        musicIcon.textContent = "🔊";
-        localStorage.setItem("memory_playMusic", "true");
-    } else {
-        bgMusic.pause();
-        musicBtn.classList.remove("playing");
-        musicIcon.textContent = "🎵";
-        localStorage.setItem("memory_playMusic", "false");
-    }
+  if (bgMusic.paused) {
+    bgMusic.play().catch(() => {});
+    musicBtn.classList.add("playing");
+    musicIcon.textContent = "🔊";
+    localStorage.setItem("memory_playMusic", "true");
+  } else {
+    bgMusic.pause();
+    musicBtn.classList.remove("playing");
+    musicIcon.textContent = "🎵";
+    localStorage.setItem("memory_playMusic", "false");
+  }
+}
+
+function createHeroSparkle() {
+  const sparkle = document.createElement("div");
+  sparkle.classList.add("hero-sparkle");
+  sparkle.style.width = sparkle.style.height = `${Math.random() * 3 + 1}px`;
+  sparkle.style.left = `${Math.random() * 100}vw`;
+  sparkle.style.top = `${100 + Math.random() * 20}vh`;
+  sparkle.style.animationDuration = `${10 + Math.random() * 8}s`;
+  sparkle.style.animationDelay = `${Math.random() * 5}s`;
+  heroSparkleContainer.appendChild(sparkle);
+
+  sparkle.addEventListener("animationend", () => {
+    sparkle.remove();
+  });
 }
 
 // --- Gallery & Lightbox Logic ---
-function createGalleryItem(item, index) {
-    const itemEl = document.createElement("div");
-    itemEl.className = "gallery-item";
-    itemEl.setAttribute("tabindex", "0");
+function createGalleryItem(item) {
+  const itemEl = document.createElement("div");
+  itemEl.className = "gallery-item";
+  itemEl.setAttribute("tabindex", "0");
 
-    const mediaEl = document.createElement(item.type === "image" ? "img" : "video");
-    mediaEl.src = getAssetPath(item.src); // This will now use the modified getAssetPath
-    mediaEl.alt = item.caption;
-    mediaEl.loading = "lazy";
-    
-    if (item.type === "video") {
-        mediaEl.muted = true;
-        mediaEl.playsInline = true;
-        mediaEl.preload = "metadata";
+  const mediaEl = document.createElement(
+    item.type === "image" ? "img" : "video"
+  );
+  mediaEl.src = getAssetPath(item.src);
+  mediaEl.alt = item.caption;
+  mediaEl.loading = "lazy";
 
-        const videoIndicator = document.createElement("span");
-        videoIndicator.className = "video-indicator";
-        videoIndicator.textContent = "VIDEO";
-        itemEl.appendChild(videoIndicator);
-    }
+  if (item.type === "video") {
+    mediaEl.muted = true;
+    mediaEl.playsInline = true;
+    mediaEl.preload = "metadata";
 
-    itemEl.appendChild(mediaEl);
-    
-    itemEl.addEventListener("click", () => {
-        currentIndex = index;
-        openLightbox(item);
-    });
+    const videoIndicator = document.createElement("span");
+    videoIndicator.className = "video-indicator";
+    videoIndicator.textContent = "VIDEO";
+    itemEl.appendChild(videoIndicator);
+  }
 
-    return itemEl;
+  itemEl.appendChild(mediaEl);
+
+  itemEl.addEventListener("click", () => {
+    const allItems = [...photosGrid.children, ...videosGrid.children].map(
+      (el) => el.dataset.item
+    );
+    const itemJSON = JSON.stringify(item);
+    currentIndex = allItems.indexOf(itemJSON);
+    openLightbox(item);
+  });
+
+  itemEl.dataset.item = JSON.stringify(item);
+
+  return itemEl;
 }
 
 function loadGallery() {
-    siteConfig.galleryItems.forEach((item, index) => {
-        const galleryItem = createGalleryItem(item, index);
-        galleryGrid.appendChild(galleryItem);
-    });
+  const photos = siteConfig.galleryItems.filter(
+    (item) => item.type === "image"
+  );
+  const videos = siteConfig.galleryItems.filter(
+    (item) => item.type === "video"
+  );
+
+  photos.forEach((item) => {
+    const galleryItem = createGalleryItem(item);
+    photosGrid.appendChild(galleryItem);
+  });
+
+  videos.forEach((item) => {
+    const galleryItem = createGalleryItem(item);
+    videosGrid.appendChild(galleryItem);
+  });
 }
 
 function openLightbox(item) {
-    lightbox.classList.add("is-open");
-    lightbox.setAttribute("aria-hidden", "false");
-    document.body.style.overflow = "hidden";
+  lightbox.classList.add("is-open");
+  lightbox.setAttribute("aria-hidden", "false");
+  document.body.style.overflow = "hidden";
 
-    if (item.type === "image") {
-        lightboxVideo.style.display = "none";
-        lightboxVideo.pause();
-        lightboxImg.style.display = "block";
-        lightboxImg.src = getAssetPath(item.src); // This will now use the modified getAssetPath
-        lightboxImg.alt = item.caption;
-    } else {
-        lightboxImg.style.display = "none";
-        lightboxVideo.style.display = "block";
-        lightboxVideo.src = getAssetPath(item.src); // This will now use the modified getAssetPath
-        lightboxVideo.play().catch(() => {});
-    }
+  if (item.type === "image") {
+    lightboxVideo.style.display = "none";
+    lightboxVideo.pause();
+    lightboxImg.style.display = "block";
+    lightboxImg.src = getAssetPath(item.src);
+    lightboxImg.alt = item.caption;
+  } else {
+    lightboxImg.style.display = "none";
+    lightboxVideo.style.display = "block";
+    lightboxVideo.src = getAssetPath(item.src);
+    lightboxVideo.play().catch(() => {});
+  }
 
-    lightboxCaption.textContent = item.caption;
+  lightboxCaption.textContent = item.caption;
 }
 
 function closeLightbox() {
-    lightbox.classList.remove("is-open");
-    lightbox.setAttribute("aria-hidden", "true");
-    document.body.style.overflow = "";
-    lightboxVideo.pause();
-    lightboxVideo.src = "";
-    lightboxImg.src = "";
-    lightboxCaption.textContent = "";
+  lightbox.classList.remove("is-open");
+  lightbox.setAttribute("aria-hidden", "true");
+  document.body.style.overflow = "";
+  lightboxVideo.pause();
+  lightboxVideo.src = "";
+  lightboxImg.src = "";
+  lightboxCaption.textContent = "";
 }
 
 function navigateLightbox(direction) {
-    currentIndex = (currentIndex + direction + siteConfig.galleryItems.length) % siteConfig.galleryItems.length;
-    openLightbox(siteConfig.galleryItems[currentIndex]);
+  const allItems = siteConfig.galleryItems;
+  currentIndex = (currentIndex + direction + allItems.length) % allItems.length;
+  openLightbox(allItems[currentIndex]);
 }
 
 // --- Event Listeners ---
 document.addEventListener("DOMContentLoaded", () => {
-    loadGallery();
-    
-    // Hide loader after a delay
-    setTimeout(hideLoader, 1000);
+  loadGallery();
 
-    // Persist music state
-    if (localStorage.getItem("memory_playMusic") === "true") {
-        bgMusic.play().catch(() => {});
-        musicBtn.classList.add("playing");
-        musicIcon.textContent = "🔊";
-    }
+  setTimeout(hideLoader, 1000);
+
+  if (localStorage.getItem("memory_playMusic") === "true") {
+    bgMusic.play().catch(() => {});
+    musicBtn.classList.add("playing");
+    musicIcon.textContent = "🔊";
+  }
+
+  setInterval(createHeroSparkle, 500);
 });
 
 musicBtn.addEventListener("click", toggleMusic);
 
 scrollBtn.addEventListener("click", () => {
-    document.getElementById("gallery").scrollIntoView({ behavior: "smooth" });
+  document
+    .getElementById("photos-gallery")
+    .scrollIntoView({ behavior: "smooth" });
 });
 
 window.addEventListener("scroll", handleScroll);
@@ -235,14 +273,14 @@ lightboxClose.addEventListener("click", closeLightbox);
 prevBtn.addEventListener("click", () => navigateLightbox(-1));
 nextBtn.addEventListener("click", () => navigateLightbox(1));
 lightbox.addEventListener("click", (e) => {
-    if (e.target === lightbox || e.target.classList.contains("lightbox-stage")) {
-        closeLightbox();
-    }
+  if (e.target === lightbox || e.target.classList.contains("lightbox-stage")) {
+    closeLightbox();
+  }
 });
 
 document.addEventListener("keydown", (e) => {
-    if (!lightbox.classList.contains("is-open")) return;
-    if (e.key === "Escape") closeLightbox();
-    if (e.key === "ArrowLeft") navigateLightbox(-1);
-    if (e.key === "ArrowRight") navigateLightbox(1);
+  if (!lightbox.classList.contains("is-open")) return;
+  if (e.key === "Escape") closeLightbox();
+  if (e.key === "ArrowLeft") navigateLightbox(-1);
+  if (e.key === "ArrowRight") navigateLightbox(1);
 });
