@@ -512,36 +512,100 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Responsive Design */
-@media (max-width: 1024px) {
-  .about-content {
-    flex-direction: column;
-    text-align: center;
-  }
-  .about-image-container {
-    order: -1;
-    margin-bottom: 2rem;
-  }
+/* Responsive Design (Mobile-First Approach) */
+/* --- Default styles are for mobile --- */
+.site-header {
+  padding: 1rem 1.5rem;
 }
 
-@media (max-width: 768px) {
-  .site-header { padding: 1rem 1.5rem; }
-  .main-nav { display: none; }
-  .hero-title { font-size: 2.8rem; }
-  .cta-button { padding: 0.6rem 2rem; }
-  .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
-  .about-image { width: 250px; height: 250px; }
-  .mobile-gallery-controls { display: flex; }
-  .section-title { display: none; }
+.main-nav {
+  display: none;
 }
 
+.hero-title {
+  font-size: 2.8rem;
+}
+
+.cta-button {
+  padding: 0.6rem 2rem;
+}
+
+.gallery-grid {
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+}
+
+.mobile-gallery-controls {
+  display: flex;
+}
+
+.section-title {
+  display: none;
+}
+
+.about-content {
+  flex-direction: column;
+  text-align: center;
+}
+
+.about-image-container {
+  order: -1;
+  margin-bottom: 2rem;
+}
+
+.about-image {
+  width: 250px;
+  height: 250px;
+}
+
+/* --- Larger devices (Tablet & Desktop) --- */
 @media (min-width: 769px) {
+  .site-header {
+    padding: 1.5rem 3rem;
+  }
+
+  .main-nav {
+    display: flex;
+  }
+
+  .hero-title {
+    font-size: clamp(3rem, 8vw, 6rem);
+  }
+
+  .cta-button {
+    padding: 0.8rem 2.5rem;
+  }
+
+  .gallery-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+
+  /* Show both grids and hide toggle buttons on larger screens */
   #photos-grid,
   #videos-grid {
     display: grid !important;
     opacity: 1 !important;
   }
+
   .mobile-gallery-controls {
     display: none;
+  }
+
+  .section-title {
+    display: block;
+  }
+
+  .about-content {
+    flex-direction: row;
+    text-align: left;
+  }
+
+  .about-image-container {
+    order: 0;
+    margin-bottom: 0;
+  }
+
+  .about-image {
+    width: 350px;
+    height: 350px;
   }
 }
