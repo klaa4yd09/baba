@@ -304,7 +304,7 @@ body {
   font-size: 3rem;
   text-align: center;
   margin-bottom: 3rem;
-  color: var(--color-text-light);
+  color: var(--color-text-dark);
 }
 
 .gallery-grid {
@@ -357,7 +357,8 @@ body {
   transition: transform 0.4s ease;
 }
 
-.gallery-item:hover img {
+.gallery-item:hover img,
+.gallery-item:hover video {
   transform: scale(1.05);
 }
 
