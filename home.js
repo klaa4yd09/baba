@@ -43,37 +43,37 @@ const siteConfig = {
     { src: "11.jpg", caption: "❤️", type: "image" },
   ],
   videos: [
-    { src: "a.mp4", caption: "❤️", type: "video" },
-    { src: "b.mp4", caption: "❤️", type: "video" },
-    { src: "c.mp4", caption: "❤️", type: "video" },
-    { src: "d.mp4", caption: "❤️", type: "video" },
-    { src: "28.mp4", caption: "❤️", type: "video" },
-    { src: "29.mp4", caption: "❤️", type: "video" },
-    { src: "30.mp4", caption: "❤️", type: "video" },
-    { src: "32.mp4", caption: "❤️", type: "video" },
-    { src: "20.mp4", caption: "❤️", type: "video" },
-    { src: "49.mp4", caption: "❤️", type: "video" },
-    { src: "1.mp4", caption: "❤️", type: "video" },
-    { src: "2.mp4", caption: "❤️", type: "video" },
-    { src: "3.mp4", caption: "❤️", type: "video" },
-    { src: "45.mp4", caption: "❤️", type: "video" },
-    { src: "47.mp4", caption: "❤️", type: "video" },
-    { src: "48.mp4", caption: "❤️", type: "video" },
-    { src: "50.mp4", caption: "❤️", type: "video" },
-    { src: "52.mp4", caption: "❤️", type: "video" },
-    { src: "53.mp4", caption: "❤️", type: "video" },
-    { src: "55.mp4", caption: "❤️", type: "video" },
-    { src: "57.mp4", caption: "❤️", type: "video" },
-    { src: "58.mp4", caption: "❤️", type: "video" },
-    { src: "60.mp4", caption: "❤️", type: "video" },
-    { src: "62.mp4", caption: "❤️", type: "video" },
-    { src: "63.mp4", caption: "❤️", type: "video" },
-    { src: "64.mp4", caption: "❤️", type: "video" },
-    { src: "66.mp4", caption: "❤️", type: "video" },
-    { src: "35.mp4", caption: "❤️", type: "video" },
-    { src: "38.mp4", caption: "❤️", type: "video" },
-    { src: "39.mp4", caption: "❤️", type: "video" },
-    { src: "44.mp4", caption: "❤️", type: "video" },
+    { src: "a.mp4", poster: "a.jpg", caption: "❤️", type: "video" },
+    { src: "b.mp4", poster: "b.jpg", caption: "❤️", type: "video" },
+    { src: "c.mp4", poster: "c.jpg", caption: "❤️", type: "video" },
+    { src: "d.mp4", poster: "d.jpg", caption: "❤️", type: "video" },
+    { src: "28.mp4", poster: "28.jpg", caption: "❤️", type: "video" },
+    { src: "29.mp4", poster: "29.jpg", caption: "❤️", type: "video" },
+    { src: "30.mp4", poster: "30.jpg", caption: "❤️", type: "video" },
+    { src: "32.mp4", poster: "32.jpg", caption: "❤️", type: "video" },
+    { src: "20.mp4", poster: "20.jpg", caption: "❤️", type: "video" },
+    { src: "49.mp4", poster: "49.jpg", caption: "❤️", type: "video" },
+    { src: "1.mp4", poster: "1.jpg", caption: "❤️", type: "video" },
+    { src: "2.mp4", poster: "2.jpg", caption: "❤️", type: "video" },
+    { src: "3.mp4", poster: "3.jpg", caption: "❤️", type: "video" },
+    { src: "45.mp4", poster: "45.jpg", caption: "❤️", type: "video" },
+    { src: "47.mp4", poster: "47.jpg", caption: "❤️", type: "video" },
+    { src: "48.mp4", poster: "48.jpg", caption: "❤️", type: "video" },
+    { src: "50.mp4", poster: "50.jpg", caption: "❤️", type: "video" },
+    { src: "52.mp4", poster: "52.jpg", caption: "❤️", type: "video" },
+    { src: "53.mp4", poster: "53.jpg", caption: "❤️", type: "video" },
+    { src: "55.mp4", poster: "55.jpg", caption: "❤️", type: "video" },
+    { src: "57.mp4", poster: "57.jpg", caption: "❤️", type: "video" },
+    { src: "58.mp4", poster: "58.jpg", caption: "❤️", type: "video" },
+    { src: "60.mp4", poster: "60.jpg", caption: "❤️", type: "video" },
+    { src: "62.mp4", poster: "62.jpg", caption: "❤️", type: "video" },
+    { src: "63.mp4", poster: "63.jpg", caption: "❤️", type: "video" },
+    { src: "64.mp4", poster: "64.jpg", caption: "❤️", type: "video" },
+    { src: "66.mp4", poster: "66.jpg", caption: "❤️", type: "video" },
+    { src: "35.mp4", poster: "35.jpg", caption: "❤️", type: "video" },
+    { src: "38.mp4", poster: "38.jpg", caption: "❤️", type: "video" },
+    { src: "39.mp4", poster: "39.jpg", caption: "❤️", type: "video" },
+    { src: "44.mp4", poster: "44.jpg", caption: "❤️", type: "video" },
   ],
 };
 
@@ -133,10 +133,12 @@ function typeHeroTitle(text, speed = 100) {
 
 function handleParallax() {
   const scrollY = window.scrollY;
-  const parallaxSpeed = parseFloat(elements.heroBgImage.dataset.parallaxSpeed);
-  elements.heroBgImage.style.transform = `translateY(${
-    scrollY * parallaxSpeed
-  }px) scale(1.1)`;
+  const parallaxSpeed = 0.5; // A fixed, non-dataset value is better for consistency.
+  if (elements.heroBgImage) {
+    elements.heroBgImage.style.transform = `translateY(${
+      scrollY * parallaxSpeed
+    }px) scale(1.1)`;
+  }
 }
 
 // ------------------ UI: Header & Music ------------------
@@ -204,13 +206,12 @@ function createGalleryItem(item, index) {
     mediaEl = new Image();
     mediaEl.dataset.src = getAssetPath(item.src);
     mediaEl.alt = item.caption;
-    mediaEl.loading = "lazy";
   } else {
     mediaEl = document.createElement("video");
     mediaEl.dataset.src = getAssetPath(item.src);
+    mediaEl.dataset.poster = getAssetPath(item.poster); // Use data-poster for lazy loading
     mediaEl.muted = true;
     mediaEl.playsInline = true;
-    mediaEl.preload = "metadata";
 
     const overlay = document.createElement("div");
     overlay.className = "video-overlay";
@@ -247,15 +248,22 @@ function loadGallery() {
 }
 
 function enableLazyLoading() {
-  const lazyElements = document.querySelectorAll("[data-src]");
+  const lazyElements = document.querySelectorAll(
+    ".gallery-item img, .gallery-item video"
+  );
   const observer = new IntersectionObserver(
     (entries, obs) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           const media = entry.target;
-          media.src = media.dataset.src;
-          media.onload = () => media.classList.add("loaded");
-          media.onloadeddata = () => media.classList.add("loaded");
+          if (media.tagName === "IMG") {
+            media.src = media.dataset.src;
+            media.onload = () => media.classList.add("loaded");
+          } else if (media.tagName === "VIDEO") {
+            media.src = media.dataset.src;
+            media.poster = media.dataset.poster; // Set the poster image
+            media.onloadeddata = () => media.classList.add("loaded");
+          }
           obs.unobserve(media);
         }
       });
@@ -271,13 +279,11 @@ function enableLazyLoading() {
 function openLightbox(item) {
   elements.lightbox.classList.add("is-open");
   document.body.style.overflow = "hidden";
-  elements.lightbox.focus(); // Focus the lightbox for accessibility
+  elements.lightbox.focus();
 
   elements.lightboxImg.style.display = "none";
   elements.lightboxVideo.style.display = "none";
   elements.lightboxVideo.pause();
-  elements.lightboxVideo.src = "";
-  elements.lightboxImg.src = "";
 
   if (item.type === "image") {
     elements.lightboxImg.style.display = "block";
@@ -285,6 +291,7 @@ function openLightbox(item) {
   } else {
     elements.lightboxVideo.style.display = "block";
     elements.lightboxVideo.src = getAssetPath(item.src);
+    elements.lightboxVideo.poster = getAssetPath(item.poster); // Use the poster in the lightbox
     elements.lightboxVideo.load();
     elements.lightboxVideo
       .play()
@@ -300,7 +307,6 @@ function closeLightbox() {
   elements.lightboxVideo.pause();
   elements.lightboxVideo.src = "";
   elements.lightboxImg.src = "";
-  // Return focus to the element that opened the lightbox if possible
   document.activeElement.blur();
 }
 
@@ -384,7 +390,6 @@ function initEvents() {
     elements.musicIcon.textContent = "🔊";
   }
 
-  // Initial gallery view for mobile
   if (window.innerWidth <= 768) {
     switchGallery("photos-grid");
   } else {
@@ -392,7 +397,6 @@ function initEvents() {
     elements.videosGrid.classList.add("active");
   }
 
-  // Custom cursor
   if (window.innerWidth > 768) {
     document.addEventListener("mousemove", handleCursor);
     document.body.style.cursor = "none";
