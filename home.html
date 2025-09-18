@@ -1,88 +1,127 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Memory Lane</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
     <link rel="icon" href="heart.png" />
     <link rel="stylesheet" href="home.css" />
-</head>
-<body>
-
+  </head>
+  <body>
     <div class="loader-container" id="loader">
-        <div class="loader"></div>
+      <div class="loader"></div>
     </div>
 
     <header class="site-header" id="site-header">
-        <a class="logo" href="#">Memory Lane</a>
-        <nav class="main-nav">
-            <a href="#gallery" class="nav-link">Gallery</a>
-            <a href="#about" class="nav-link">Our Story</a>
-        </nav>
-        <button id="music-btn" class="music-btn" aria-label="Toggle background music">
-            <span class="music-icon">🎵</span>
-        </button>
+      <a class="logo" href="index.html">Memory Lane</a>
+      <nav class="main-nav">
+        <a href="#photos-gallery" class="nav-link">Photos</a>
+        <a href="#videos-gallery" class="nav-link">Videos</a>
+        <a href="#about" class="nav-link">Our Story</a>
+      </nav>
+      <button
+        id="music-btn"
+        class="music-btn"
+        aria-label="Toggle background music"
+      >
+        <span class="music-icon">🎵</span>
+      </button>
     </header>
 
     <main id="main-content">
-        <section class="hero-section" id="hero">
-            <div class="hero-content">
-                <h1 class="hero-title">Our Shared Journey</h1>
-                <p class="hero-subtitle">A curated collection of our most cherished moments.</p>
-                <button class="cta-button" id="scroll-btn">View Gallery</button>
-            </div>
-            <div class="hero-bg-image"></div>
-        </section>
+      <div class="hero-sparkle-container"></div>
+      <section class="hero-section" id="hero">
+        <div class="hero-content">
+          <h1 class="hero-title">A Curated Collection</h1>
+          <p class="hero-subtitle">
+            Celebrating our most cherished memories and milestones.
+          </p>
+          <button class="cta-button" id="scroll-btn">
+            Explore Our Journey
+          </button>
+        </div>
+        <div class="hero-bg-image"></div>
+      </section>
 
-        <section class="gallery-section" id="gallery">
-            <h2 class="section-title">Photo & Video Gallery</h2>
-            <div class="gallery-grid" aria-live="polite" id="gallery-grid"></div>
-        </section>
+      <section class="gallery-section" id="photos-gallery">
+        <h2 class="section-title">Photo Gallery</h2>
+        <div class="gallery-grid" aria-live="polite" id="photos-grid"></div>
+      </section>
 
-        <section class="about-section" id="about">
-            <div class="about-content">
-                <div class="about-text-container">
-                    <h2>Our Story</h2>
-                    <p>Welcome to our digital scrapbook. Every photo and video in this gallery is a snapshot of our journey together, from the quiet moments to the grand adventures. This space is a celebration of our love, our growth, and the beautiful memories we continue to create.</p>
-                </div>
-                <div class="about-image-container">
-                    <img src="profile.jpg" alt="Featured portrait of us" class="about-image" loading="lazy" />
-                </div>
-            </div>
-        </section>
+      <section class="gallery-section" id="videos-gallery">
+        <h2 class="section-title">Video Gallery</h2>
+        <div class="gallery-grid" aria-live="polite" id="videos-grid"></div>
+      </section>
+
+      <section class="about-section" id="about">
+        <div class="about-content">
+          <div class="about-text-container">
+            <h2>Our Story</h2>
+            <p>
+              Welcome to our digital scrapbook. Every photo and video in this
+              gallery is a snapshot of our journey together, from the quiet
+              moments to the grand adventures. This space is a celebration of
+              our love, our growth, and the beautiful memories we continue to
+              create.
+            </p>
+          </div>
+          <div class="about-image-container">
+            <img
+              src="profile.jpg"
+              alt="Featured portrait of us"
+              class="about-image"
+              loading="lazy"
+            />
+          </div>
+        </div>
+      </section>
     </main>
 
     <footer class="site-footer" id="contact">
-        <div class="footer-content">
-            <p>Built with purpose and care. &copy; Baba❤️</p>
-        </div>
+      <div class="footer-content">
+        <p>Built with purpose and care. &copy; Baba❤️</p>
+      </div>
     </footer>
 
-    <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Media viewer">
-        <button class="close-btn" id="lightbox-close" aria-label="Close viewer">
-            <span class="sr-only">Close</span>
-            &times;
+    <div
+      id="lightbox"
+      class="lightbox"
+      role="dialog"
+      aria-modal="true"
+      aria-hidden="true"
+      aria-label="Media viewer"
+    >
+      <button class="close-btn" id="lightbox-close" aria-label="Close viewer">
+        <span class="sr-only">Close</span>
+        &times;
+      </button>
+      <div class="lightbox-stage">
+        <button
+          class="nav-btn prev-btn"
+          id="prev-btn"
+          aria-label="Previous media"
+        >
+          <span class="sr-only">Previous</span>
+          ‹
         </button>
-        <div class="lightbox-stage">
-            <button class="nav-btn prev-btn" id="prev-btn" aria-label="Previous media">
-                <span class="sr-only">Previous</span>
-                ‹
-            </button>
-            <div class="lightbox-media-container">
-                <img id="lightbox-img" alt="" />
-                <video id="lightbox-video" controls playsinline></video>
-            </div>
-            <button class="nav-btn next-btn" id="next-btn" aria-label="Next media">
-                <span class="sr-only">Next</span>
-                ›
-            </button>
+        <div class="lightbox-media-container">
+          <img id="lightbox-img" alt="" />
+          <video id="lightbox-video" controls playsinline></video>
         </div>
-        <div id="lightbox-caption" class="lightbox-caption"></div>
+        <button class="nav-btn next-btn" id="next-btn" aria-label="Next media">
+          <span class="sr-only">Next</span>
+          ›
+        </button>
+      </div>
+      <div id="lightbox-caption" class="lightbox-caption"></div>
     </div>
 
     <audio id="bg-music" src="iris.mp3" loop preload="metadata"></audio>
 
     <script src="home.js" defer></script>
-</body>
+  </body>
 </html>
