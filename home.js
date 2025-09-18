@@ -262,8 +262,9 @@ function navigateLightbox(direction) {
 document.addEventListener("DOMContentLoaded", () => {
   loadGallery();
 
+  // On page load, switch to photos grid on mobile only
   if (window.innerWidth <= 768) {
-    switchGallery("photos-grid"); // Default to photos on mobile
+    switchGallery("photos-grid");
   }
 
   setTimeout(hideLoader, 1000);
