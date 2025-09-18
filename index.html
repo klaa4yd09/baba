@@ -1,63 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Baba❤️</title>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Memory Lane</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="icon" href="heart.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-    <!-- Fonts -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Montserrat:wght@200;300;400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
+  <div class="preloader">
+    <div class="preloader-heart">❤️</div>
+    <div class="preloader-text">Loading Memories...</div>
+  </div>
 
-    <!-- Favicon -->
-    <link rel="icon" href="heart.png" />
+  <div class="sparkle-container"></div>
 
-    <!-- Styles -->
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <!-- Preloader -->
-    <div id="preloader">
-      <div class="preloader-message">
-        <p>Loading your love space...</p>
+  <div class="landing">
+    <div class="overlay"></div>
+    <div class="hearts-container"></div>
+    <div class="content">
+      <div class="avatar-glow">
+        <img src="14.jpg" alt="Profile" class="avatar">
       </div>
-    </div>
-
-    <!-- Background Layers -->
-    <div class="background-layers">
-      <div class="bg-vignette"></div>
-      <div class="bg-gradient-overlay"></div>
-      <img src="14.jpg" alt="A cherished profile image" class="bg-image" />
-    </div>
-    <div class="particle-container"></div>
-
-    <!-- Main Content -->
-    <main class="content-container">
       <h1 class="main-title">
-        <span class="title-stroke">Baba</span>
-        <span class="heart-symbol">❤️</span>
+        <span class="title-letter">O</span><span class="title-letter">u</span><span class="title-letter">r</span>
+        <span class="title-letter space"> </span>
+        <span class="title-letter">M</span><span class="title-letter">e</span><span class="title-letter">m</span><span class="title-letter">o</span><span class="title-letter">r</span><span class="title-letter">y</span>
+        <span class="title-letter space"> </span>
+        <span class="title-letter">L</span><span class="title-letter">a</span><span class="title-letter">n</span><span class="title-letter">e</span>
       </h1>
-      <p class="main-subtitle">A digital garden of our memories.</p>
-      <button
-        id="enter-btn"
-        class="main-cta-button"
-        aria-label="Enter our world"
-      >
-        <span>Open the Album</span>
-      </button>
-    </main>
+      <p class="fade-up delay">A collection of our most cherished moments 💕</p>
 
-    <!-- Audio -->
-    <audio id="background-audio" loop>
-      <source src="iris.mp3" type="audio/mpeg" />
-    </audio>
-    <audio id="click-sound">
-      <source src="click.mp3" type="audio/mpeg" />
-    </audio>
 
-    <!-- Scripts -->
-    <script src="script.js"></script>
-  </body>
+      <a href="home.html" class="enter-btn fade-up delay3" id="enter-btn" aria-label="Enter Memory Lane">
+  Enter Memory Lane
+</a>  
+      </a>
+
+      <audio id="bg-music" src="iris.mp3" loop></audio>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
 </html>
