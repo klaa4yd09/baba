@@ -81,6 +81,8 @@ const mainContent = document.getElementById("main-content");
 const siteHeader = document.getElementById("site-header");
 const photosGrid = document.getElementById("photos-grid");
 const videosGrid = document.getElementById("videos-grid");
+const galleryToggleButtons = document.querySelectorAll(".gallery-toggle-btn");
+const galleryTitle = document.getElementById("gallery-title");
 const scrollBtn = document.getElementById("scroll-btn");
 const musicBtn = document.getElementById("music-btn");
 const bgMusic = document.getElementById("bg-music");
@@ -147,6 +149,21 @@ function createHeroSparkle() {
   });
 }
 
+function switchGallery(targetId) {
+  const grids = document.querySelectorAll(".gallery-grid");
+  grids.forEach((grid) => grid.classList.remove("active"));
+  document.getElementById(targetId).classList.add("active");
+
+  galleryToggleButtons.forEach((btn) => btn.classList.remove("active"));
+  document.querySelector(`[data-target="${targetId}"]`).classList.add("active");
+
+  if (targetId === "photos-grid") {
+    galleryTitle.textContent = "Photo Gallery";
+  } else {
+    galleryTitle.textContent = "Video Gallery";
+  }
+}
+
 // --- Gallery & Lightbox Logic ---
 function createGalleryItem(item) {
   const itemEl = document.createElement("div");
@@ -174,12 +191,10 @@ function createGalleryItem(item) {
   itemEl.appendChild(mediaEl);
 
   itemEl.addEventListener("click", () => {
-    const allItems = [...photosGrid.children, ...videosGrid.children].map(
-      (el) => el.dataset.item
-    );
-    const itemJSON = JSON.stringify(item);
-    currentIndex = allItems.indexOf(itemJSON);
-    openLightbox(item);
+    const allItems = siteConfig.galleryItems;
+    const currentItem = siteConfig.galleryItems.find((i) => i.src === item.src);
+    currentIndex = allItems.indexOf(currentItem);
+    openLightbox(currentItem);
   });
 
   itemEl.dataset.item = JSON.stringify(item);
@@ -247,6 +262,10 @@ function navigateLightbox(direction) {
 document.addEventListener("DOMContentLoaded", () => {
   loadGallery();
 
+  if (window.innerWidth <= 768) {
+    switchGallery("photos-grid"); // Default to photos on mobile
+  }
+
   setTimeout(hideLoader, 1000);
 
   if (localStorage.getItem("memory_playMusic") === "true") {
@@ -258,12 +277,17 @@ document.addEventListener("DOMContentLoaded", () => {
   setInterval(createHeroSparkle, 500);
 });
 
+galleryToggleButtons.forEach((btn) => {
+  btn.addEventListener("click", (e) => {
+    const targetId = e.target.dataset.target;
+    switchGallery(targetId);
+  });
+});
+
 musicBtn.addEventListener("click", toggleMusic);
 
 scrollBtn.addEventListener("click", () => {
-  document
-    .getElementById("photos-gallery")
-    .scrollIntoView({ behavior: "smooth" });
+  document.getElementById("gallery").scrollIntoView({ behavior: "smooth" });
 });
 
 window.addEventListener("scroll", handleScroll);
