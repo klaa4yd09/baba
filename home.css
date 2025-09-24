@@ -16,6 +16,17 @@
   --header-height: 4.5rem;
 }
 
+/* Dark Mode */
+.dark-mode {
+  --color-secondary: #2C2C2C;
+  --color-text-light: #F8F4F2;
+  --color-text-dark: #F8F4F2;
+  --color-bg-dark: #1C1C1C;
+  --color-bg-light: #3A3A3A;
+  --color-accent-light: #F0A0B8;
+  --color-accent: var(--color-primary);
+}
+
 /* Base Styles */
 *, *::before, *::after {
   box-sizing: border-box;
@@ -119,6 +130,9 @@ body {
   z-index: 1000;
   transition: transform var(--transition-speed-fast) ease-in-out;
 }
+.dark-mode .site-header {
+  background: rgba(44, 44, 44, 0.9);
+}
 
 .site-header.hide {
   transform: translateY(-100%);
@@ -155,12 +169,18 @@ body {
   background-color: var(--color-primary);
   transition: width var(--transition-speed-fast);
 }
-
+.main-nav .nav-link.active::after,
 .main-nav .nav-link:hover::after {
   width: 100%;
 }
 
-.music-btn {
+.utility-buttons {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.utility-btn {
   width: 48px;
   height: 48px;
   border-radius: 50%;
@@ -171,14 +191,17 @@ body {
   font-size: 1.2rem;
   box-shadow: 0 0 10px rgba(201, 76, 127, 0.2);
   transition: transform var(--transition-speed-fast), box-shadow var(--transition-speed-fast);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.music-btn:hover {
+.utility-btn:hover {
   transform: scale(1.05);
   background-color: rgba(201, 76, 127, 0.1);
 }
 
-.music-btn.playing {
+.utility-btn.playing {
   animation: pulse 1.5s infinite;
 }
 
@@ -307,7 +330,7 @@ body {
   font-size: 3rem;
   text-align: center;
   margin-bottom: 3rem;
-  color: var(--color-text-light);
+  color: var(--color-text-dark);
 }
 
 .gallery-grid {
@@ -620,8 +643,8 @@ body {
     display: flex;
   }
 
-  .music-btn {
-    display: block;
+  .utility-buttons {
+    display: flex;
   }
 
   .hero-title {
@@ -636,7 +659,6 @@ body {
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   }
   
-  /* FIXED: Ensure both grids are always visible on larger screens, no JS required */
   #photos-grid,
   #videos-grid {
     display: grid !important;
@@ -672,13 +694,13 @@ body {
     padding: 1rem 1.5rem;
     height: auto;
   }
-
+  
   .main-nav {
     display: none;
   }
 
-  .music-btn {
-    display: block;
+  .utility-buttons {
+    display: flex;
   }
 
   .hero-title {
@@ -715,9 +737,99 @@ body {
     width: 250px;
     height: 250px;
   }
+
+  /* Mobile Nav */
+  .mobile-nav-toggle {
+    display: block;
+  }
+  
+  .mobile-nav-menu {
+    display: flex;
+  }
 }
 
-.gallery-section.dark {
+/* Additional Enhancements */
+.dark-mode .gallery-section {
   background-color: var(--color-bg-dark);
+}
+.dark-mode .about-section {
+  background-color: var(--color-bg-dark);
+}
+.dark-mode .gallery-toggle-btn {
+  background: var(--color-bg-dark);
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+.dark-mode .gallery-toggle-btn.active,
+.dark-mode .gallery-toggle-btn:hover {
+  background: var(--color-primary);
   color: var(--color-text-light);
+}
+.dark-mode .cta-button {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+.dark-mode .cta-button:hover {
+  background-color: var(--color-primary);
+  color: var(--color-bg-dark);
+}
+
+
+/* -- New CSS for Mobile Nav and Theme Toggle -- */
+.mobile-nav-toggle {
+  display: none;
+  font-size: 1.5rem;
+  background: none;
+  border: none;
+  color: var(--color-text-dark);
+  cursor: pointer;
+  z-index: 1001;
+}
+
+.mobile-nav-menu {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 100%;
+  height: 100%;
+  background: var(--color-bg-light);
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  transition: right var(--transition-speed-fast);
+}
+.dark-mode .mobile-nav-menu {
+  background: var(--color-bg-dark);
+}
+
+.mobile-nav-menu.is-open {
+  right: 0;
+}
+
+.mobile-nav-menu .nav-link {
+  font-size: 2rem;
+  color: var(--color-text-dark);
+  text-decoration: none;
+  font-weight: 500;
+  position: relative;
+  transition: color var(--transition-speed-fast);
+}
+
+.mobile-nav-menu .nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: var(--color-primary);
+  transition: width var(--transition-speed-fast);
+}
+
+.mobile-nav-menu .nav-link:hover::after,
+.mobile-nav-menu .nav-link.active::after {
+  width: 100%;
 }
