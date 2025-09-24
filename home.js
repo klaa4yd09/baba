@@ -85,7 +85,6 @@ const elements = {
   galleryToggleButtons: document.querySelectorAll(".gallery-toggle-btn"),
   scrollBtn: document.getElementById("scroll-btn"),
   musicBtn: document.getElementById("music-btn"),
-  themeToggleBtn: document.getElementById("theme-toggle-btn"),
   bgMusic: document.getElementById("bg-music"),
   musicIcon: document.getElementById("music-icon"),
   heroSparkleContainer: document.querySelector(".hero-sparkle-container"),
@@ -99,8 +98,6 @@ const elements = {
   heroTitle: document.getElementById("hero-title"),
   heroBgImage: document.querySelector(".hero-bg-image"),
   customCursor: document.getElementById("custom-cursor"),
-  mobileNavToggle: document.getElementById("mobile-nav-toggle"),
-  mobileNavMenu: document.getElementById("mobile-nav-menu"),
 };
 
 // ------------------ State ------------------
@@ -110,11 +107,6 @@ let currentIndex = 0;
 let lastScrollY = window.scrollY;
 let sparklesInterval;
 let isMusicPlaying = localStorage.getItem("playMusic") === "true";
-let currentTheme =
-  localStorage.getItem("theme") ||
-  (window.matchMedia("(prefers-color-scheme: dark)").matches
-    ? "dark"
-    : "light");
 
 // ------------------ Helpers ------------------
 const getAssetPath = (file) => `./${file}`;
@@ -180,23 +172,6 @@ function toggleMusic() {
   }
 }
 
-// ------------------ UI: Theme Toggle ------------------
-function toggleTheme() {
-  currentTheme = currentTheme === "light" ? "dark" : "light";
-  document.body.classList.toggle("dark-mode", currentTheme === "dark");
-  localStorage.setItem("theme", currentTheme);
-  updateThemeIcon();
-}
-
-function updateThemeIcon() {
-  const icon = elements.themeToggleBtn.querySelector(".icon");
-  if (currentTheme === "dark") {
-    icon.textContent = "🌙";
-  } else {
-    icon.textContent = "☀️";
-  }
-}
-
 // ------------------ UI: Sparkles ------------------
 function createHeroSparkle() {
   const sparkle = document.createElement("div");
@@ -248,11 +223,11 @@ function createGalleryItem(item) {
             mediaEl.play().catch((e) => console.log("Autoplay failed:", e));
           } else {
             mediaEl.pause();
-            mediaEl.currentTime = 0;
+            mediaEl.currentTime = 0; // Reset video to beginning when it goes out of view
           }
         });
       },
-      { threshold: 0.5 }
+      { threshold: 0.5 } // Trigger when 50% of the video is visible
     );
     observer.observe(mediaEl);
 
@@ -375,51 +350,10 @@ function initEvents() {
     );
   });
   elements.musicBtn.addEventListener("click", toggleMusic);
-  elements.themeToggleBtn.addEventListener("click", toggleTheme);
   elements.scrollBtn.addEventListener("click", () => {
-    document.getElementById("gallery").scrollIntoView({ behavior: "smooth" });
-  });
-
-  // Mobile navigation toggle
-  elements.mobileNavToggle.addEventListener("click", () => {
-    const isOpen = elements.mobileNavMenu.classList.toggle("is-open");
-    elements.mobileNavToggle.classList.toggle("is-open", isOpen);
-    elements.mobileNavToggle.setAttribute("aria-expanded", isOpen);
-    document.body.style.overflow = isOpen ? "hidden" : "";
-  });
-
-  // Close mobile nav on link click
-  document.querySelectorAll("[data-close-menu]").forEach((link) => {
-    link.addEventListener("click", () => {
-      elements.mobileNavMenu.classList.remove("is-open");
-      elements.mobileNavToggle.classList.remove("is-open");
-      elements.mobileNavToggle.setAttribute("aria-expanded", "false");
-      document.body.style.overflow = "";
-    });
-  });
-
-  // Highlight active nav link on scroll
-  const sections = document.querySelectorAll("section");
-  const navLinks = document.querySelectorAll(
-    ".main-nav .nav-link, .mobile-nav-menu .nav-link"
-  );
-
-  window.addEventListener("scroll", () => {
-    let current = "";
-    sections.forEach((section) => {
-      const sectionTop = section.offsetTop;
-      const sectionHeight = section.clientHeight;
-      if (scrollY >= sectionTop - elements.siteHeader.clientHeight) {
-        current = section.getAttribute("id");
-      }
-    });
-
-    navLinks.forEach((link) => {
-      link.classList.remove("active");
-      if (link.getAttribute("href").includes(current)) {
-        link.classList.add("active");
-      }
-    });
+    document
+      .getElementById("photos-gallery")
+      .scrollIntoView({ behavior: "smooth" });
   });
 
   window.addEventListener("scroll", handleHeaderScroll);
@@ -477,8 +411,6 @@ function initialize() {
   initEvents();
   typeHeroTitle("Our Memories");
   sparklesInterval = setInterval(createHeroSparkle, 500);
-  document.body.classList.toggle("dark-mode", currentTheme === "dark");
-  updateThemeIcon();
 }
 
 document.addEventListener("DOMContentLoaded", initialize);
