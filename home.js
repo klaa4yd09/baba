@@ -76,7 +76,6 @@ const siteConfig = {
     { src: "44.mp4", poster: "44.jpg", caption: "❤️", type: "video" },
   ],
 };
-
 // ------------------ DOM Elements ------------------
 const elements = {
   loader: document.getElementById("loader"),
@@ -99,11 +98,11 @@ const elements = {
   heroTitle: document.getElementById("hero-title"),
   heroBgImage: document.querySelector(".hero-bg-image"),
   customCursor: document.getElementById("custom-cursor"),
-  mobileNavToggle: document.getElementById("mobile-nav-toggle"),
-  mobileNavMenu: document.getElementById("mobile-nav-menu"),
 };
 
 // ------------------ State ------------------
+const allItems = [...siteConfig.photos, ...siteConfig.videos];
+const memoryItems = [...siteConfig.photos, ...siteConfig.videos];
 let currentIndex = 0;
 let lastScrollY = window.scrollY;
 let sparklesInterval;
@@ -120,7 +119,6 @@ function hideLoader() {
 }
 
 function typeHeroTitle(text, speed = 100) {
-  elements.heroTitle.textContent = ""; // reset before typing
   let i = 0;
   const timer = setInterval(() => {
     if (i < text.length) {
@@ -132,26 +130,27 @@ function typeHeroTitle(text, speed = 100) {
   }, speed);
 }
 
-function handleScroll() {
+function handleParallax() {
   const scrollY = window.scrollY;
-
-  // Header hide/show
-  if (scrollY > lastScrollY && scrollY > 100) {
-    elements.siteHeader.classList.add("hide");
-  } else {
-    elements.siteHeader.classList.remove("hide");
-  }
-  lastScrollY = scrollY;
-
-  // Parallax
+  const parallaxSpeed = 0.5;
   if (elements.heroBgImage) {
     elements.heroBgImage.style.transform = `translateY(${
-      scrollY * 0.5
+      scrollY * parallaxSpeed
     }px) scale(1.1)`;
   }
 }
 
 // ------------------ UI: Header & Music ------------------
+function handleHeaderScroll() {
+  const currentScrollY = window.scrollY;
+  if (currentScrollY > lastScrollY && currentScrollY > 100) {
+    elements.siteHeader.classList.add("hide");
+  } else {
+    elements.siteHeader.classList.remove("hide");
+  }
+  lastScrollY = currentScrollY;
+}
+
 function toggleMusic() {
   const isPlaying = !elements.bgMusic.paused;
   if (isPlaying) {
@@ -216,6 +215,7 @@ function createGalleryItem(item) {
     mediaEl.playsInline = true;
     mediaEl.loading = "lazy";
 
+    // IntersectionObserver to handle auto-play/pause
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -223,11 +223,11 @@ function createGalleryItem(item) {
             mediaEl.play().catch((e) => console.log("Autoplay failed:", e));
           } else {
             mediaEl.pause();
-            mediaEl.currentTime = 0;
+            mediaEl.currentTime = 0; // Reset video to beginning when it goes out of view
           }
         });
       },
-      { threshold: 0.5 }
+      { threshold: 0.5 } // Trigger when 50% of the video is visible
     );
     observer.observe(mediaEl);
 
@@ -331,7 +331,10 @@ function switchGallery(targetId) {
 
 // ------------------ Custom Cursor ------------------
 function handleCursor(e) {
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  if (
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+    window.innerWidth <= 768
+  ) {
     return;
   }
   elements.customCursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -50%)`;
@@ -348,118 +351,66 @@ function initEvents() {
   });
   elements.musicBtn.addEventListener("click", toggleMusic);
   elements.scrollBtn.addEventListener("click", () => {
-    document.getElementById("gallery").scrollIntoView({ behavior: "smooth" });
+    document
+      .getElementById("photos-gallery")
+      .scrollIntoView({ behavior: "smooth" });
   });
 
-  // Mobile navigation toggle
-  elements.mobileNavToggle.addEventListener("click", () => {
-    const isOpen = elements.mobileNavMenu.classList.toggle("is-open");
-    elements.mobileNavToggle.classList.toggle("is-open", isOpen);
-    elements.mobileNavToggle.setAttribute("aria-expanded", isOpen);
-    document.body.style.overflow = isOpen ? "hidden" : "";
-  });
-
-  // Close mobile nav on link click
-  document.querySelectorAll("[data-close-menu]").forEach((link) => {
-    link.addEventListener("click", () => {
-      elements.mobileNavMenu.classList.remove("is-open");
-      elements.mobileNavToggle.classList.remove("is-open");
-      elements.mobileNavToggle.setAttribute("aria-expanded", "false");
-      document.body.style.overflow = "";
-    });
-  });
-
-  // Highlight active nav link on scroll
-  const sections = document.querySelectorAll("section");
-  const navLinks = document.querySelectorAll(
-    ".main-nav .nav-link, .mobile-nav-menu .nav-link"
-  );
-
-  window.addEventListener("scroll", () => {
-    let current = "";
-    sections.forEach((section) => {
-      const sectionTop = section.offsetTop;
-      if (scrollY >= sectionTop - elements.siteHeader.clientHeight) {
-        current = section.getAttribute("id");
-      }
-    });
-
-    navLinks.forEach((link) => {
-      link.classList.remove("active");
-      if (link.getAttribute("href").includes(current)) {
-        link.classList.add("active");
-      }
-    });
-  });
-
-  // Gallery items click/keyboard
-  [elements.photosGrid, elements.videosGrid].forEach((grid, gridIndex) => {
-    grid.addEventListener("click", (e) => {
-      const item = getGalleryItemData(e.target);
-      if (item) {
-        openLightbox(
-          item,
-          [...grid.children].indexOf(e.target.closest(".gallery-item"))
-        );
-      }
-    });
-    grid.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" || e.key === " ") {
-        const item = getGalleryItemData(e.target);
-        if (item) {
-          openLightbox(
-            item,
-            [...grid.children].indexOf(e.target.closest(".gallery-item"))
-          );
-        }
-      }
-    });
-  });
-
-  // Lightbox navigation
+  window.addEventListener("scroll", handleHeaderScroll);
+  window.addEventListener("scroll", handleParallax);
   elements.lightboxClose.addEventListener("click", closeLightbox);
   elements.nextBtn.addEventListener("click", nextItem);
   elements.prevBtn.addEventListener("click", prevItem);
-
+  elements.lightbox.addEventListener("click", (e) => {
+    if (e.target === elements.lightbox) closeLightbox();
+  });
   document.addEventListener("keydown", (e) => {
-    if (elements.lightbox.classList.contains("is-open")) {
-      if (e.key === "Escape") closeLightbox();
-      if (e.key === "ArrowRight") nextItem();
-      if (e.key === "ArrowLeft") prevItem();
+    if (!elements.lightbox.classList.contains("is-open")) return;
+    if (e.key === "Escape") closeLightbox();
+    if (e.key === "ArrowRight") nextItem();
+    if (e.key === "ArrowLeft") prevItem();
+  });
+  document.addEventListener("click", (e) => {
+    const itemEl = e.target.closest(".gallery-item");
+    if (itemEl) {
+      const itemSrc = itemEl.dataset.src.replace("./", "");
+      const itemType = itemEl.dataset.type;
+      const currentItems =
+        itemType === "image" ? siteConfig.photos : siteConfig.videos;
+      const itemIndex = currentItems.findIndex((item) => item.src === itemSrc);
+
+      const itemData = getGalleryItemData(e.target);
+      if (itemData) {
+        openLightbox(itemData, itemIndex);
+      }
     }
   });
-
-  if (window.innerWidth > 768) {
-    document.addEventListener("mousemove", handleCursor);
-  }
-
-  // Cleanup sparkles on unload
-  window.addEventListener("beforeunload", () =>
-    clearInterval(sparklesInterval)
-  );
-
-  // Combined scroll handler
-  window.addEventListener("scroll", handleScroll);
-}
-
-// ------------------ Initialization ------------------
-function initSite() {
-  hideLoader();
-  typeHeroTitle("Our Memories", 100);
-  loadGallery();
-  initEvents();
 
   if (isMusicPlaying) {
     elements.bgMusic
       .play()
-      .then(() => {
-        elements.musicBtn.classList.add("playing");
-        elements.musicIcon.textContent = "🔊";
-      })
       .catch((e) => console.error("Autoplay was prevented:", e));
+    elements.musicBtn.classList.add("playing");
+    elements.musicIcon.textContent = "🔊";
   }
 
+  // FIXED: Simplified logic for initial gallery display
+  if (window.innerWidth <= 768) {
+    switchGallery("photos-grid");
+  }
+
+  if (window.innerWidth > 768) {
+    document.addEventListener("mousemove", handleCursor);
+    document.body.style.cursor = "none";
+  }
+}
+
+function initialize() {
+  loadGallery();
+  window.addEventListener("load", hideLoader);
+  initEvents();
+  typeHeroTitle("Our Memories");
   sparklesInterval = setInterval(createHeroSparkle, 500);
 }
 
-window.addEventListener("load", initSite);
+document.addEventListener("DOMContentLoaded", initialize);
