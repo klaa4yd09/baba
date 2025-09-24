@@ -76,7 +76,6 @@ const siteConfig = {
     { src: "44.mp4", poster: "44.jpg", caption: "❤️", type: "video" },
   ],
 };
-
 // ------------------ DOM Elements ------------------
 const elements = {
   loader: document.getElementById("loader"),
@@ -103,6 +102,7 @@ const elements = {
 
 // ------------------ State ------------------
 const allItems = [...siteConfig.photos, ...siteConfig.videos];
+const memoryItems = [...siteConfig.photos, ...siteConfig.videos];
 let currentIndex = 0;
 let lastScrollY = window.scrollY;
 let sparklesInterval;
@@ -112,7 +112,6 @@ let isMusicPlaying = localStorage.getItem("playMusic") === "true";
 const getAssetPath = (file) => `./${file}`;
 
 // ------------------ Core Functions ------------------
-
 function hideLoader() {
   if (elements.loader) {
     elements.loader.classList.add("hidden");
@@ -133,7 +132,7 @@ function typeHeroTitle(text, speed = 100) {
 
 function handleParallax() {
   const scrollY = window.scrollY;
-  const parallaxSpeed = 0.5; // A fixed, non-dataset value is better for consistency.
+  const parallaxSpeed = 0.5;
   if (elements.heroBgImage) {
     elements.heroBgImage.style.transform = `translateY(${
       scrollY * parallaxSpeed
@@ -142,7 +141,6 @@ function handleParallax() {
 }
 
 // ------------------ UI: Header & Music ------------------
-
 function handleHeaderScroll() {
   const currentScrollY = window.scrollY;
   if (currentScrollY > lastScrollY && currentScrollY > 100) {
@@ -154,7 +152,14 @@ function handleHeaderScroll() {
 }
 
 function toggleMusic() {
-  if (elements.bgMusic.paused) {
+  const isPlaying = !elements.bgMusic.paused;
+  if (isPlaying) {
+    elements.bgMusic.pause();
+    elements.musicBtn.classList.remove("playing");
+    elements.musicIcon.textContent = "🎵";
+    localStorage.setItem("playMusic", "false");
+    isMusicPlaying = false;
+  } else {
     elements.bgMusic
       .play()
       .then(() => {
@@ -164,54 +169,67 @@ function toggleMusic() {
         isMusicPlaying = true;
       })
       .catch((e) => console.error("Autoplay was prevented:", e));
-  } else {
-    elements.bgMusic.pause();
-    elements.musicBtn.classList.remove("playing");
-    elements.musicIcon.textContent = "🎵";
-    localStorage.setItem("playMusic", "false");
-    isMusicPlaying = false;
   }
 }
 
 // ------------------ UI: Sparkles ------------------
-
 function createHeroSparkle() {
   const sparkle = document.createElement("div");
   sparkle.className = "hero-sparkle";
-  sparkle.style.width = `${Math.random() * 3 + 1}px`;
-  sparkle.style.height = sparkle.style.width;
+  const size = Math.random() * 3 + 1;
+  sparkle.style.width = `${size}px`;
+  sparkle.style.height = `${size}px`;
   sparkle.style.left = `${Math.random() * 100}vw`;
   sparkle.style.top = `${100 + Math.random() * 20}vh`;
   sparkle.style.animationDuration = `${10 + Math.random() * 8}s`;
   sparkle.style.animationDelay = `${Math.random() * 5}s`;
   elements.heroSparkleContainer.appendChild(sparkle);
-
   sparkle.addEventListener("animationend", () => sparkle.remove());
 }
 
-// ------------------ UI: Gallery & Lazy Loading ------------------
-
-function createGalleryItem(item, index) {
+// ------------------ UI: Gallery ------------------
+function createGalleryItem(item) {
   const itemEl = document.createElement("div");
   itemEl.className = "gallery-item";
-  itemEl.tabIndex = 0; // Make it focusable for keyboard navigation
+  itemEl.tabIndex = 0;
   itemEl.setAttribute("role", "button");
   itemEl.setAttribute(
     "aria-label",
     `Open ${item.type} with caption: ${item.caption}`
   );
+  itemEl.dataset.src = getAssetPath(item.src);
+  itemEl.dataset.type = item.type;
+  itemEl.dataset.caption = item.caption;
 
   let mediaEl;
   if (item.type === "image") {
-    mediaEl = new Image();
-    mediaEl.dataset.src = getAssetPath(item.src);
+    mediaEl = document.createElement("img");
+    mediaEl.src = getAssetPath(item.src);
     mediaEl.alt = item.caption;
+    mediaEl.loading = "lazy";
   } else {
     mediaEl = document.createElement("video");
-    mediaEl.dataset.src = getAssetPath(item.src);
-    mediaEl.dataset.poster = getAssetPath(item.poster); // Use data-poster for lazy loading
+    mediaEl.src = getAssetPath(item.src);
+    mediaEl.poster = getAssetPath(item.poster);
     mediaEl.muted = true;
     mediaEl.playsInline = true;
+    mediaEl.loading = "lazy";
+
+    // IntersectionObserver to handle auto-play/pause
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            mediaEl.play().catch((e) => console.log("Autoplay failed:", e));
+          } else {
+            mediaEl.pause();
+            mediaEl.currentTime = 0; // Reset video to beginning when it goes out of view
+          }
+        });
+      },
+      { threshold: 0.5 } // Trigger when 50% of the video is visible
+    );
+    observer.observe(mediaEl);
 
     const overlay = document.createElement("div");
     overlay.className = "video-overlay";
@@ -219,64 +237,40 @@ function createGalleryItem(item, index) {
   }
 
   itemEl.appendChild(mediaEl);
-
-  itemEl.addEventListener("click", () => {
-    currentIndex = index;
-    openLightbox(allItems[currentIndex]);
-  });
-
+  mediaEl.onload = () => itemEl.classList.add("loaded");
   return itemEl;
 }
 
 function loadGallery() {
   const photosFragment = document.createDocumentFragment();
-  const videosFragment = document.createDocumentFragment();
-
-  allItems.forEach((item, i) => {
-    const el = createGalleryItem(item, i);
-    if (item.type === "image") {
-      photosFragment.appendChild(el);
-    } else {
-      videosFragment.appendChild(el);
-    }
+  siteConfig.photos.forEach((photo) => {
+    photosFragment.appendChild(createGalleryItem(photo));
   });
-
   elements.photosGrid.appendChild(photosFragment);
-  elements.videosGrid.appendChild(videosFragment);
 
-  enableLazyLoading();
+  const videosFragment = document.createDocumentFragment();
+  siteConfig.videos.forEach((video) => {
+    videosFragment.appendChild(createGalleryItem(video));
+  });
+  elements.videosGrid.appendChild(videosFragment);
 }
 
-function enableLazyLoading() {
-  const lazyElements = document.querySelectorAll(
-    ".gallery-item img, .gallery-item video"
-  );
-  const observer = new IntersectionObserver(
-    (entries, obs) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const media = entry.target;
-          if (media.tagName === "IMG") {
-            media.src = media.dataset.src;
-            media.onload = () => media.classList.add("loaded");
-          } else if (media.tagName === "VIDEO") {
-            media.src = media.dataset.src;
-            media.poster = media.dataset.poster; // Set the poster image
-            media.onloadeddata = () => media.classList.add("loaded");
-          }
-          obs.unobserve(media);
-        }
-      });
-    },
-    { rootMargin: "100px" }
-  );
-
-  lazyElements.forEach((el) => observer.observe(el));
+function getGalleryItemData(target) {
+  const itemEl = target.closest(".gallery-item");
+  if (!itemEl) return null;
+  return {
+    src: itemEl.dataset.src,
+    type: itemEl.dataset.type,
+    caption: itemEl.dataset.caption,
+    poster: itemEl.querySelector("video")?.poster,
+  };
 }
 
 // ------------------ UI: Lightbox ------------------
+let currentLightboxIndex = 0;
 
-function openLightbox(item) {
+function openLightbox(item, index) {
+  currentLightboxIndex = index;
   elements.lightbox.classList.add("is-open");
   document.body.style.overflow = "hidden";
   elements.lightbox.focus();
@@ -284,18 +278,17 @@ function openLightbox(item) {
   elements.lightboxImg.style.display = "none";
   elements.lightboxVideo.style.display = "none";
   elements.lightboxVideo.pause();
+  elements.lightboxVideo.currentTime = 0;
 
   if (item.type === "image") {
+    elements.lightboxImg.src = item.src;
+    elements.lightboxImg.alt = item.caption;
     elements.lightboxImg.style.display = "block";
-    elements.lightboxImg.src = getAssetPath(item.src);
-  } else {
+  } else if (item.type === "video") {
+    elements.lightboxVideo.src = item.src;
+    elements.lightboxVideo.poster = item.poster || "";
     elements.lightboxVideo.style.display = "block";
-    elements.lightboxVideo.src = getAssetPath(item.src);
-    elements.lightboxVideo.poster = getAssetPath(item.poster); // Use the poster in the lightbox
-    elements.lightboxVideo.load();
-    elements.lightboxVideo
-      .play()
-      .catch((e) => console.error("Autoplay was prevented:", e));
+    elements.lightboxVideo.controls = true;
   }
 
   elements.lightboxCaption.textContent = item.caption;
@@ -304,30 +297,39 @@ function openLightbox(item) {
 function closeLightbox() {
   elements.lightbox.classList.remove("is-open");
   document.body.style.overflow = "";
-  elements.lightboxVideo.pause();
-  elements.lightboxVideo.src = "";
   elements.lightboxImg.src = "";
+  elements.lightboxVideo.src = "";
   document.activeElement.blur();
 }
 
-function navigateLightbox(dir) {
-  currentIndex = (currentIndex + dir + allItems.length) % allItems.length;
-  openLightbox(allItems[currentIndex]);
+function nextItem() {
+  const currentMediaItems = elements.photosGrid.classList.contains("active")
+    ? siteConfig.photos
+    : siteConfig.videos;
+  currentLightboxIndex = (currentLightboxIndex + 1) % currentMediaItems.length;
+  openLightbox(currentMediaItems[currentLightboxIndex], currentLightboxIndex);
+}
+
+function prevItem() {
+  const currentMediaItems = elements.photosGrid.classList.contains("active")
+    ? siteConfig.photos
+    : siteConfig.videos;
+  currentLightboxIndex =
+    (currentLightboxIndex - 1 + currentMediaItems.length) %
+    currentMediaItems.length;
+  openLightbox(currentMediaItems[currentLightboxIndex], currentLightboxIndex);
 }
 
 // ------------------ UI: Mobile Gallery Switch ------------------
-
 function switchGallery(targetId) {
-  elements.photosGrid.classList.remove("active");
-  elements.videosGrid.classList.remove("active");
-  document.getElementById(targetId).classList.add("active");
-
-  elements.galleryToggleButtons.forEach((b) => b.classList.remove("active"));
-  document.querySelector(`[data-target="${targetId}"]`).classList.add("active");
+  elements.photosGrid.classList.toggle("active", targetId === "photos-grid");
+  elements.videosGrid.classList.toggle("active", targetId === "videos-grid");
+  elements.galleryToggleButtons.forEach((b) =>
+    b.classList.toggle("active", b.dataset.target === targetId)
+  );
 }
 
 // ------------------ Custom Cursor ------------------
-
 function handleCursor(e) {
   if (
     window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
@@ -336,28 +338,18 @@ function handleCursor(e) {
     return;
   }
   elements.customCursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -50%)`;
-  const target = e.target;
-  const isHoverable =
-    target.closest("a, button, .gallery-item") ||
-    window.getComputedStyle(target).cursor === "pointer";
-  if (isHoverable) {
-    elements.customCursor.classList.add("hover");
-  } else {
-    elements.customCursor.classList.remove("hover");
-  }
+  const isHoverable = e.target.closest("a, button, .gallery-item");
+  elements.customCursor.classList.toggle("hover", isHoverable);
 }
 
 // ------------------ Event Listeners & Init ------------------
-
 function initEvents() {
   elements.galleryToggleButtons.forEach((btn) => {
     btn.addEventListener("click", (e) =>
       switchGallery(e.target.dataset.target)
     );
   });
-
   elements.musicBtn.addEventListener("click", toggleMusic);
-
   elements.scrollBtn.addEventListener("click", () => {
     document
       .getElementById("photos-gallery")
@@ -366,20 +358,32 @@ function initEvents() {
 
   window.addEventListener("scroll", handleHeaderScroll);
   window.addEventListener("scroll", handleParallax);
-
   elements.lightboxClose.addEventListener("click", closeLightbox);
-  elements.prevBtn.addEventListener("click", () => navigateLightbox(-1));
-  elements.nextBtn.addEventListener("click", () => navigateLightbox(1));
-
+  elements.nextBtn.addEventListener("click", nextItem);
+  elements.prevBtn.addEventListener("click", prevItem);
   elements.lightbox.addEventListener("click", (e) => {
     if (e.target === elements.lightbox) closeLightbox();
   });
-
   document.addEventListener("keydown", (e) => {
     if (!elements.lightbox.classList.contains("is-open")) return;
     if (e.key === "Escape") closeLightbox();
-    if (e.key === "ArrowLeft") navigateLightbox(-1);
-    if (e.key === "ArrowRight") navigateLightbox(1);
+    if (e.key === "ArrowRight") nextItem();
+    if (e.key === "ArrowLeft") prevItem();
+  });
+  document.addEventListener("click", (e) => {
+    const itemEl = e.target.closest(".gallery-item");
+    if (itemEl) {
+      const itemSrc = itemEl.dataset.src.replace("./", "");
+      const itemType = itemEl.dataset.type;
+      const currentItems =
+        itemType === "image" ? siteConfig.photos : siteConfig.videos;
+      const itemIndex = currentItems.findIndex((item) => item.src === itemSrc);
+
+      const itemData = getGalleryItemData(e.target);
+      if (itemData) {
+        openLightbox(itemData, itemIndex);
+      }
+    }
   });
 
   if (isMusicPlaying) {
@@ -390,11 +394,9 @@ function initEvents() {
     elements.musicIcon.textContent = "🔊";
   }
 
+  // FIXED: Simplified logic for initial gallery display
   if (window.innerWidth <= 768) {
     switchGallery("photos-grid");
-  } else {
-    elements.photosGrid.classList.add("active");
-    elements.videosGrid.classList.add("active");
   }
 
   if (window.innerWidth > 768) {
