@@ -1,5 +1,11 @@
+// =================================================================
+// Enhanced & Refactored JavaScript
+// =================================================================
+
 // ------------------ Configuration ------------------
 const siteConfig = {
+  // Array of objects for photos and videos.
+  // Ensure all images and video posters are pre-cached for a smoother experience.
   photos: [
     { src: "23.jpg", caption: "❤️", type: "image" },
     { src: "25.jpg", caption: "❤️", type: "image" },
@@ -76,7 +82,8 @@ const siteConfig = {
     { src: "44.mp4", poster: "44.jpg", caption: "❤️", type: "video" },
   ],
 };
-// ------------------ DOM Elements ------------------
+
+// ------------------ DOM Element Cache ------------------
 const elements = {
   loader: document.getElementById("loader"),
   siteHeader: document.getElementById("site-header"),
@@ -101,17 +108,52 @@ const elements = {
 };
 
 // ------------------ State ------------------
-const allItems = [...siteConfig.photos, ...siteConfig.videos];
-const memoryItems = [...siteConfig.photos, ...siteConfig.videos];
-let currentIndex = 0;
-let lastScrollY = window.scrollY;
-let sparklesInterval;
-let isMusicPlaying = localStorage.getItem("playMusic") === "true";
+const state = {
+  isMusicPlaying: localStorage.getItem("playMusic") === "true",
+  lastScrollY: window.scrollY,
+  sparklesInterval: null,
+  currentLightboxIndex: 0,
+  currentLightboxItems: [],
+  reducedMotion: window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+};
 
-// ------------------ Helpers ------------------
-const getAssetPath = (file) => `./${file}`;
+// ------------------ Asset Management & Caching ------------------
+function getAssetPath(file) {
+  return `./${file}`;
+}
 
-// ------------------ Core Functions ------------------
+function preCacheAssets() {
+  const assetsToCache = [
+    "14.jpg", // Hero image
+    ...siteConfig.photos.map((p) => p.src),
+    ...siteConfig.videos.map((v) => v.poster),
+    "song.mp3",
+  ];
+
+  if ("caches" in window) {
+    caches.open("our-memories-cache-v1").then((cache) => {
+      cache
+        .addAll(assetsToCache.map(getAssetPath))
+        .then(() => {
+          console.log("Assets pre-cached successfully!");
+        })
+        .catch((err) => {
+          console.error("Failed to pre-cache assets:", err);
+        });
+    });
+  }
+
+  // Preload hero image for faster display
+  const heroImg = new Image();
+  heroImg.src = getAssetPath("14.jpg");
+  heroImg.onload = () => {
+    elements.heroBgImage.style.backgroundImage = `url(${getAssetPath(
+      "14.jpg"
+    )})`;
+  };
+}
+
+// ------------------ UI: Loading & Hero Section ------------------
 function hideLoader() {
   if (elements.loader) {
     elements.loader.classList.add("hidden");
@@ -119,7 +161,13 @@ function hideLoader() {
 }
 
 function typeHeroTitle(text, speed = 100) {
+  if (state.reducedMotion) {
+    elements.heroTitle.textContent = text;
+    return;
+  }
+
   let i = 0;
+  elements.heroTitle.textContent = ""; // Clear content
   const timer = setInterval(() => {
     if (i < text.length) {
       elements.heroTitle.textContent += text.charAt(i);
@@ -143,12 +191,12 @@ function handleParallax() {
 // ------------------ UI: Header & Music ------------------
 function handleHeaderScroll() {
   const currentScrollY = window.scrollY;
-  if (currentScrollY > lastScrollY && currentScrollY > 100) {
+  if (currentScrollY > state.lastScrollY && currentScrollY > 100) {
     elements.siteHeader.classList.add("hide");
   } else {
     elements.siteHeader.classList.remove("hide");
   }
-  lastScrollY = currentScrollY;
+  state.lastScrollY = currentScrollY;
 }
 
 function toggleMusic() {
@@ -158,7 +206,7 @@ function toggleMusic() {
     elements.musicBtn.classList.remove("playing");
     elements.musicIcon.textContent = "🎵";
     localStorage.setItem("playMusic", "false");
-    isMusicPlaying = false;
+    state.isMusicPlaying = false;
   } else {
     elements.bgMusic
       .play()
@@ -166,7 +214,7 @@ function toggleMusic() {
         elements.musicBtn.classList.add("playing");
         elements.musicIcon.textContent = "🔊";
         localStorage.setItem("playMusic", "true");
-        isMusicPlaying = true;
+        state.isMusicPlaying = true;
       })
       .catch((e) => console.error("Autoplay was prevented:", e));
   }
@@ -201,43 +249,46 @@ function createGalleryItem(item) {
   itemEl.dataset.type = item.type;
   itemEl.dataset.caption = item.caption;
 
-  let mediaEl;
+  const mediaEl = document.createElement(
+    item.type === "image" ? "img" : "video"
+  );
+
   if (item.type === "image") {
-    mediaEl = document.createElement("img");
-    mediaEl.src = getAssetPath(item.src);
     mediaEl.alt = item.caption;
-    mediaEl.loading = "lazy";
   } else {
-    mediaEl = document.createElement("video");
-    mediaEl.src = getAssetPath(item.src);
-    mediaEl.poster = getAssetPath(item.poster);
     mediaEl.muted = true;
     mediaEl.playsInline = true;
-    mediaEl.loading = "lazy";
-
-    // IntersectionObserver to handle auto-play/pause
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            mediaEl.play().catch((e) => console.log("Autoplay failed:", e));
-          } else {
-            mediaEl.pause();
-            mediaEl.currentTime = 0; // Reset video to beginning when it goes out of view
-          }
-        });
-      },
-      { threshold: 0.5 } // Trigger when 50% of the video is visible
-    );
-    observer.observe(mediaEl);
-
+    mediaEl.poster = getAssetPath(item.poster);
     const overlay = document.createElement("div");
     overlay.className = "video-overlay";
     itemEl.appendChild(overlay);
   }
 
+  // IntersectionObserver for lazy loading
+  const observer = new IntersectionObserver(
+    (entries, observer) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          if (item.type === "image") {
+            mediaEl.src = getAssetPath(item.src);
+          } else {
+            mediaEl.src = getAssetPath(item.src);
+            mediaEl.play().catch((e) => console.log("Autoplay failed:", e));
+          }
+          entry.target.classList.add("loaded");
+          observer.unobserve(entry.target);
+        } else if (item.type === "video") {
+          mediaEl.pause();
+          mediaEl.currentTime = 0;
+        }
+      });
+    },
+    { threshold: 0.1 }
+  ); // Trigger when 10% of element is visible
+
   itemEl.appendChild(mediaEl);
-  mediaEl.onload = () => itemEl.classList.add("loaded");
+  observer.observe(itemEl);
+
   return itemEl;
 }
 
@@ -267,31 +318,59 @@ function getGalleryItemData(target) {
 }
 
 // ------------------ UI: Lightbox ------------------
-let currentLightboxIndex = 0;
-
-function openLightbox(item, index) {
-  currentLightboxIndex = index;
+function openLightbox(itemData, index) {
+  state.currentLightboxIndex = index;
   elements.lightbox.classList.add("is-open");
   document.body.style.overflow = "hidden";
+
+  // Focus trap for accessibility
   elements.lightbox.focus();
+  const focusableEls = elements.lightbox.querySelectorAll(
+    "button, [href], input, select, textarea, [tabindex]:not([tabindex='-1'])"
+  );
+  const firstFocusableEl = focusableEls[0];
+  const lastFocusableEl = focusableEls[focusableEls.length - 1];
+
+  elements.lightbox.addEventListener("keydown", (e) => {
+    if (e.key === "Tab") {
+      if (e.shiftKey) {
+        /* shift + tab */
+        if (document.activeElement === firstFocusableEl) {
+          lastFocusableEl.focus();
+          e.preventDefault();
+        }
+      } else {
+        /* tab */
+        if (document.activeElement === lastFocusableEl) {
+          firstFocusableEl.focus();
+          e.preventDefault();
+        }
+      }
+    }
+  });
 
   elements.lightboxImg.style.display = "none";
   elements.lightboxVideo.style.display = "none";
   elements.lightboxVideo.pause();
   elements.lightboxVideo.currentTime = 0;
+  elements.lightboxVideo.src = "";
+  elements.lightboxImg.src = "";
 
-  if (item.type === "image") {
-    elements.lightboxImg.src = item.src;
-    elements.lightboxImg.alt = item.caption;
+  if (itemData.type === "image") {
+    elements.lightboxImg.src = itemData.src;
+    elements.lightboxImg.alt = itemData.caption;
     elements.lightboxImg.style.display = "block";
-  } else if (item.type === "video") {
-    elements.lightboxVideo.src = item.src;
-    elements.lightboxVideo.poster = item.poster || "";
+  } else if (itemData.type === "video") {
+    elements.lightboxVideo.src = itemData.src;
+    elements.lightboxVideo.poster = itemData.poster || "";
     elements.lightboxVideo.style.display = "block";
     elements.lightboxVideo.controls = true;
+    elements.lightboxVideo
+      .play()
+      .catch((e) => console.log("Video playback failed:", e));
   }
 
-  elements.lightboxCaption.textContent = item.caption;
+  elements.lightboxCaption.textContent = itemData.caption;
 }
 
 function closeLightbox() {
@@ -299,42 +378,44 @@ function closeLightbox() {
   document.body.style.overflow = "";
   elements.lightboxImg.src = "";
   elements.lightboxVideo.src = "";
-  document.activeElement.blur();
+  elements.lightboxVideo.pause();
+  elements.lightboxVideo.currentTime = 0;
+  document.activeElement.blur(); // Remove focus from the closed lightbox
 }
 
 function nextItem() {
-  const currentMediaItems = elements.photosGrid.classList.contains("active")
-    ? siteConfig.photos
-    : siteConfig.videos;
-  currentLightboxIndex = (currentLightboxIndex + 1) % currentMediaItems.length;
-  openLightbox(currentMediaItems[currentLightboxIndex], currentLightboxIndex);
+  state.currentLightboxIndex =
+    (state.currentLightboxIndex + 1) % state.currentLightboxItems.length;
+  openLightbox(
+    state.currentLightboxItems[state.currentLightboxIndex],
+    state.currentLightboxIndex
+  );
 }
 
 function prevItem() {
-  const currentMediaItems = elements.photosGrid.classList.contains("active")
-    ? siteConfig.photos
-    : siteConfig.videos;
-  currentLightboxIndex =
-    (currentLightboxIndex - 1 + currentMediaItems.length) %
-    currentMediaItems.length;
-  openLightbox(currentMediaItems[currentLightboxIndex], currentLightboxIndex);
+  state.currentLightboxIndex =
+    (state.currentLightboxIndex - 1 + state.currentLightboxItems.length) %
+    state.currentLightboxItems.length;
+  openLightbox(
+    state.currentLightboxItems[state.currentLightboxIndex],
+    state.currentLightboxIndex
+  );
 }
 
 // ------------------ UI: Mobile Gallery Switch ------------------
 function switchGallery(targetId) {
-  elements.photosGrid.classList.toggle("active", targetId === "photos-grid");
-  elements.videosGrid.classList.toggle("active", targetId === "videos-grid");
+  const isPhotos = targetId === "photos-grid";
+  elements.photosGrid.classList.toggle("active", isPhotos);
+  elements.videosGrid.classList.toggle("active", !isPhotos);
   elements.galleryToggleButtons.forEach((b) =>
     b.classList.toggle("active", b.dataset.target === targetId)
   );
+  state.currentLightboxItems = isPhotos ? siteConfig.photos : siteConfig.videos;
 }
 
 // ------------------ Custom Cursor ------------------
 function handleCursor(e) {
-  if (
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
-    window.innerWidth <= 768
-  ) {
+  if (state.reducedMotion || window.innerWidth <= 768) {
     return;
   }
   elements.customCursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -50%)`;
@@ -344,20 +425,26 @@ function handleCursor(e) {
 
 // ------------------ Event Listeners & Init ------------------
 function initEvents() {
+  // Gallery controls
   elements.galleryToggleButtons.forEach((btn) => {
     btn.addEventListener("click", (e) =>
       switchGallery(e.target.dataset.target)
     );
   });
+
+  // Music control
   elements.musicBtn.addEventListener("click", toggleMusic);
+
+  // Smooth scroll to gallery
   elements.scrollBtn.addEventListener("click", () => {
-    document
-      .getElementById("photos-gallery")
-      .scrollIntoView({ behavior: "smooth" });
+    document.getElementById("gallery").scrollIntoView({ behavior: "smooth" });
   });
 
+  // Header & Parallax
   window.addEventListener("scroll", handleHeaderScroll);
   window.addEventListener("scroll", handleParallax);
+
+  // Lightbox controls
   elements.lightboxClose.addEventListener("click", closeLightbox);
   elements.nextBtn.addEventListener("click", nextItem);
   elements.prevBtn.addEventListener("click", prevItem);
@@ -370,6 +457,8 @@ function initEvents() {
     if (e.key === "ArrowRight") nextItem();
     if (e.key === "ArrowLeft") prevItem();
   });
+
+  // Open lightbox from gallery
   document.addEventListener("click", (e) => {
     const itemEl = e.target.closest(".gallery-item");
     if (itemEl) {
@@ -377,16 +466,19 @@ function initEvents() {
       const itemType = itemEl.dataset.type;
       const currentItems =
         itemType === "image" ? siteConfig.photos : siteConfig.videos;
-      const itemIndex = currentItems.findIndex((item) => item.src === itemSrc);
-
+      const itemIndex = currentItems.findIndex(
+        (item) => getAssetPath(item.src) === itemSrc
+      );
       const itemData = getGalleryItemData(e.target);
       if (itemData) {
+        state.currentLightboxItems = currentItems;
         openLightbox(itemData, itemIndex);
       }
     }
   });
 
-  if (isMusicPlaying) {
+  // Initialize music state
+  if (state.isMusicPlaying) {
     elements.bgMusic
       .play()
       .catch((e) => console.error("Autoplay was prevented:", e));
@@ -394,11 +486,12 @@ function initEvents() {
     elements.musicIcon.textContent = "🔊";
   }
 
-  // FIXED: Simplified logic for initial gallery display
+  // Initial gallery display for mobile
   if (window.innerWidth <= 768) {
     switchGallery("photos-grid");
   }
 
+  // Custom cursor for desktop
   if (window.innerWidth > 768) {
     document.addEventListener("mousemove", handleCursor);
     document.body.style.cursor = "none";
@@ -406,11 +499,14 @@ function initEvents() {
 }
 
 function initialize() {
+  preCacheAssets();
   loadGallery();
   window.addEventListener("load", hideLoader);
   initEvents();
   typeHeroTitle("Our Memories");
-  sparklesInterval = setInterval(createHeroSparkle, 500);
+  if (!state.reducedMotion) {
+    state.sparklesInterval = setInterval(createHeroSparkle, 500);
+  }
 }
 
 document.addEventListener("DOMContentLoaded", initialize);
