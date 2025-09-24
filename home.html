@@ -4,16 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Memory Lane</title>
-    <link
-      rel="preconnect"
-      href="https://fonts.googleapis.com"
-      crossorigin="anonymous"
-    />
-    <link
-      rel="preconnect"
-      href="https://fonts.gstatic.com"
-      crossorigin="anonymous"
-    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Playfair+Display:wght@700&display=swap"
       rel="stylesheet"
@@ -22,9 +14,14 @@
     <link rel="icon" href="heart.png" />
   </head>
   <body>
-    <div id="custom-cursor" class="custom-cursor"></div>
+    <div id="custom-cursor" class="custom-cursor" aria-hidden="true"></div>
 
-    <div id="loader" class="loader-container">
+    <div
+      id="loader"
+      class="loader-container"
+      role="status"
+      aria-label="Loading content"
+    >
       <div class="loader"></div>
     </div>
 
@@ -44,53 +41,69 @@
       </button>
     </header>
 
-    <section class="hero-section">
-      <div class="hero-bg-image" data-parallax-speed="0.3"></div>
-      <div class="hero-content">
-        <h1 id="hero-title" class="hero-title"></h1>
-        <p class="hero-subtitle">A collection of moments to cherish forever</p>
-        <button id="scroll-btn" class="cta-button">Explore</button>
-      </div>
-      <div class="hero-sparkle-container"></div>
-    </section>
-
-    <div class="mobile-gallery-controls">
-      <button class="gallery-toggle-btn active" data-target="photos-grid">
-        Photos
-      </button>
-      <button class="gallery-toggle-btn" data-target="videos-grid">
-        Videos
-      </button>
-    </div>
-
-    <section id="photos-gallery" class="gallery-section">
-      <h2 class="section-title">Photo Gallery</h2>
-      <div class="gallery-grid-container">
-        <div id="photos-grid" class="gallery-grid"></div>
-      </div>
-    </section>
-
-    <section id="videos-gallery" class="gallery-section dark">
-      <h2 class="section-title">Video Gallery</h2>
-      <div class="gallery-grid-container">
-        <div id="videos-grid" class="gallery-grid"></div>
-      </div>
-    </section>
-
-    <section id="about" class="about-section">
-      <div class="about-content">
-        <div class="about-text-container">
-          <h2>About This Collection</h2>
-          <p>
-            This is a digital memory lane that captures our best moments
-            together — photos and videos that tell our story.
+    <main>
+      <section class="hero-section">
+        <div class="hero-bg-image" data-parallax-speed="0.3"></div>
+        <div class="hero-content">
+          <h1 id="hero-title" class="hero-title"></h1>
+          <p class="hero-subtitle">
+            A collection of moments to cherish forever
           </p>
+          <button id="scroll-btn" class="cta-button">Explore</button>
         </div>
-        <div class="about-image-container">
-          <img src="profile.jpg" alt="About us" class="about-image" />
-        </div>
+        <div class="hero-sparkle-container" aria-hidden="true"></div>
+      </section>
+
+      <div class="mobile-gallery-controls">
+        <button class="gallery-toggle-btn active" data-target="photos-grid">
+          Photos
+        </button>
+        <button class="gallery-toggle-btn" data-target="videos-grid">
+          Videos
+        </button>
       </div>
-    </section>
+
+      <section
+        id="photos-gallery"
+        class="gallery-section"
+        aria-labelledby="photos-title"
+      >
+        <h2 id="photos-title" class="section-title">Photo Gallery</h2>
+        <div class="gallery-grid-container">
+          <div id="photos-grid" class="gallery-grid"></div>
+        </div>
+      </section>
+
+      <section
+        id="videos-gallery"
+        class="gallery-section dark"
+        aria-labelledby="videos-title"
+      >
+        <h2 id="videos-title" class="section-title">Video Gallery</h2>
+        <div class="gallery-grid-container">
+          <div id="videos-grid" class="gallery-grid"></div>
+        </div>
+      </section>
+
+      <section id="about" class="about-section" aria-labelledby="about-title">
+        <div class="about-content">
+          <div class="about-text-container">
+            <h2 id="about-title">About This Collection</h2>
+            <p>
+              This is a digital memory lane that captures our best moments
+              together — photos and videos that tell our story.
+            </p>
+          </div>
+          <div class="about-image-container">
+            <img
+              src="profile.jpg"
+              alt="A couple smiling together, representing the collection"
+              class="about-image"
+            />
+          </div>
+        </div>
+      </section>
+    </main>
 
     <footer class="site-footer">
       <p>&copy; 2025 Memory Lane</p>
@@ -99,9 +112,16 @@
 
     <audio id="bg-music" loop>
       <source src="iris.mp3" type="audio/mp3" />
+      Your browser does not support the audio element.
     </audio>
 
-    <div id="lightbox" class="lightbox" role="dialog" aria-modal="true">
+    <div
+      id="lightbox"
+      class="lightbox"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Media Lightbox"
+    >
       <div class="lightbox-stage">
         <button
           id="prev-btn"
@@ -111,13 +131,21 @@
           ❮
         </button>
         <div class="lightbox-media-container">
-          <img id="lightbox-img" alt="lightbox item" />
-          <video id="lightbox-video" controls></video>
+          <img id="lightbox-img" alt="Currently viewed image in lightbox" />
+          <video
+            id="lightbox-video"
+            controls
+            aria-label="Currently viewed video in lightbox"
+          ></video>
         </div>
         <button id="next-btn" class="nav-btn" aria-label="Next image or video">
           ❯
         </button>
-        <button id="lightbox-close" class="close-btn" aria-label="Close">
+        <button
+          id="lightbox-close"
+          class="close-btn"
+          aria-label="Close lightbox"
+        >
           &times;
         </button>
         <div id="lightbox-caption" class="lightbox-caption"></div>
