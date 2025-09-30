@@ -1,31 +1,54 @@
-// Get elements by ID
-const typingElement = document.getElementById("typingText");
-const buttonElement = document.getElementById("actionButton");
+$(document).ready(function () {
+  const $message = $(".message");
+  const $triggerHeart = $(".trigger-heart"); // The heart that opens/closes the message
+  const $bottomHeart = $(".bottom-heart"); // The link heart at the bottom
+  const $body = $("body"); // Changing background of body
+  const $checkbox = $("#messageState");
 
-// Function to run and start the animation logic
-function initAnimation() {
-  // Check if the elements exist before running (good practice)
-  if (!typingElement || !buttonElement) return;
+  // The initial 'beating' class is assumed to be set on $triggerHeart in the HTML.
 
-  // Initially, set the typing text to be invisible
-  typingElement.style.opacity = 0;
+  $checkbox.on("change", function () {
+    if (this.checked) {
+      // OPEN
 
-  // Wait 500ms before starting the animation (a subtle delay)
-  setTimeout(() => {
-    typingElement.style.opacity = 1; // Make the text container visible
-    // CSS animation takes over here
-  }, 500);
-}
+      // 1. Hide the trigger heart quickly and stop its beat
+      $triggerHeart
+        .removeClass("beating")
+        .stop(true, true)
+        .fadeOut(200, function () {
+          // 2. Open the message and change background AFTER the trigger heart is gone
+          $message.addClass("opened");
+          $body.css("background-color", "#f48fb1");
+        });
 
-// Add an event listener to the button to improve UX
-buttonElement.addEventListener("click", function (event) {
-  // Instantly stop the animation if the user clicks the button before it finishes
-  typingElement.style.animation = "none";
-  // Ensure the full text is shown immediately
-  typingElement.style.width = "27ch";
-  // Hide the blinking cursor
-  typingElement.style.borderRight = "none";
+      // 3. Show the link heart at the bottom
+      $bottomHeart.stop(true, true).fadeIn(400);
+    } else {
+      // CLOSE
+
+      // 1. Close the message and revert background
+      $message.removeClass("opened");
+      $body.css("background-color", "#fce4ec");
+
+      // 2. Hide the bottom link heart
+      $bottomHeart.stop(true, true).fadeOut(400);
+
+      // 3. Bring the trigger heart back and restart the beat
+      // This is necessary so the user can interact with it next time.
+      $triggerHeart.stop(true, true).fadeIn(400).addClass("beating");
+    }
+  });
+
+  // Click outside the message to close it (better UX)
+  $(document).on("click", function (e) {
+    if (
+      $checkbox.is(":checked") &&
+      // Ensure the click target is NOT the message area, the bottom link heart, or the (now-hidden) trigger heart's label
+      !$(e.target).closest(".message").length &&
+      !$(e.target).closest(".bottom-heart").length &&
+      !$(e.target).closest(".heart-label").length
+    ) {
+      $checkbox.prop("checked", false).trigger("change");
+    }
+  });
 });
-
-// Start the animation once the script runs (which is after the DOM is loaded since the script is at the end of <body>)
-initAnimation();
