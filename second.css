@@ -1,0 +1,131 @@
+/*
+    GLOBAL ENHANCEMENTS & RESET
+*/
+body {
+    /* Set a dark background and ensure text is visible against it */
+    background-color: #1a1a1a; 
+    color: #f0f0f0;
+    margin: 0; /* Remove default body margin */
+}
+
+/* BASE STYLES 
+*/
+.wrapper {
+    /* Ensures it takes the full viewport height and centers the content */
+    height: 100vh;
+    /* Use grid for centering and vertical stacking */
+    display: grid;
+    place-items: center;
+    /* Spacing between the text and the button */
+    grid-gap: 25px; 
+}
+ 
+.typing-demo {
+    /* Improved font stack for monospace consistency */
+    font-family: 'Courier New', Courier, monospace;
+    /* Font size scales with viewport width for responsiveness */
+    font-size: 5vw; 
+    
+    /* Initial state is hidden until JS starts the delay */
+    opacity: 0; 
+    
+    /* Cursor border: Wider for better visibility */
+    border-right: 5px solid #f0f0f0; 
+    
+    /* Animation settings */
+    width: 27ch; 
+    animation: 
+        typing 2s steps(22) forwards, 
+        blink-caret .5s step-end infinite alternate; 
+        
+    white-space: nowrap;
+    overflow: hidden;
+    /* Prevents the text from being too wide on very large screens */
+    max-width: 90%; 
+
+    /* Subtle text shadow for a glowing terminal look */
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+}
+
+/* BUTTON STYLES (Styled Anchor Tag)
+*/
+.action-button {
+    /* Accessibility: Remove default link styles */
+    text-decoration: none; 
+    
+    display: inline-block; /* Allows padding and scaling */
+    padding: 12px 24px; /* Larger padding for easier tapping on mobile */
+    font-size: 1.2em;
+    font-family: 'Courier New', Courier, monospace;
+    color: white;
+    background-color: #ff69b4; /* Pink color */
+    border: 2px solid #ff69b4; 
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.4); 
+    /* Smooth transition for hover effects */
+    transition: all 0.2s ease-in-out; 
+    
+    /* Initially hidden, fades in via animation */
+    opacity: 0;
+    animation: fadeIn 0.5s ease 2.5s forwards; 
+}
+
+.action-button:hover {
+    background-color: #ff88c2; 
+    border-color: #ff88c2;
+    transform: scale(1.05); /* Subtle scale effect on hover */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.5);
+}
+
+.action-button:focus {
+    /* Accessibility: Clear outline for keyboard users */
+    outline: 3px solid #fff; 
+    outline-offset: 3px;
+}
+
+
+/*
+    MEDIA QUERY FOR PHONES (Ensures responsiveness on small screens)
+*/
+@media (max-width: 768px) {
+    .typing-demo {
+        /* Increase font size relative to viewport for better mobile readability */
+        font-size: 6vw; 
+    }
+    .action-button {
+        font-size: 1.1em;
+        padding: 10px 20px;
+    }
+}
+
+@media (max-width: 400px) {
+    .typing-demo {
+        font-size: 7vw;
+    }
+}
+
+/*
+    KEYFRAMES: Typing Animation
+*/
+@keyframes typing {
+    from {
+        width: 0
+    }
+}
+      
+/* KEYFRAMES: Blinking Cursor Animation
+*/
+@keyframes blink-caret {
+    50% {
+        border-color: transparent /* Hides the cursor border */
+    }
+}
+
+/* KEYFRAMES: Button Fade-In
+*/
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
+}
