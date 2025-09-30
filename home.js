@@ -5,9 +5,9 @@
 // ------------------ Configuration ------------------
 const siteConfig = {
   // Array of objects for photos and videos.
-  // Ensure all images and video posters are pre-cached for a smoother experience.
+  // NOTE: Replace image/video files (e.g., "23.jpg") with your actual file names.
   photos: [
-    { src: "23.jpg", caption: "❤️", type: "image" },
+    { src: "23.jpg", caption: "❤️ Our first trip together!", type: "image" },
     { src: "25.jpg", caption: "❤️", type: "image" },
     { src: "17.jpg", caption: "❤️", type: "image" },
     { src: "g.jpg", caption: "❤️", type: "image" },
@@ -126,15 +126,17 @@ const state = {
 
 // ------------------ Asset Management & Caching ------------------
 function getAssetPath(file) {
-  return `./${file}`;
+  // Ensures the path is correct, assuming assets are in the same folder as home.html
+  return file.startsWith("./") ? file : `./${file}`;
 }
 
 function preCacheAssets() {
+  // Note: The audio file is assumed to be 'iris.mp3' based on the HTML
   const assetsToCache = [
     "14.jpg", // Hero image
     ...siteConfig.photos.map((p) => p.src),
     ...siteConfig.videos.map((v) => v.poster),
-    "song.mp3",
+    "iris.mp3", // Audio asset
   ];
 
   if ("caches" in window) {
@@ -167,7 +169,8 @@ function hideLoader() {
   }
 }
 
-function typeHeroTitle(text, speed = 100) {
+// Enhanced Title Typewriter Function
+function typeHeroTitle(text, speed = 80) {
   if (state.reducedMotion) {
     elements.heroTitle.textContent = text;
     return;
@@ -187,8 +190,11 @@ function typeHeroTitle(text, speed = 100) {
 
 function handleParallax() {
   const scrollY = window.scrollY;
-  const parallaxSpeed = 0.5;
+  // Parallax speed from data-attribute (0.5)
+  const parallaxSpeed =
+    parseFloat(elements.heroBgImage.dataset.parallaxSpeed) || 0.5;
   if (elements.heroBgImage) {
+    // Moves the background up slower than the foreground
     elements.heroBgImage.style.transform = `translateY(${
       scrollY * parallaxSpeed
     }px) scale(1.1)`;
@@ -198,6 +204,7 @@ function handleParallax() {
 // ------------------ UI: Header & Music ------------------
 function handleHeaderScroll() {
   const currentScrollY = window.scrollY;
+  // Hide header when scrolling down past 100px
   if (currentScrollY > state.lastScrollY && currentScrollY > 100) {
     elements.siteHeader.classList.add("hide");
   } else {
@@ -211,7 +218,7 @@ function toggleMusic() {
   if (isPlaying) {
     elements.bgMusic.pause();
     elements.musicBtn.classList.remove("playing");
-    elements.musicIcon.textContent = "🎵";
+    elements.musicIcon.textContent = "🎵"; // Muted icon
     localStorage.setItem("playMusic", "false");
     state.isMusicPlaying = false;
   } else {
@@ -219,7 +226,7 @@ function toggleMusic() {
       .play()
       .then(() => {
         elements.musicBtn.classList.add("playing");
-        elements.musicIcon.textContent = "🔊";
+        elements.musicIcon.textContent = "🔊"; // Playing icon
         localStorage.setItem("playMusic", "true");
         state.isMusicPlaying = true;
       })
@@ -231,14 +238,16 @@ function toggleMusic() {
 function createHeroSparkle() {
   const sparkle = document.createElement("div");
   sparkle.className = "hero-sparkle";
-  const size = Math.random() * 3 + 1;
+  const size = Math.random() * 3 + 1; // 1px to 4px
   sparkle.style.width = `${size}px`;
   sparkle.style.height = `${size}px`;
   sparkle.style.left = `${Math.random() * 100}vw`;
+  // Start below the viewport and move up
   sparkle.style.top = `${100 + Math.random() * 20}vh`;
   sparkle.style.animationDuration = `${10 + Math.random() * 8}s`;
   sparkle.style.animationDelay = `${Math.random() * 5}s`;
   elements.heroSparkleContainer.appendChild(sparkle);
+  // Remove sparkle after animation ends to prevent DOM clutter
   sparkle.addEventListener("animationend", () => sparkle.remove());
 }
 
@@ -246,7 +255,7 @@ function createHeroSparkle() {
 function createGalleryItem(item) {
   const itemEl = document.createElement("div");
   itemEl.className = "gallery-item";
-  itemEl.tabIndex = 0;
+  itemEl.tabIndex = 0; // Make focusable
   itemEl.setAttribute("role", "button");
   itemEl.setAttribute(
     "aria-label",
@@ -264,10 +273,11 @@ function createGalleryItem(item) {
     mediaEl.alt = item.caption;
   } else {
     mediaEl.muted = true;
+    mediaEl.loop = true; // Videos should loop in the grid view
     mediaEl.playsInline = true;
     mediaEl.poster = getAssetPath(item.poster);
     const overlay = document.createElement("div");
-    overlay.className = "video-overlay";
+    overlay.className = "video-overlay"; // For the play icon
     itemEl.appendChild(overlay);
   }
 
@@ -277,21 +287,24 @@ function createGalleryItem(item) {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           if (item.type === "image") {
+            // For images, set source to load
             mediaEl.src = getAssetPath(item.src);
           } else {
+            // For videos, set source and attempt to play (muted)
             mediaEl.src = getAssetPath(item.src);
             mediaEl.play().catch((e) => console.log("Autoplay failed:", e));
           }
           entry.target.classList.add("loaded");
           observer.unobserve(entry.target);
-        } else if (item.type === "video") {
+        } else if (item.type === "video" && mediaEl.src) {
+          // Pause videos when they scroll out of view
           mediaEl.pause();
           mediaEl.currentTime = 0;
         }
       });
     },
-    { threshold: 0.1 }
-  ); // Trigger when 10% of element is visible
+    { threshold: 0.1 } // Trigger when 10% of element is visible
+  );
 
   itemEl.appendChild(mediaEl);
   observer.observe(itemEl);
@@ -320,6 +333,7 @@ function getGalleryItemData(target) {
     src: itemEl.dataset.src,
     type: itemEl.dataset.type,
     caption: itemEl.dataset.caption,
+    // The poster data is useful for the lightbox if the video file itself is large
     poster: itemEl.querySelector("video")?.poster,
   };
 }
@@ -328,34 +342,9 @@ function getGalleryItemData(target) {
 function openLightbox(itemData, index) {
   state.currentLightboxIndex = index;
   elements.lightbox.classList.add("is-open");
-  document.body.style.overflow = "hidden";
+  document.body.style.overflow = "hidden"; // Prevent background scrolling
 
-  // Focus trap for accessibility
-  elements.lightbox.focus();
-  const focusableEls = elements.lightbox.querySelectorAll(
-    "button, [href], input, select, textarea, [tabindex]:not([tabindex='-1'])"
-  );
-  const firstFocusableEl = focusableEls[0];
-  const lastFocusableEl = focusableEls[focusableEls.length - 1];
-
-  elements.lightbox.addEventListener("keydown", (e) => {
-    if (e.key === "Tab") {
-      if (e.shiftKey) {
-        /* shift + tab */
-        if (document.activeElement === firstFocusableEl) {
-          lastFocusableEl.focus();
-          e.preventDefault();
-        }
-      } else {
-        /* tab */
-        if (document.activeElement === lastFocusableEl) {
-          firstFocusableEl.focus();
-          e.preventDefault();
-        }
-      }
-    }
-  });
-
+  // Hide both elements first
   elements.lightboxImg.style.display = "none";
   elements.lightboxVideo.style.display = "none";
   elements.lightboxVideo.pause();
@@ -372,12 +361,17 @@ function openLightbox(itemData, index) {
     elements.lightboxVideo.poster = itemData.poster || "";
     elements.lightboxVideo.style.display = "block";
     elements.lightboxVideo.controls = true;
+    // Lightbox videos should not loop unless specifically requested
+    elements.lightboxVideo.loop = false;
     elements.lightboxVideo
       .play()
       .catch((e) => console.log("Video playback failed:", e));
   }
 
   elements.lightboxCaption.textContent = itemData.caption;
+
+  // Accessibility: Focus on close button when lightbox opens
+  elements.lightboxClose.focus();
 }
 
 function closeLightbox() {
@@ -387,7 +381,9 @@ function closeLightbox() {
   elements.lightboxVideo.src = "";
   elements.lightboxVideo.pause();
   elements.lightboxVideo.currentTime = 0;
-  document.activeElement.blur(); // Remove focus from the closed lightbox
+
+  // Optional: Restore focus to the element that opened the lightbox if tracked
+  document.activeElement.blur();
 }
 
 function nextItem() {
@@ -412,11 +408,16 @@ function prevItem() {
 // ------------------ UI: Mobile Gallery Switch ------------------
 function switchGallery(targetId) {
   const isPhotos = targetId === "photos-grid";
+  // Toggle active class on the grid containers based on the target
   elements.photosGrid.classList.toggle("active", isPhotos);
   elements.videosGrid.classList.toggle("active", !isPhotos);
+
+  // Toggle active class on the mobile buttons
   elements.galleryToggleButtons.forEach((b) =>
     b.classList.toggle("active", b.dataset.target === targetId)
   );
+
+  // Set the source data for the lightbox navigation
   state.currentLightboxItems = isPhotos ? siteConfig.photos : siteConfig.videos;
 }
 
@@ -425,14 +426,17 @@ function handleCursor(e) {
   if (state.reducedMotion || window.innerWidth <= 768) {
     return;
   }
+  // Smooth movement by translating the cursor to the mouse position
   elements.customCursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -50%)`;
+
+  // Check if the element being hovered is interactive
   const isHoverable = e.target.closest("a, button, .gallery-item");
   elements.customCursor.classList.toggle("hover", isHoverable);
 }
 
 // ------------------ Event Listeners & Init ------------------
 function initEvents() {
-  // Gallery controls
+  // Gallery controls for mobile
   elements.galleryToggleButtons.forEach((btn) => {
     btn.addEventListener("click", (e) =>
       switchGallery(e.target.dataset.target)
@@ -442,9 +446,12 @@ function initEvents() {
   // Music control
   elements.musicBtn.addEventListener("click", toggleMusic);
 
-  // Smooth scroll to gallery
+  // Smooth scroll to gallery from CTA button
   elements.scrollBtn.addEventListener("click", () => {
-    document.getElementById("gallery").scrollIntoView({ behavior: "smooth" });
+    // Scroll to the photos section, which is the start of the content
+    document
+      .getElementById("photos-gallery")
+      .scrollIntoView({ behavior: "smooth" });
   });
 
   // Header & Parallax
@@ -455,9 +462,13 @@ function initEvents() {
   elements.lightboxClose.addEventListener("click", closeLightbox);
   elements.nextBtn.addEventListener("click", nextItem);
   elements.prevBtn.addEventListener("click", prevItem);
+
+  // Close lightbox when clicking the backdrop
   elements.lightbox.addEventListener("click", (e) => {
     if (e.target === elements.lightbox) closeLightbox();
   });
+
+  // Keyboard navigation for lightbox
   document.addEventListener("keydown", (e) => {
     if (!elements.lightbox.classList.contains("is-open")) return;
     if (e.key === "Escape") closeLightbox();
@@ -469,13 +480,18 @@ function initEvents() {
   document.addEventListener("click", (e) => {
     const itemEl = e.target.closest(".gallery-item");
     if (itemEl) {
-      const itemSrc = itemEl.dataset.src.replace("./", "");
+      const itemSrc = itemEl.dataset.src;
       const itemType = itemEl.dataset.type;
+
+      // Determine the full list of items for navigation
       const currentItems =
         itemType === "image" ? siteConfig.photos : siteConfig.videos;
+
+      // Find the index of the clicked item
       const itemIndex = currentItems.findIndex(
         (item) => getAssetPath(item.src) === itemSrc
       );
+
       const itemData = getGalleryItemData(e.target);
       if (itemData) {
         state.currentLightboxItems = currentItems;
@@ -484,8 +500,10 @@ function initEvents() {
     }
   });
 
-  // Initialize music state
+  // Initialize music state on interaction
   if (state.isMusicPlaying) {
+    // The play() call is a suggestion; actual playback requires user interaction
+    // but we'll try to play if a user setting persists.
     elements.bgMusic
       .play()
       .catch((e) => console.error("Autoplay was prevented:", e));
@@ -510,8 +528,11 @@ function initialize() {
   loadGallery();
   window.addEventListener("load", hideLoader);
   initEvents();
-  typeHeroTitle("Our Memories");
+  // Enhanced Hero Title Text
+  typeHeroTitle("Our Memory Lane");
+
   if (!state.reducedMotion) {
+    // Start sparkle animation only if motion isn't reduced
     state.sparklesInterval = setInterval(createHeroSparkle, 500);
   }
 }
