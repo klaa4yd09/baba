@@ -1,5 +1,4 @@
 :root {
-  /* GIRLY + PROFESSIONAL ELEGANCE PALETTE */
   --color-primary: #B0726D; /* Muted Rosewood */
   --color-secondary: #F7B7C7; /* Soft Blush Pink */
   --color-accent: #E6C7E6; /* Lavender Champagne */
@@ -8,17 +7,20 @@
   --color-text-light: #3A2D2D; /* Warm Cocoa */
   --color-text-dark: #FDEDED; /* Creamy Rose White */
 
-  --gradient-pink: linear-gradient(135deg, #F7B7C7, #E6C7E6);
+  /* UPDATED: Changed to a light gradient */
+  --gradient-pink: linear-gradient(135deg, #FFFFFF, #F0F0F0);
   --gradient-rose: linear-gradient(135deg, #B0726D, #F7B7C7);
 
-  --font-heading: 'Playfair Display', serif; /* elegant */
-  --font-body: 'Poppins', sans-serif; /* soft modern */
+  /* FONT SYSTEM */
+  --font-heading: 'Playfair Display', serif; /* Elegant */
+  --font-body: 'Quicksand', sans-serif; /* Soft + Cute */
+  --font-script: 'Great Vibes', cursive; /* Girly Accent */
 
   --transition-fast: 0.3s ease-in-out;
   --transition-slow: 0.5s ease;
 }
 
-/* Global Reset and Styles */
+/* ------------------ Global Reset ------------------ */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -33,11 +35,12 @@ body {
   font-family: var(--font-body);
   color: var(--color-text-light);
   background-color: var(--color-background-light);
-  line-height: 1.6;
+  line-height: 1.7;
+  font-size: 1rem;
   overflow-x: hidden;
 }
 
-/* Typography */
+/* ------------------ Typography ------------------ */
 h1, h2, .logo {
   font-family: var(--font-heading);
   font-weight: 700;
@@ -47,7 +50,7 @@ h1, h2, .logo {
 h1 {
   font-size: clamp(2.5rem, 5vw, 4.5rem);
   letter-spacing: 2px;
-  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
 }
 
 h2 {
@@ -61,20 +64,21 @@ h2 {
   position: relative;
   text-transform: uppercase;
   letter-spacing: 3px;
-  color: var(--color-primary);
+  color: black;
+  font-family: var(--font-heading);
 }
 
 .section-title::after {
   content: '';
   display: block;
-  width: 60px;
+  width: 70px;
   height: 3px;
   border-radius: 2px;
   background: var(--gradient-pink);
   margin: 10px auto 0;
 }
 
-/* Custom Cursor */
+/* ------------------ Custom Cursor ------------------ */
 .custom-cursor {
   position: fixed;
   width: 30px;
@@ -100,7 +104,7 @@ h2 {
   body { cursor: default; }
 }
 
-/* Loader */
+/* ------------------ Loader ------------------ */
 .loader-container {
   position: fixed;
   top: 0; left: 0;
@@ -131,7 +135,7 @@ h2 {
   100% { transform: rotate(360deg);}
 }
 
-/* Header */
+/* ------------------ Header ------------------ */
 .site-header {
   position: fixed;
   top: 0; left: 0;
@@ -151,9 +155,10 @@ h2 {
 }
 
 .logo {
-  font-size: 1.6rem;
-  text-decoration: none;
+  font-size: 1.8rem;
+  font-family: var(--font-script);
   color: var(--color-primary);
+  text-decoration: none;
   transition: color var(--transition-fast);
 }
 
@@ -164,6 +169,7 @@ h2 {
   color: var(--color-text-light);
   margin-left: 25px;
   font-weight: 600;
+  font-family: var(--font-body);
   position: relative;
   transition: color var(--transition-fast);
 }
@@ -181,7 +187,7 @@ h2 {
 
 .main-nav a:hover::after { width: 100%; }
 
-/* Music Button */
+/* ------------------ Music Button ------------------ */
 .music-btn {
   background: none;
   border: 2px solid var(--color-primary);
@@ -211,7 +217,7 @@ h2 {
   100% { box-shadow: 0 0 0 0 rgba(247,183,199,0); }
 }
 
-/* Hero Section */
+/* ------------------ Hero Section ------------------ */
 .hero-section {
   position: relative;
   height: 100vh;
@@ -244,14 +250,16 @@ h2 {
 }
 
 .hero-subtitle {
-  font-size: clamp(1rem, 2vw, 1.5rem);
-  font-weight: 300;
-  max-width: 600px;
+  font-size: clamp(1.2rem, 2vw, 1.6rem);
+  font-family: var(--font-script);
+  font-weight: 400;
+  max-width: 650px;
   margin: 0 auto 3rem;
-  text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+  text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
+  color: var(--color-secondary);
 }
 
-/* Call To Action Button */
+/* ------------------ Call To Action Button ------------------ */
 .cta-button {
   background: var(--gradient-rose);
   color: var(--color-background-light);
@@ -261,6 +269,7 @@ h2 {
   font-weight: 600;
   border-radius: 50px;
   cursor: pointer;
+  font-family: var(--font-body);
   text-transform: uppercase;
   letter-spacing: 1px;
   box-shadow: 0 4px 12px rgba(176,114,109,0.25);
@@ -273,7 +282,7 @@ h2 {
   background: var(--gradient-pink);
 }
 
-/* Sparkles */
+/* ------------------ Sparkles ------------------ */
 .hero-sparkle-container {
   position: absolute;
   top: 0; left: 0;
@@ -299,16 +308,16 @@ h2 {
   100% { transform: translateY(-100vh) scale(0.5); opacity: 0; }
 }
 
-/* Gallery Section */
+/* ------------------ Gallery Section ------------------ */
 .gallery-section {
   padding: 5rem 3vw;
 }
 
 .gallery-section.dark {
-  background-color: var(--color-background-dark);
+  background-color: var(--color-background-light);
 }
 
-.gallery-section.dark .section-title { color: var(--color-background-light); }
+.gallery-section.dark .section-title { color: var(--color-background-dark); }
 .gallery-section.dark .section-title::after { background: var(--gradient-pink); }
 
 .gallery-grid-container {
@@ -317,6 +326,7 @@ h2 {
   margin: 0 auto;
 }
 
+/* CRUCIAL FIX: Ensure grids are always visible on desktop */
 .gallery-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -368,7 +378,7 @@ h2 {
 
 .gallery-item:hover .video-overlay::before { opacity: 1; }
 
-/* About Section */
+/* ------------------ About Section ------------------ */
 .about-section {
   background-color: var(--color-background-dark);
   color: var(--color-text-dark);
@@ -391,6 +401,7 @@ h2 {
   font-size: 1.1rem;
   line-height: 1.8;
   color: var(--color-text-dark);
+  font-family: var(--font-body);
 }
 
 .about-image-container {
@@ -403,19 +414,20 @@ h2 {
 
 .about-image { width: 100%; height: auto; display: block; }
 
-/* Footer */
+/* ------------------ Footer ------------------ */
 .site-footer {
   text-align: center;
   padding: 2rem;
   background: var(--gradient-rose);
   color: var(--color-background-light);
   font-size: 0.95rem;
+  font-family: var(--font-body);
   box-shadow: 0 -2px 10px rgba(0,0,0,0.15);
 }
 
 .site-footer p { margin: 5px 0; }
 
-/* Lightbox */
+/* ------------------ Lightbox ------------------ */
 .lightbox {
   position: fixed;
   top: 0; left: 0;
@@ -455,12 +467,13 @@ h2 {
 .lightbox-caption {
   color: var(--color-secondary);
   margin-top: 10px;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
+  font-family: var(--font-script);
   font-style: italic;
-  font-weight: 500;
   text-shadow: 1px 1px 2px #000;
 }
 
+/* Buttons inside Lightbox */
 .close-btn, .nav-btn {
   position: absolute;
   background: none;
@@ -479,7 +492,7 @@ h2 {
 #prev-btn { left: -60px; top: 50%; transform: translateY(-50%); }
 #next-btn { right: -60px; top: 50%; transform: translateY(-50%); }
 
-/* Responsive Adjustments */
+/* ------------------ Responsive ------------------ */
 @media (max-width: 1024px) {
   .about-content { flex-direction: column; text-align: center; }
   .about-image-container { flex: none; order: -1; margin-bottom: 2rem; }
@@ -494,7 +507,7 @@ h2 {
 @media (max-width: 768px) {
   .site-header { padding: 1rem 5vw; }
   .main-nav { display: none; }
-  .hero-title { font-size: 2.2rem; }
+  .hero-title { font-size: 2.3rem; }
   .mobile-gallery-controls {
     display: flex; justify-content: center;
     padding: 1rem 0;
@@ -509,7 +522,8 @@ h2 {
     font-size: 1.1rem;
     font-weight: 600;
     cursor: pointer;
-    color: #999;
+    /* FIX: Changed color from #999 to the lighter variable for better contrast/theme */
+    color: var(--color-text-light); 
     transition: color var(--transition-fast);
     border-bottom: 2px solid transparent;
   }
@@ -517,6 +531,7 @@ h2 {
     color: var(--color-primary);
     border-bottom-color: var(--color-primary);
   }
+  /* These rules hide the inactive grid on mobile */
   #photos-grid, #videos-grid { display: none; }
   #photos-grid.active, #videos-grid.active { display: grid; }
 }
