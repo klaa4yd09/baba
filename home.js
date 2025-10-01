@@ -100,8 +100,6 @@ const siteConfig = {
     { src: "39.mp4", poster: "39.jpg", caption: "❤️", type: "video" },
     { src: "44.mp4", poster: "44.jpg", caption: "❤️", type: "video" },
   ],
-  heroText: "Our Memory Lane",
-  musicFile: "iris.mp3", // Standardized music file name
 };
 
 // ------------------ DOM Element Cache ------------------
@@ -126,10 +124,6 @@ const elements = {
   heroTitle: document.getElementById("hero-title"),
   heroBgImage: document.querySelector(".hero-bg-image"),
   customCursor: document.getElementById("custom-cursor"),
-  // NEW: Scroll-to-top button
-  backToTopBtn:
-    document.getElementById("back-to-top-btn") ||
-    document.createElement("button"),
 };
 
 // ------------------ State ------------------
@@ -138,48 +132,36 @@ const state = {
   lastScrollY: window.scrollY,
   sparklesInterval: null,
   currentLightboxIndex: 0,
-  // Start with videos list as the default
+  // Initialize currentLightboxItems to videos since they will be displayed first
   currentLightboxItems: siteConfig.videos,
   reducedMotion: window.matchMedia("(prefers-reduced-motion: reduce)").matches,
-  // NEW: Hero zoom state
-  isHeroVisible: true,
 };
-
-// ------------------ Utility Functions ------------------
-
-/**
- * NEW: Debounce function to limit the rate of function calls.
- * @param {function} func - The function to debounce.
- * @param {number} delay - The delay in milliseconds.
- */
-const debounce = (func, delay = 50) => {
-  let timeoutId;
-  return (...args) => {
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => {
-      func.apply(this, args);
-    }, delay);
-  };
-};
-
-// Simplified asset path resolver
-const getAssetPath = (file) => `./${file}`;
 
 // ------------------ Asset Management & Caching ------------------
+function getAssetPath(file) {
+  // Ensures the path is correct, assuming assets are in the same folder as home.html
+  return file.startsWith("./") ? file : `./${file}`;
+}
 
 function preCacheAssets() {
+  // Note: The audio file is assumed to be 'iris.mp3' based on the HTML
   const assetsToCache = [
     "14.jpg", // Hero image
     ...siteConfig.photos.map((p) => p.src),
     ...siteConfig.videos.map((v) => v.poster),
-    siteConfig.musicFile,
+    "iris.mp3", // Audio asset
   ];
 
   if ("caches" in window) {
     caches.open("our-memories-cache-v1").then((cache) => {
       cache
         .addAll(assetsToCache.map(getAssetPath))
-        .catch((err) => console.error("Failed to pre-cache assets:", err));
+        .then(() => {
+          console.log("Assets pre-cached successfully! 💖");
+        })
+        .catch((err) => {
+          console.error("Failed to pre-cache assets:", err);
+        });
     });
   }
 
@@ -194,19 +176,13 @@ function preCacheAssets() {
 }
 
 // ------------------ UI: Loading & Hero Section ------------------
-
 function hideLoader() {
   if (elements.loader) {
     elements.loader.classList.add("hidden");
-    // NEW: Ensure music starts immediately upon interaction if saved state is true
-    if (state.isMusicPlaying) {
-      // Attach the play attempt to the next *guaranteed* user interaction
-      document.body.addEventListener("click", toggleMusic, { once: true });
-    }
   }
 }
 
-// ENHANCED Title Typewriter Function with more elegant reset
+// Enhanced Title Typewriter Function
 function typeHeroTitle(text, speed = 80) {
   if (state.reducedMotion) {
     elements.heroTitle.textContent = text;
@@ -214,7 +190,7 @@ function typeHeroTitle(text, speed = 80) {
   }
 
   let i = 0;
-  elements.heroTitle.textContent = "";
+  elements.heroTitle.textContent = ""; // Clear content
   const timer = setInterval(() => {
     if (i < text.length) {
       elements.heroTitle.textContent += text.charAt(i);
@@ -225,87 +201,33 @@ function typeHeroTitle(text, speed = 80) {
   }, speed);
 }
 
-// NEW: Advanced Parallax and Header Visibility
-function handleScrollEffects() {
-  const currentScrollY = window.scrollY;
-  const heroHeight = window.innerHeight;
+function handleParallax() {
+  const scrollY = window.scrollY;
+  // Parallax speed from data-attribute (0.5)
+  const parallaxSpeed =
+    parseFloat(elements.heroBgImage.dataset.parallaxSpeed) || 0.5;
+  if (elements.heroBgImage) {
+    // Moves the background up slower than the foreground
+    elements.heroBgImage.style.transform = `translateY(${
+      scrollY * parallaxSpeed
+    }px) scale(1.1)`;
+  }
+}
 
-  // 1. Header Visibility
+// ------------------ UI: Header & Music ------------------
+function handleHeaderScroll() {
+  const currentScrollY = window.scrollY;
+  // Hide header when scrolling down past 100px
   if (currentScrollY > state.lastScrollY && currentScrollY > 100) {
     elements.siteHeader.classList.add("hide");
   } else {
     elements.siteHeader.classList.remove("hide");
   }
   state.lastScrollY = currentScrollY;
-
-  // 2. Parallax
-  const parallaxSpeed =
-    parseFloat(elements.heroBgImage.dataset.parallaxSpeed) || 0.5;
-  if (elements.heroBgImage) {
-    elements.heroBgImage.style.transform = `translateY(${
-      currentScrollY * parallaxSpeed
-    }px) scale(1.05)`;
-  }
-
-  // 3. Back to Top Button Visibility
-  if (currentScrollY > heroHeight * 0.7) {
-    elements.backToTopBtn.style.opacity = "1";
-    elements.backToTopBtn.style.visibility = "visible";
-  } else {
-    elements.backToTopBtn.style.opacity = "0";
-    elements.backToTopBtn.style.visibility = "hidden";
-  }
-
-  // 4. Hero Visibility State (for use in handleHeroZoom)
-  state.isHeroVisible = currentScrollY < heroHeight;
 }
-
-// NEW: Hero Image Zoom on Mouse Move (only active when hero is visible)
-function handleHeroZoom(e) {
-  if (window.innerWidth <= 1024 || state.reducedMotion || !state.isHeroVisible)
-    return;
-
-  // Calculate normalized coordinates (-0.5 to 0.5) relative to the viewport
-  const x = e.clientX / window.innerWidth - 0.5;
-  const y = e.clientY / window.innerHeight - 0.5;
-
-  // Apply a subtle rotation and pan
-  const rotateX = y * 2; // Subtle vertical tilt
-  const rotateY = x * -2; // Subtle horizontal tilt
-  const translateX = x * 10;
-  const translateY = y * 10;
-
-  // Apply the transformation
-  elements.heroBgImage.style.transform = `
-        translateY(${window.scrollY * 0.5}px) 
-        scale(1.08) 
-        translateX(${translateX}px) 
-        translateY(${translateY}px)
-    `;
-  elements.heroBgImage.style.setProperty("--rotateX", `${rotateX}deg`);
-  elements.heroBgImage.style.setProperty("--rotateY", `${rotateY}deg`);
-
-  // Ensure the CSS uses the custom properties for the subtle 3D effect:
-  /*
-    .hero-bg-image {
-        ...
-        transform: scale(1.05); 
-        transition: transform 3s ease-out, filter var(--transition-slow); 
-        transform-origin: center center;
-        perspective: 1000px;
-        transform: translateY(calc(var(--scroll-y) * var(--parallax-speed, 0.5) * 1px)) scale(1.05);
-        transform: rotateX(var(--rotateX, 0deg)) rotateY(var(--rotateY, 0deg)); // NEW
-    }
-    */
-}
-
-// ------------------ UI: Header & Music ------------------
 
 function toggleMusic() {
-  // This function is now the single source of truth for music state toggling
-  const isPlaying =
-    !elements.bgMusic.paused && elements.bgMusic.currentTime > 0;
-
+  const isPlaying = !elements.bgMusic.paused;
   if (isPlaying) {
     elements.bgMusic.pause();
     elements.musicBtn.classList.remove("playing");
@@ -313,8 +235,6 @@ function toggleMusic() {
     localStorage.setItem("playMusic", "false");
     state.isMusicPlaying = false;
   } else {
-    // Attempt to play only if the music hasn't been blocked (i.e., this is a user-initiated click)
-    elements.bgMusic.volume = 0.6; // Set a default volume
     elements.bgMusic
       .play()
       .then(() => {
@@ -323,35 +243,32 @@ function toggleMusic() {
         localStorage.setItem("playMusic", "true");
         state.isMusicPlaying = true;
       })
-      .catch((e) =>
-        console.error("Autoplay was prevented (must be user action):", e)
-      );
+      .catch((e) => console.error("Autoplay was prevented:", e));
   }
 }
 
 // ------------------ UI: Sparkles ------------------
-
 function createHeroSparkle() {
   const sparkle = document.createElement("div");
   sparkle.className = "hero-sparkle";
-  const size = Math.random() * 3 + 1;
+  const size = Math.random() * 3 + 1; // 1px to 4px
   sparkle.style.width = `${size}px`;
   sparkle.style.height = `${size}px`;
   sparkle.style.left = `${Math.random() * 100}vw`;
-  // Start below the viewport
+  // Start below the viewport and move up
   sparkle.style.top = `${100 + Math.random() * 20}vh`;
   sparkle.style.animationDuration = `${10 + Math.random() * 8}s`;
   sparkle.style.animationDelay = `${Math.random() * 5}s`;
   elements.heroSparkleContainer.appendChild(sparkle);
+  // Remove sparkle after animation ends to prevent DOM clutter
   sparkle.addEventListener("animationend", () => sparkle.remove());
 }
 
 // ------------------ UI: Gallery ------------------
-
 function createGalleryItem(item) {
   const itemEl = document.createElement("div");
   itemEl.className = "gallery-item";
-  itemEl.tabIndex = 0;
+  itemEl.tabIndex = 0; // Make focusable
   itemEl.setAttribute("role", "button");
   itemEl.setAttribute(
     "aria-label",
@@ -369,11 +286,11 @@ function createGalleryItem(item) {
     mediaEl.alt = item.caption;
   } else {
     mediaEl.muted = true;
-    mediaEl.loop = true;
+    mediaEl.loop = true; // Videos should loop in the grid view
     mediaEl.playsInline = true;
     mediaEl.poster = getAssetPath(item.poster);
     const overlay = document.createElement("div");
-    overlay.className = "video-overlay";
+    overlay.className = "video-overlay"; // For the play icon
     itemEl.appendChild(overlay);
   }
 
@@ -382,28 +299,24 @@ function createGalleryItem(item) {
     (entries, observer) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          const targetEl = entry.target;
-          const media = targetEl.querySelector("img, video");
           if (item.type === "image") {
-            media.src = getAssetPath(item.src);
+            // For images, set source to load
+            mediaEl.src = getAssetPath(item.src);
           } else {
-            media.src = getAssetPath(item.src);
-            // Only attempt to play if media is not already playing
-            if (media.paused)
-              media.play().catch((e) => console.log("Autoplay failed:", e));
+            // For videos, set source and attempt to play (muted)
+            mediaEl.src = getAssetPath(item.src);
+            mediaEl.play().catch((e) => console.log("Autoplay failed:", e));
           }
-          targetEl.classList.add("loaded");
-          observer.unobserve(targetEl);
-        } else if (item.type === "video") {
-          // Pause videos when they scroll out of view (improves performance)
-          const video = entry.target.querySelector("video");
-          if (video && !video.paused) {
-            video.pause();
-          }
+          entry.target.classList.add("loaded");
+          observer.unobserve(entry.target);
+        } else if (item.type === "video" && mediaEl.src) {
+          // Pause videos when they scroll out of view
+          mediaEl.pause();
+          mediaEl.currentTime = 0;
         }
       });
     },
-    { threshold: 0.1 }
+    { threshold: 0.1 } // Trigger when 10% of element is visible
   );
 
   itemEl.appendChild(mediaEl);
@@ -413,14 +326,14 @@ function createGalleryItem(item) {
 }
 
 function loadGallery() {
-  // 1. Load Videos First
+  // 1. Load Videos First (Appends to the correct #videos-grid element)
   const videosFragment = document.createDocumentFragment();
   siteConfig.videos.forEach((video) => {
     videosFragment.appendChild(createGalleryItem(video));
   });
   elements.videosGrid.appendChild(videosFragment);
 
-  // 2. Load Photos Second
+  // 2. Load Photos Second (Appends to the correct #photos-grid element)
   const photosFragment = document.createDocumentFragment();
   siteConfig.photos.forEach((photo) => {
     photosFragment.appendChild(createGalleryItem(photo));
@@ -435,18 +348,18 @@ function getGalleryItemData(target) {
     src: itemEl.dataset.src,
     type: itemEl.dataset.type,
     caption: itemEl.dataset.caption,
+    // The poster data is useful for the lightbox if the video file itself is large
     poster: itemEl.querySelector("video")?.poster,
   };
 }
 
 // ------------------ UI: Lightbox ------------------
-
 function openLightbox(itemData, index) {
   state.currentLightboxIndex = index;
   elements.lightbox.classList.add("is-open");
-  document.body.style.overflow = "hidden";
+  document.body.style.overflow = "hidden"; // Prevent background scrolling
 
-  // Hide all media elements first
+  // Hide both elements first
   elements.lightboxImg.style.display = "none";
   elements.lightboxVideo.style.display = "none";
   elements.lightboxVideo.pause();
@@ -463,6 +376,7 @@ function openLightbox(itemData, index) {
     elements.lightboxVideo.poster = itemData.poster || "";
     elements.lightboxVideo.style.display = "block";
     elements.lightboxVideo.controls = true;
+    // Lightbox videos should not loop unless specifically requested
     elements.lightboxVideo.loop = false;
     elements.lightboxVideo
       .play()
@@ -470,6 +384,8 @@ function openLightbox(itemData, index) {
   }
 
   elements.lightboxCaption.textContent = itemData.caption;
+
+  // Accessibility: Focus on close button when lightbox opens
   elements.lightboxClose.focus();
 }
 
@@ -480,53 +396,64 @@ function closeLightbox() {
   elements.lightboxVideo.src = "";
   elements.lightboxVideo.pause();
   elements.lightboxVideo.currentTime = 0;
+
+  // Optional: Restore focus to the element that opened the lightbox if tracked
+  document.activeElement.blur();
 }
 
-function navigateLightbox(direction) {
-  let nextIndex = state.currentLightboxIndex + direction;
-  const totalItems = state.currentLightboxItems.length;
+function nextItem() {
+  state.currentLightboxIndex =
+    (state.currentLightboxIndex + 1) % state.currentLightboxItems.length;
+  openLightbox(
+    state.currentLightboxItems[state.currentLightboxIndex],
+    state.currentLightboxIndex
+  );
+}
 
-  // Wrap around logic
-  nextIndex = (nextIndex + totalItems) % totalItems;
-
-  state.currentLightboxIndex = nextIndex;
-  openLightbox(state.currentLightboxItems[nextIndex], nextIndex);
+function prevItem() {
+  state.currentLightboxIndex =
+    (state.currentLightboxIndex - 1 + state.currentLightboxItems.length) %
+    state.currentLightboxItems.length;
+  openLightbox(
+    state.currentLightboxItems[state.currentLightboxIndex],
+    state.currentLightboxIndex
+  );
 }
 
 // ------------------ UI: Mobile Gallery Switch ------------------
-
 function switchGallery(targetId) {
+  // Note: 'videos-grid' is now the expected default/first
   const isVideos = targetId === "videos-grid";
 
+  // Toggle active class on the grid containers based on the target (CRITICAL FOR MOBILE CSS)
   elements.videosGrid.classList.toggle("active", isVideos);
   elements.photosGrid.classList.toggle("active", !isVideos);
 
+  // Toggle active class on the mobile buttons
   elements.galleryToggleButtons.forEach((b) =>
     b.classList.toggle("active", b.dataset.target === targetId)
   );
 
+  // Set the source data for the lightbox navigation
   state.currentLightboxItems = isVideos ? siteConfig.videos : siteConfig.photos;
 }
 
 // ------------------ Custom Cursor ------------------
-
-const handleCursor = debounce((e) => {
-  if (state.reducedMotion || window.innerWidth <= 768 || !elements.customCursor)
+function handleCursor(e) {
+  if (state.reducedMotion || window.innerWidth <= 768) {
     return;
+  }
+  // Smooth movement by translating the cursor to the mouse position
+  elements.customCursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -50%)`;
 
-  // Use requestAnimationFrame for smoother cursor updates
-  window.requestAnimationFrame(() => {
-    elements.customCursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -50%)`;
-  });
-
+  // Check if the element being hovered is interactive
   const isHoverable = e.target.closest("a, button, .gallery-item");
   elements.customCursor.classList.toggle("hover", isHoverable);
-});
+}
 
-// ------------------ Initialization and Events ------------------
-
+// ------------------ Event Listeners & Init ------------------
 function initEvents() {
-  // Gallery controls
+  // Gallery controls for mobile
   elements.galleryToggleButtons.forEach((btn) => {
     btn.addEventListener("click", (e) =>
       switchGallery(e.target.dataset.target)
@@ -536,28 +463,24 @@ function initEvents() {
   // Music control
   elements.musicBtn.addEventListener("click", toggleMusic);
 
-  // NEW: Scroll to Top button
-  if (elements.backToTopBtn) {
-    elements.backToTopBtn.addEventListener("click", () => {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    });
-  }
-
   // Smooth scroll to gallery from CTA button
   elements.scrollBtn.addEventListener("click", () => {
+    // Scroll to the videos-gallery section, which is now the first content section
     document
-      .getElementById("videos-gallery")
+      .getElementById("videos-gallery") // Changed to target videos-gallery
       .scrollIntoView({ behavior: "smooth" });
   });
 
-  // Header, Parallax, and Back-to-Top (Debounced for performance)
-  window.addEventListener("scroll", debounce(handleScrollEffects, 10));
+  // Header & Parallax
+  window.addEventListener("scroll", handleHeaderScroll);
+  window.addEventListener("scroll", handleParallax);
 
   // Lightbox controls
   elements.lightboxClose.addEventListener("click", closeLightbox);
-  elements.nextBtn.addEventListener("click", () => navigateLightbox(1));
-  elements.prevBtn.addEventListener("click", () => navigateLightbox(-1));
+  elements.nextBtn.addEventListener("click", nextItem);
+  elements.prevBtn.addEventListener("click", prevItem);
 
+  // Close lightbox when clicking the backdrop
   elements.lightbox.addEventListener("click", (e) => {
     if (e.target === elements.lightbox) closeLightbox();
   });
@@ -566,47 +489,54 @@ function initEvents() {
   document.addEventListener("keydown", (e) => {
     if (!elements.lightbox.classList.contains("is-open")) return;
     if (e.key === "Escape") closeLightbox();
-    if (e.key === "ArrowRight") navigateLightbox(1);
-    if (e.key === "ArrowLeft") navigateLightbox(-1);
+    if (e.key === "ArrowRight") nextItem();
+    if (e.key === "ArrowLeft") prevItem();
   });
 
   // Open lightbox from gallery
   document.addEventListener("click", (e) => {
     const itemEl = e.target.closest(".gallery-item");
-    if (!itemEl) return;
+    if (itemEl) {
+      const itemSrc = itemEl.dataset.src;
+      const itemType = itemEl.dataset.type;
 
-    const itemSrc = itemEl.dataset.src;
-    const itemType = itemEl.dataset.type;
+      // Determine the full list of items for navigation
+      const currentItems =
+        itemType === "video" ? siteConfig.videos : siteConfig.photos;
 
-    // Determine the full list of items for navigation
-    const currentItems =
-      itemType === "video" ? siteConfig.videos : siteConfig.photos;
+      // Find the index of the clicked item
+      const itemIndex = currentItems.findIndex(
+        (item) => getAssetPath(item.src) === itemSrc
+      );
 
-    // Find the index of the clicked item using the full asset path
-    const itemIndex = currentItems.findIndex(
-      (item) => getAssetPath(item.src) === itemSrc
-    );
-
-    const itemData = getGalleryItemData(e.target);
-    if (itemData && itemIndex !== -1) {
-      state.currentLightboxItems = currentItems;
-      openLightbox(itemData, itemIndex);
+      const itemData = getGalleryItemData(e.target);
+      if (itemData) {
+        state.currentLightboxItems = currentItems;
+        openLightbox(itemData, itemIndex);
+      }
     }
   });
 
-  // Initialize gallery display for mobile (now defaulting to videos-grid)
+  // Initialize music state on interaction
+  if (state.isMusicPlaying) {
+    // The play() call is a suggestion; actual playback requires user interaction
+    // but we'll try to play if a user setting persists.
+    elements.bgMusic
+      .play()
+      .catch((e) => console.error("Autoplay was prevented:", e));
+    elements.musicBtn.classList.add("playing");
+    elements.musicIcon.textContent = "🔊";
+  }
+
+  // Initial gallery display for mobile (now defaulting to videos-grid)
   if (window.innerWidth <= 768) {
     switchGallery("videos-grid");
   }
 
-  // Custom cursor and Hero Zoom for desktop
+  // Custom cursor for desktop
   if (window.innerWidth > 768) {
     document.addEventListener("mousemove", handleCursor);
     document.body.style.cursor = "none";
-    // NEW: Hero Zoom effect
-    document
-      .querySelector(".hero-section")
-      .addEventListener("mousemove", handleHeroZoom);
   }
 }
 
@@ -615,17 +545,13 @@ function initialize() {
   loadGallery();
   window.addEventListener("load", hideLoader);
   initEvents();
-
-  // Type out the main title
-  typeHeroTitle(siteConfig.heroText);
+  // Enhanced Hero Title Text
+  typeHeroTitle("Our Memory Lane");
 
   if (!state.reducedMotion) {
     // Start sparkle animation only if motion isn't reduced
     state.sparklesInterval = setInterval(createHeroSparkle, 500);
   }
-
-  // Run initial scroll handler once to set header/parallax state immediately
-  handleScrollEffects();
 }
 
 document.addEventListener("DOMContentLoaded", initialize);
