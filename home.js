@@ -1,5 +1,5 @@
 // =================================================================
-// Enhanced & Refactored JavaScript
+// Enhanced & Refactored JavaScript (Videos First)
 // =================================================================
 
 // ------------------ Configuration ------------------
@@ -54,18 +54,30 @@ const siteConfig = {
   ],
   videos: [
     { src: "67.mp4", poster: "67.jpg", caption: "❤️", type: "video" },
+    { src: "84.mp4", poster: "67.jpg", caption: "❤️", type: "video" },
     { src: "68.mp4", poster: "67.jpg", caption: "❤️", type: "video" },
     { src: "a.mp4", poster: "a.jpg", caption: "❤️", type: "video" },
     { src: "b.mp4", poster: "b.jpg", caption: "❤️", type: "video" },
     { src: "69.mp4", poster: "c.jpg", caption: "❤️", type: "video" },
+    { src: "82.mp4", poster: "29.jpg", caption: "❤️", type: "video" },
+    { src: "83.mp4", poster: "29.jpg", caption: "❤️", type: "video" },
+    { src: "81.mp4", poster: "29.jpg", caption: "❤️", type: "video" },
+    { src: "79.mp4", poster: "29.jpg", caption: "❤️", type: "video" },
+    { src: "80.mp4", poster: "29.jpg", caption: "❤️", type: "video" },
+    { src: "75.mp4", poster: "29.jpg", caption: "❤️", type: "video" },
+    { src: "78.mp4", poster: "29.jpg", caption: "❤️", type: "video" },
+    { src: "85.mp4", poster: "29.jpg", caption: "❤️", type: "video" },
+    { src: "74.mp4", poster: "29.jpg", caption: "❤️", type: "video" },
     { src: "c.mp4", poster: "c.jpg", caption: "❤️", type: "video" },
     { src: "d.mp4", poster: "d.jpg", caption: "❤️", type: "video" },
     { src: "28.mp4", poster: "28.jpg", caption: "❤️", type: "video" },
     { src: "29.mp4", poster: "29.jpg", caption: "❤️", type: "video" },
+    { src: "76.mp4", poster: "29.jpg", caption: "❤️", type: "video" },
     { src: "30.mp4", poster: "30.jpg", caption: "❤️", type: "video" },
     { src: "32.mp4", poster: "32.jpg", caption: "❤️", type: "video" },
     { src: "20.mp4", poster: "20.jpg", caption: "❤️", type: "video" },
     { src: "49.mp4", poster: "49.jpg", caption: "❤️", type: "video" },
+    { src: "77.mp4", poster: "29.jpg", caption: "❤️", type: "video" },
     { src: "1.mp4", poster: "1.jpg", caption: "❤️", type: "video" },
     { src: "2.mp4", poster: "2.jpg", caption: "❤️", type: "video" },
     { src: "3.mp4", poster: "3.jpg", caption: "❤️", type: "video" },
@@ -120,7 +132,8 @@ const state = {
   lastScrollY: window.scrollY,
   sparklesInterval: null,
   currentLightboxIndex: 0,
-  currentLightboxItems: [],
+  // Initialize currentLightboxItems to videos since they will be displayed first
+  currentLightboxItems: siteConfig.videos,
   reducedMotion: window.matchMedia("(prefers-reduced-motion: reduce)").matches,
 };
 
@@ -313,17 +326,19 @@ function createGalleryItem(item) {
 }
 
 function loadGallery() {
-  const photosFragment = document.createDocumentFragment();
-  siteConfig.photos.forEach((photo) => {
-    photosFragment.appendChild(createGalleryItem(photo));
-  });
-  elements.photosGrid.appendChild(photosFragment);
-
+  // 1. Load Videos First
   const videosFragment = document.createDocumentFragment();
   siteConfig.videos.forEach((video) => {
     videosFragment.appendChild(createGalleryItem(video));
   });
   elements.videosGrid.appendChild(videosFragment);
+
+  // 2. Load Photos Second
+  const photosFragment = document.createDocumentFragment();
+  siteConfig.photos.forEach((photo) => {
+    photosFragment.appendChild(createGalleryItem(photo));
+  });
+  elements.photosGrid.appendChild(photosFragment);
 }
 
 function getGalleryItemData(target) {
@@ -407,10 +422,11 @@ function prevItem() {
 
 // ------------------ UI: Mobile Gallery Switch ------------------
 function switchGallery(targetId) {
-  const isPhotos = targetId === "photos-grid";
+  // Note: 'videos-grid' is now the expected default/first
+  const isVideos = targetId === "videos-grid";
   // Toggle active class on the grid containers based on the target
-  elements.photosGrid.classList.toggle("active", isPhotos);
-  elements.videosGrid.classList.toggle("active", !isPhotos);
+  elements.videosGrid.classList.toggle("active", isVideos);
+  elements.photosGrid.classList.toggle("active", !isVideos);
 
   // Toggle active class on the mobile buttons
   elements.galleryToggleButtons.forEach((b) =>
@@ -418,7 +434,7 @@ function switchGallery(targetId) {
   );
 
   // Set the source data for the lightbox navigation
-  state.currentLightboxItems = isPhotos ? siteConfig.photos : siteConfig.videos;
+  state.currentLightboxItems = isVideos ? siteConfig.videos : siteConfig.photos;
 }
 
 // ------------------ Custom Cursor ------------------
@@ -448,7 +464,7 @@ function initEvents() {
 
   // Smooth scroll to gallery from CTA button
   elements.scrollBtn.addEventListener("click", () => {
-    // Scroll to the photos section, which is the start of the content
+    // Scroll to the photos-gallery section, which now contains the videos-grid first
     document
       .getElementById("photos-gallery")
       .scrollIntoView({ behavior: "smooth" });
@@ -485,7 +501,7 @@ function initEvents() {
 
       // Determine the full list of items for navigation
       const currentItems =
-        itemType === "image" ? siteConfig.photos : siteConfig.videos;
+        itemType === "video" ? siteConfig.videos : siteConfig.photos;
 
       // Find the index of the clicked item
       const itemIndex = currentItems.findIndex(
@@ -511,9 +527,9 @@ function initEvents() {
     elements.musicIcon.textContent = "🔊";
   }
 
-  // Initial gallery display for mobile
+  // Initial gallery display for mobile (now defaulting to videos-grid)
   if (window.innerWidth <= 768) {
-    switchGallery("photos-grid");
+    switchGallery("videos-grid");
   }
 
   // Custom cursor for desktop
