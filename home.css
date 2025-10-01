@@ -153,7 +153,7 @@ h2 {
 .logo:hover { color: var(--color-secondary); }
 
 .main-nav a {
-  color: #fff; /* white so About button is visible */
+  color: black; /* white so About button is visible */
   text-decoration: none;
   margin-left: 20px;
   font-weight: 600;
