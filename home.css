@@ -153,13 +153,13 @@ h2 {
 .logo:hover { color: var(--color-secondary); }
 
 .main-nav a {
+  color: #fff; /* white so About button is visible */
   text-decoration: none;
-  color: var(--color-text-light);
-  margin-left: 25px;
+  margin-left: 20px;
   font-weight: 600;
   font-family: var(--font-body);
   position: relative;
-  transition: color var(--transition-fast);
+  transition: color 0.3s ease;
 }
 .main-nav a:hover { color: var(--color-secondary); }
 .main-nav a::after {
