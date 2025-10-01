@@ -4,12 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Memory Lane</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Playfair+Display:wght@700&display=swap"
       rel="stylesheet"
     />
+
     <link rel="stylesheet" href="home.css" />
     <link rel="icon" href="heart.png" />
   </head>
@@ -22,14 +24,14 @@
       role="status"
       aria-label="Loading content"
     >
-      <div class="loader"></div>
+      <div class="loader" aria-hidden="true"></div>
     </div>
 
     <header id="site-header" class="site-header">
       <a href="index.html" class="logo">Memory Lane</a>
       <nav class="main-nav" aria-label="Main Navigation">
-        <a href="#photos-gallery" class="nav-link">Photos</a>
         <a href="#videos-gallery" class="nav-link">Videos</a>
+        <a href="#photos-gallery" class="nav-link">Photos</a>
         <a href="#about" class="nav-link">About</a>
       </nav>
       <button
@@ -43,9 +45,13 @@
 
     <main>
       <section class="hero-section">
-        <div class="hero-bg-image" data-parallax-speed="0.5"></div>
+        <div
+          class="hero-bg-image"
+          data-parallax-speed="0.5"
+          aria-hidden="true"
+        ></div>
         <div class="hero-content">
-          <h1 id="hero-title" class="hero-title"></h1>
+          <h1 id="hero-title" class="hero-title">Welcome to Memory Lane</h1>
           <p class="hero-subtitle">
             A collection of moments to cherish forever
           </p>
@@ -55,23 +61,13 @@
       </section>
 
       <div class="mobile-gallery-controls">
-        <button
-          class="gallery-toggle-btn active"
-          data-target="photos-grid"
-        ></button>
-        <button class="gallery-toggle-btn" data-target="videos-grid"></button>
+        <button class="gallery-toggle-btn active" data-target="videos-grid">
+          Videos
+        </button>
+        <button class="gallery-toggle-btn" data-target="photos-grid">
+          Photos
+        </button>
       </div>
-
-      <section
-        id="photos-gallery"
-        class="gallery-section"
-        aria-labelledby="photos-title"
-      >
-        <h2 id="photos-title" class="section-title">Photo Gallery</h2>
-        <div class="gallery-grid-container">
-          <div id="photos-grid" class="gallery-grid"></div>
-        </div>
-      </section>
 
       <section
         id="videos-gallery"
@@ -81,6 +77,17 @@
         <h2 id="videos-title" class="section-title">Video Gallery</h2>
         <div class="gallery-grid-container">
           <div id="videos-grid" class="gallery-grid"></div>
+        </div>
+      </section>
+
+      <section
+        id="photos-gallery"
+        class="gallery-section"
+        aria-labelledby="photos-title"
+      >
+        <h2 id="photos-title" class="section-title">Photo Gallery</h2>
+        <div class="gallery-grid-container">
+          <div id="photos-grid" class="gallery-grid"></div>
         </div>
       </section>
 
@@ -129,11 +136,16 @@
           ❮
         </button>
         <div class="lightbox-media-container">
-          <img id="lightbox-img" alt="Currently viewed image in lightbox" />
+          <img
+            id="lightbox-img"
+            alt="Currently viewed image in lightbox"
+            hidden
+          />
           <video
             id="lightbox-video"
             controls
             aria-label="Currently viewed video in lightbox"
+            hidden
           ></video>
         </div>
         <button id="next-btn" class="nav-btn" aria-label="Next image or video">
