@@ -157,7 +157,7 @@ function preCacheAssets() {
       cache
         .addAll(assetsToCache.map(getAssetPath))
         .then(() => {
-          console.log("Assets pre-cached successfully!");
+          console.log("Assets pre-cached successfully! 💖");
         })
         .catch((err) => {
           console.error("Failed to pre-cache assets:", err);
@@ -326,14 +326,14 @@ function createGalleryItem(item) {
 }
 
 function loadGallery() {
-  // 1. Load Videos First
+  // 1. Load Videos First (Appends to the correct #videos-grid element)
   const videosFragment = document.createDocumentFragment();
   siteConfig.videos.forEach((video) => {
     videosFragment.appendChild(createGalleryItem(video));
   });
   elements.videosGrid.appendChild(videosFragment);
 
-  // 2. Load Photos Second
+  // 2. Load Photos Second (Appends to the correct #photos-grid element)
   const photosFragment = document.createDocumentFragment();
   siteConfig.photos.forEach((photo) => {
     photosFragment.appendChild(createGalleryItem(photo));
@@ -424,7 +424,8 @@ function prevItem() {
 function switchGallery(targetId) {
   // Note: 'videos-grid' is now the expected default/first
   const isVideos = targetId === "videos-grid";
-  // Toggle active class on the grid containers based on the target
+
+  // Toggle active class on the grid containers based on the target (CRITICAL FOR MOBILE CSS)
   elements.videosGrid.classList.toggle("active", isVideos);
   elements.photosGrid.classList.toggle("active", !isVideos);
 
@@ -464,9 +465,9 @@ function initEvents() {
 
   // Smooth scroll to gallery from CTA button
   elements.scrollBtn.addEventListener("click", () => {
-    // Scroll to the photos-gallery section, which now contains the videos-grid first
+    // Scroll to the videos-gallery section, which is now the first content section
     document
-      .getElementById("photos-gallery")
+      .getElementById("videos-gallery") // Changed to target videos-gallery
       .scrollIntoView({ behavior: "smooth" });
   });
 
