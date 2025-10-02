@@ -146,6 +146,9 @@ const state = {
   reducedMotion: window.matchMedia("(prefers-reduced-motion: reduce)").matches,
 };
 
+// --- ENHANCEMENT: Global Video Observer ---
+let videoObserver;
+
 // ------------------ Asset Management & Caching ------------------
 function getAssetPath(file) {
   // Ensures the path is correct, assuming assets are in the same folder as home.html
@@ -274,6 +277,58 @@ function createHeroSparkle() {
 }
 
 // ------------------ UI: Gallery ------------------
+
+// --- ENHANCEMENT: Separate Lazy Loading from Video Playback ---
+function initGalleryObservers() {
+  // Observer for lazy loading (Images and initial video source setting)
+  const lazyLoadObserver = new IntersectionObserver(
+    (entries, observer) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const itemEl = entry.target;
+          const mediaEl = itemEl.querySelector("img, video");
+          const itemData = getGalleryItemData(itemEl);
+
+          if (itemData && mediaEl) {
+            // Set the source to load the asset
+            if (itemData.type === "image") {
+              mediaEl.src = itemData.src;
+            } else if (itemData.type === "video") {
+              mediaEl.src = itemData.src; // Just set source for lazy load
+            }
+          }
+          itemEl.classList.add("loaded");
+          observer.unobserve(itemEl);
+        }
+      });
+    },
+    { threshold: 0.1 } // Load when 10% is visible
+  );
+
+  // ENHANCEMENT: Observer for Video Playback (Play/Pause when centered)
+  // Use a higher threshold (0.8) to only play when the video is mostly in view
+  videoObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        const videoEl = entry.target.querySelector("video");
+        if (!videoEl) return;
+
+        if (entry.isIntersecting) {
+          // Play if it's highly visible (e.g., 80% or more)
+          videoEl.play().catch((e) => console.log("Video autoplay failed:", e));
+        } else {
+          // Pause when it's largely out of view
+          videoEl.pause();
+        }
+      });
+    },
+    { threshold: 0.8 } // Trigger when 80% of element is visible
+  );
+
+  // Apply observers to all gallery items created later
+  return { lazyLoadObserver, videoObserver };
+}
+
 function createGalleryItem(item) {
   const itemEl = document.createElement("div");
   itemEl.className = "gallery-item";
@@ -283,6 +338,7 @@ function createGalleryItem(item) {
     "aria-label",
     `Open ${item.type} with caption: ${item.caption}`
   );
+  // Store the original source for lightbox access
   itemEl.dataset.src = getAssetPath(item.src);
   itemEl.dataset.type = item.type;
   itemEl.dataset.caption = item.caption;
@@ -294,55 +350,48 @@ function createGalleryItem(item) {
   if (item.type === "image") {
     mediaEl.alt = item.caption;
   } else {
+    // Video attributes
     mediaEl.muted = true;
     mediaEl.loop = true; // Videos should loop in the grid view
     mediaEl.playsInline = true;
     mediaEl.poster = getAssetPath(item.poster);
+
     const overlay = document.createElement("div");
     overlay.className = "video-overlay"; // For the play icon
     itemEl.appendChild(overlay);
   }
 
-  // IntersectionObserver for lazy loading
-  const observer = new IntersectionObserver(
-    (entries, observer) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          if (item.type === "image") {
-            // For images, set source to load
-            mediaEl.src = getAssetPath(item.src);
-          } else {
-            // For videos, set source and attempt to play (muted)
-            mediaEl.src = getAssetPath(item.src);
-            mediaEl.play().catch((e) => console.log("Autoplay failed:", e));
-          }
-          entry.target.classList.add("loaded");
-          observer.unobserve(entry.target);
-        } else if (item.type === "video" && mediaEl.src) {
-          // Pause videos when they scroll out of view
-          mediaEl.pause();
-          mediaEl.currentTime = 0;
-        }
-      });
-    },
-    { threshold: 0.1 } // Trigger when 10% of element is visible
-  );
+  // Set placeholder/empty src for lazy loading to handle the load event
+  mediaEl.src = "";
 
   itemEl.appendChild(mediaEl);
-  observer.observe(itemEl);
+
+  // Get the observers initialized earlier
+  const { lazyLoadObserver, videoObserver } = window.galleryObservers;
+
+  // Apply lazy load observer
+  lazyLoadObserver.observe(itemEl);
+
+  // Apply video play/pause observer
+  if (item.type === "video") {
+    videoObserver.observe(itemEl);
+  }
 
   return itemEl;
 }
 
 function loadGallery() {
-  // 1. Load Videos First (Appends to the correct #videos-grid element)
+  // Initialize and store observers globally for use in createGalleryItem
+  window.galleryObservers = initGalleryObservers();
+
+  // 1. Load Videos First
   const videosFragment = document.createDocumentFragment();
   siteConfig.videos.forEach((video) => {
     videosFragment.appendChild(createGalleryItem(video));
   });
   elements.videosGrid.appendChild(videosFragment);
 
-  // 2. Load Photos Second (Appends to the correct #photos-grid element)
+  // 2. Load Photos Second
   const photosFragment = document.createDocumentFragment();
   siteConfig.photos.forEach((photo) => {
     photosFragment.appendChild(createGalleryItem(photo));
@@ -351,19 +400,26 @@ function loadGallery() {
 }
 
 function getGalleryItemData(target) {
+  // Ensure we get the root gallery-item element
   const itemEl = target.closest(".gallery-item");
   if (!itemEl) return null;
   return {
     src: itemEl.dataset.src,
     type: itemEl.dataset.type,
     caption: itemEl.dataset.caption,
-    // The poster data is useful for the lightbox if the video file itself is large
+    // Safely get the poster from the inner video element
     poster: itemEl.querySelector("video")?.poster,
   };
 }
 
 // ------------------ UI: Lightbox ------------------
+// ENHANCEMENT: Explicit type check inside openLightbox
 function openLightbox(itemData, index) {
+  if (!itemData || !itemData.type) {
+    console.error("Invalid item data provided to lightbox.");
+    return;
+  }
+
   state.currentLightboxIndex = index;
   elements.lightbox.classList.add("is-open");
   document.body.style.overflow = "hidden"; // Prevent background scrolling
@@ -382,14 +438,18 @@ function openLightbox(itemData, index) {
     elements.lightboxImg.style.display = "block";
   } else if (itemData.type === "video") {
     elements.lightboxVideo.src = itemData.src;
+    // Poster is useful for the initial video load screen
     elements.lightboxVideo.poster = itemData.poster || "";
     elements.lightboxVideo.style.display = "block";
     elements.lightboxVideo.controls = true;
-    // Lightbox videos should not loop unless specifically requested
-    elements.lightboxVideo.loop = false;
+    elements.lightboxVideo.loop = false; // Lightbox videos should not loop
+
+    // Attempt to play, catching the common autoplay error
     elements.lightboxVideo
       .play()
       .catch((e) => console.log("Video playback failed:", e));
+  } else {
+    console.warn(`Unknown media type: ${itemData.type}`);
   }
 
   elements.lightboxCaption.textContent = itemData.caption;
@@ -437,6 +497,14 @@ function switchGallery(targetId) {
   // Toggle active class on the grid containers based on the target (CRITICAL FOR MOBILE CSS)
   elements.videosGrid.classList.toggle("active", isVideos);
   elements.photosGrid.classList.toggle("active", !isVideos);
+
+  // Pause all videos when switching away from the videos grid
+  if (!isVideos && videoObserver) {
+    document.querySelectorAll("#videos-grid video").forEach((v) => {
+      v.pause();
+      v.currentTime = 0;
+    });
+  }
 
   // Toggle active class on the mobile buttons
   elements.galleryToggleButtons.forEach((b) =>
@@ -513,7 +581,7 @@ function initEvents() {
       const currentItems =
         itemType === "video" ? siteConfig.videos : siteConfig.photos;
 
-      // Find the index of the clicked item
+      // Find the index of the clicked item using the full path
       const itemIndex = currentItems.findIndex(
         (item) => getAssetPath(item.src) === itemSrc
       );
