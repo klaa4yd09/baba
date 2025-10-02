@@ -1,634 +1,863 @@
-// =================================================================
-// Enhanced & Refactored JavaScript (Videos First)
-// =================================================================
+:root {
+  --color-primary: #B0726D; /* Muted Rosewood */
+  --color-secondary: #F7B7C7; /* Soft Blush Pink */
+  --color-accent: #E6C7E6; /* Lavender Champagne */
+  --color-background-light: #FFFAFB; /* Gentle Blush Ivory */
+  --color-background-dark: #1A1A1A; /* Elegant Charcoal */
+  --color-text-light: #3A2D2D; /* Warm Cocoa */
+  --color-text-dark: #FDEDED; /* Creamy Rose White */
 
-// ------------------ Configuration ------------------
-const siteConfig = {
-  // Array of objects for photos and videos.
-  // NOTE: Replace image/video files (e.g., "23.jpg") with your actual file names.
-  photos: [
-    { src: "94.jpg", caption: "❤️", type: "image" },
-    { src: "23.jpg", caption: "❤️ Our first meet together!", type: "image" },
-    { src: "25.jpg", caption: "❤️", type: "image" },
-    { src: "17.jpg", caption: "❤️", type: "image" },
-    { src: "g.jpg", caption: "❤️", type: "image" },
-    { src: "70.jpg", caption: "❤️", type: "image" },
-    { src: "71.jpg", caption: "❤️", type: "image" },
-    { src: "72.jpg", caption: "❤️", type: "image" },
-    { src: "51.jpg", caption: "❤️", type: "image" },
-    { src: "26.jpg", caption: "❤️", type: "image" },
-    { src: "33.jpg", caption: "❤️", type: "image" },
-    { src: "e.jpg", caption: "❤️", type: "image" },
-    { src: "f.jpg", caption: "❤️", type: "image" },
-    { src: "73.jpg", caption: "❤️", type: "image" },
-    { src: "27.jpg", caption: "❤️", type: "image" },
-    { src: "21.jpg", caption: "❤️", type: "image" },
-    { src: "24.jpg", caption: "❤️", type: "image" },
-    { src: "42.jpg", caption: "❤️", type: "image" },
-    { src: "43.jpg", caption: "❤️", type: "image" },
-    { src: "16.jpg", caption: "❤️", type: "image" },
-    { src: "19.jpg", caption: "❤️", type: "image" },
-    { src: "65.jpg", caption: "❤️", type: "image" },
-    { src: "18.jpg", caption: "❤️", type: "image" },
-    { src: "61.jpg", caption: "❤️", type: "image" },
-    { src: "22.jpg", caption: "❤️", type: "image" },
-    { src: "54.jpg", caption: "❤️", type: "image" },
-    { src: "59.jpg", caption: "❤️", type: "image" },
-    { src: "41.jpg", caption: "❤️", type: "image" },
-    { src: "56.jpg", caption: "❤️", type: "image" },
-    { src: "4.jpg", caption: "❤️", type: "image" },
-    { src: "5.jpg", caption: "❤️", type: "image" },
-    { src: "6.jpg", caption: "❤️", type: "image" },
-    { src: "7.jpg", caption: "❤️", type: "image" },
-    { src: "8.jpg", caption: "❤️", type: "image" },
-    { src: "9.jpg", caption: "❤️", type: "image" },
-    { src: "10.jpg", caption: "❤️", type: "image" },
-    { src: "12.jpg", caption: "❤️", type: "image" },
-    { src: "13.jpg", caption: "❤️", type: "image" },
-    { src: "14.jpg", caption: "❤️", type: "image" },
-    { src: "profile.jpg", caption: "❤️", type: "image" },
-    { src: "46.jpg", caption: "❤️", type: "image" },
-    { src: "31.jpg", caption: "❤️", type: "image" },
-    { src: "36.jpg", caption: "❤️", type: "image" },
-    { src: "40.jpg", caption: "❤️", type: "image" },
-    { src: "11.jpg", caption: "❤️", type: "image" },
-  ],
-  videos: [
-    { src: "67.mp4", poster: "67.jpg", caption: "❤️", type: "video" },
-    { src: "84.mp4", poster: "67.jpg", caption: "❤️", type: "video" },
-    { src: "68.mp4", poster: "67.jpg", caption: "❤️", type: "video" },
-    { src: "a.mp4", poster: "a.jpg", caption: "❤️", type: "video" },
-    { src: "b.mp4", poster: "b.jpg", caption: "❤️", type: "video" },
-    { src: "88.mp4", poster: "b.jpg", caption: "❤️", type: "video" },
-    { src: "69.mp4", poster: "c.jpg", caption: "❤️", type: "video" },
-    { src: "90.mp4", poster: "b.jpg", caption: "❤️", type: "video" },
-    { src: "93.mp4", poster: "b.jpg", caption: "❤️", type: "video" },
-    { src: "82.mp4", poster: "29.jpg", caption: "❤️", type: "video" },
-    { src: "83.mp4", poster: "29.jpg", caption: "❤️", type: "video" },
-    { src: "92.mp4", poster: "b.jpg", caption: "❤️", type: "video" },
-    { src: "81.mp4", poster: "29.jpg", caption: "❤️", type: "video" },
-    { src: "86.mp4", poster: "b.jpg", caption: "❤️", type: "video" },
-    { src: "79.mp4", poster: "29.jpg", caption: "❤️", type: "video" },
-    { src: "80.mp4", poster: "29.jpg", caption: "❤️", type: "video" },
-    { src: "87.mp4", poster: "b.jpg", caption: "❤️", type: "video" },
-    { src: "89.mp4", poster: "b.jpg", caption: "❤️", type: "video" },
-    { src: "91.mp4", poster: "b.jpg", caption: "❤️", type: "video" },
-    { src: "75.mp4", poster: "29.jpg", caption: "❤️", type: "video" },
-    { src: "78.mp4", poster: "29.jpg", caption: "❤️", type: "video" },
-    { src: "85.mp4", poster: "29.jpg", caption: "❤️", type: "video" },
-    { src: "74.mp4", poster: "29.jpg", caption: "❤️", type: "video" },
-    { src: "c.mp4", poster: "c.jpg", caption: "❤️", type: "video" },
-    { src: "d.mp4", poster: "d.jpg", caption: "❤️", type: "video" },
-    { src: "28.mp4", poster: "28.jpg", caption: "❤️", type: "video" },
-    { src: "29.mp4", poster: "29.jpg", caption: "❤️", type: "video" },
-    { src: "76.mp4", poster: "29.jpg", caption: "❤️", type: "video" },
-    { src: "30.mp4", poster: "30.jpg", caption: "❤️", type: "video" },
-    { src: "32.mp4", poster: "32.jpg", caption: "❤️", type: "video" },
-    { src: "20.mp4", poster: "20.jpg", caption: "❤️", type: "video" },
-    { src: "49.mp4", poster: "49.jpg", caption: "❤️", type: "video" },
-    { src: "77.mp4", poster: "29.jpg", caption: "❤️", type: "video" },
-    { src: "1.mp4", poster: "1.jpg", caption: "❤️", type: "video" },
-    { src: "2.mp4", poster: "2.jpg", caption: "❤️", type: "video" },
-    { src: "3.mp4", poster: "3.jpg", caption: "❤️", type: "video" },
-    { src: "45.mp4", poster: "45.jpg", caption: "❤️", type: "video" },
-    { src: "47.mp4", poster: "47.jpg", caption: "❤️", type: "video" },
-    { src: "48.mp4", poster: "48.jpg", caption: "❤️", type: "video" },
-    { src: "50.mp4", poster: "50.jpg", caption: "❤️", type: "video" },
-    { src: "52.mp4", poster: "52.jpg", caption: "❤️", type: "video" },
-    { src: "53.mp4", poster: "53.jpg", caption: "❤️", type: "video" },
-    { src: "55.mp4", poster: "55.jpg", caption: "❤️", type: "video" },
-    { src: "57.mp4", poster: "57.jpg", caption: "❤️", type: "video" },
-    { src: "58.mp4", poster: "58.jpg", caption: "❤️", type: "video" },
-    { src: "60.mp4", poster: "60.jpg", caption: "❤️", type: "video" },
-    { src: "62.mp4", poster: "62.jpg", caption: "❤️", type: "video" },
-    { src: "63.mp4", poster: "63.jpg", caption: "❤️", type: "video" },
-    { src: "64.mp4", poster: "64.jpg", caption: "❤️", type: "video" },
-    { src: "66.mp4", poster: "66.jpg", caption: "❤️", type: "video" },
-    { src: "35.mp4", poster: "35.jpg", caption: "❤️", type: "video" },
-    { src: "38.mp4", poster: "38.jpg", caption: "❤️", type: "video" },
-    { src: "39.mp4", poster: "39.jpg", caption: "❤️", type: "video" },
-    { src: "44.mp4", poster: "44.jpg", caption: "❤️", type: "video" },
-  ],
-};
+  /* GRADIENT SYSTEM */
+  --gradient-pink: linear-gradient(135deg, #FFFFFF, #F0F0F0);
+  --gradient-rose: linear-gradient(135deg, #B0726D, #F7B7C7);
+  --gradient-hover: linear-gradient(135deg, #F7B7C7, #E6C7E6); /* New hover gradient */
+  --gradient-soft-bg: radial-gradient(circle at top left, var(--color-background-light) 0%, #FFF5F7 100%); /* New radial background gradient */
 
-// ------------------ DOM Element Cache ------------------
-const elements = {
-  loader: document.getElementById("loader"),
-  siteHeader: document.getElementById("site-header"),
-  photosGrid: document.getElementById("photos-grid"),
-  videosGrid: document.getElementById("videos-grid"),
-  galleryToggleButtons: document.querySelectorAll(".gallery-toggle-btn"),
-  scrollBtn: document.getElementById("scroll-btn"),
-  musicBtn: document.getElementById("music-btn"),
-  bgMusic: document.getElementById("bg-music"),
-  musicIcon: document.getElementById("music-icon"),
-  heroSparkleContainer: document.querySelector(".hero-sparkle-container"),
-  lightbox: document.getElementById("lightbox"),
-  lightboxImg: document.getElementById("lightbox-img"),
-  lightboxVideo: document.getElementById("lightbox-video"),
-  lightboxCaption: document.getElementById("lightbox-caption"),
-  lightboxClose: document.getElementById("lightbox-close"),
-  prevBtn: document.getElementById("prev-btn"),
-  nextBtn: document.getElementById("next-btn"),
-  heroTitle: document.getElementById("hero-title"),
-  heroBgImage: document.querySelector(".hero-bg-image"),
-  customCursor: document.getElementById("custom-cursor"),
-};
+  /* FONT SYSTEM */
+  --font-heading: 'Playfair Display', serif; /* Elegant */
+  --font-body: 'Quicksand', sans-serif; /* Soft + Cute */
+  --font-script: 'Great Vibes', cursive; /* Girly Accent */
 
-// ------------------ State ------------------
-const state = {
-  isMusicPlaying: localStorage.getItem("playMusic") === "true",
-  lastScrollY: window.scrollY,
-  sparklesInterval: null,
-  currentLightboxIndex: 0,
-  // Initialize currentLightboxItems to videos since they will be displayed first
-  currentLightboxItems: siteConfig.videos,
-  reducedMotion: window.matchMedia("(prefers-reduced-motion: reduce)").matches,
-};
+  /* TRANSITIONS & TIMING */
+  --transition-fast: 0.3s ease-in-out;
+  --transition-medium: 0.4s ease-in-out; /* Added medium transition */
+  --transition-slow: 0.6s ease; /* Slightly slower for subtle effects */
 
-// --- ENHANCEMENT: Global Video Observer ---
-let videoObserver;
-
-// ------------------ Asset Management & Caching ------------------
-function getAssetPath(file) {
-  // Ensures the path is correct, assuming assets are in the same folder as home.html
-  return file.startsWith("./") ? file : `./${file}`;
+  /* SHADOWS & RADIUS */
+  --shadow-light: 0 4px 15px rgba(0, 0, 0, 0.08);
+  --shadow-medium: 0 8px 25px rgba(0, 0, 0, 0.15);
+  --shadow-heavy: 0 15px 40px rgba(0, 0, 0, 0.25);
+  --shadow-glow: 0 0 15px rgba(247, 183, 199, 0.7); /* Light glow shadow */
+  --border-radius-base: 15px;
 }
 
-function preCacheAssets() {
-  // Note: The audio file is assumed to be 'iris.mp3' based on the HTML
-  const assetsToCache = [
-    "14.jpg", // Hero image
-    ...siteConfig.photos.map((p) => p.src),
-    ...siteConfig.videos.map((v) => v.poster),
-    "iris.mp3", // Audio asset
-  ];
-
-  if ("caches" in window) {
-    caches.open("our-memories-cache-v1").then((cache) => {
-      cache
-        .addAll(assetsToCache.map(getAssetPath))
-        .then(() => {
-          console.log("Assets pre-cached successfully! 💖");
-        })
-        .catch((err) => {
-          console.error("Failed to pre-cache assets:", err);
-        });
-    });
-  }
-
-  // Preload hero image for faster display
-  const heroImg = new Image();
-  heroImg.src = getAssetPath("14.jpg");
-  heroImg.onload = () => {
-    elements.heroBgImage.style.backgroundImage = `url(${getAssetPath(
-      "14.jpg"
-    )})`;
-  };
+/* ------------------ Global Reset & Base Styles ------------------ */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-// ------------------ UI: Loading & Hero Section ------------------
-function hideLoader() {
-  if (elements.loader) {
-    elements.loader.classList.add("hidden");
-  }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  color: var(--color-text-light);
+  background-color: var(--color-background-light);
+  background-image: var(--gradient-soft-bg); /* Use soft radial gradient */
+  line-height: 1.7;
+  font-size: 1rem;
+  overflow-x: hidden;
+  /* Added a subtle pattern overlay for texture */
+  background-image: var(--gradient-soft-bg), url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="1.5" fill="%23fcf0f0" /><circle cx="80" cy="80" r="1.5" fill="%23fcf0f0" /><circle cx="20" cy="80" r="1.5" fill="%23fcf0f0" /><circle cx="80" cy="20" r="1.5" fill="%23fcf0f0" /></svg>');
+  background-repeat: repeat;
+  background-size: auto, 50px;
 }
 
-// Enhanced Title Typewriter Function
-function typeHeroTitle(text, speed = 80) {
-  if (state.reducedMotion) {
-    elements.heroTitle.textContent = text;
-    return;
-  }
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color var(--transition-fast), transform var(--transition-fast);
+}
+a:hover { color: var(--color-secondary); }
 
-  let i = 0;
-  elements.heroTitle.textContent = ""; // Clear content
-  const timer = setInterval(() => {
-    if (i < text.length) {
-      elements.heroTitle.textContent += text.charAt(i);
-      i++;
-    } else {
-      clearInterval(timer);
-    }
-  }, speed);
+/* Section Wrapper for common padding/max-width */
+.section-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 3vw;
 }
 
-function handleParallax() {
-  const scrollY = window.scrollY;
-  // Parallax speed from data-attribute (0.5)
-  const parallaxSpeed =
-    parseFloat(elements.heroBgImage.dataset.parallaxSpeed) || 0.5;
-  if (elements.heroBgImage) {
-    // Moves the background up slower than the foreground
-    elements.heroBgImage.style.transform = `translateY(${
-      scrollY * parallaxSpeed
-    }px) scale(1.1)`;
-  }
+
+/* ------------------ Typography ------------------ */
+h1, h2, .logo {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  color: var(--color-primary);
 }
 
-// ------------------ UI: Header & Music ------------------
-function handleHeaderScroll() {
-  const currentScrollY = window.scrollY;
-  // Hide header when scrolling down past 100px
-  if (currentScrollY > state.lastScrollY && currentScrollY > 100) {
-    elements.siteHeader.classList.add("hide");
-  } else {
-    elements.siteHeader.classList.remove("hide");
-  }
-  state.lastScrollY = currentScrollY;
+h1 {
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  letter-spacing: 2px;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.25); /* Stronger Shadow */
 }
 
-function toggleMusic() {
-  const isPlaying = !elements.bgMusic.paused;
-  if (isPlaying) {
-    elements.bgMusic.pause();
-    elements.musicBtn.classList.remove("playing");
-    elements.musicIcon.textContent = "🎵"; // Muted icon
-    localStorage.setItem("playMusic", "false");
-    state.isMusicPlaying = false;
-  } else {
-    elements.bgMusic
-      .play()
-      .then(() => {
-        elements.musicBtn.classList.add("playing");
-        elements.musicIcon.textContent = "🔊"; // Playing icon
-        localStorage.setItem("playMusic", "true");
-        state.isMusicPlaying = true;
-      })
-      .catch((e) => console.error("Autoplay was prevented:", e));
-  }
+h2 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  text-align: center;
+  margin-bottom: 3.5rem; /* Increased margin */
+  padding-top: 1rem;
+  position: relative;
+  text-transform: capitalize;
 }
 
-// ------------------ UI: Sparkles ------------------
-function createHeroSparkle() {
-  const sparkle = document.createElement("div");
-  sparkle.className = "hero-sparkle";
-  const size = Math.random() * 3 + 1; // 1px to 4px
-  sparkle.style.width = `${size}px`;
-  sparkle.style.height = `${size}px`;
-  sparkle.style.left = `${Math.random() * 100}vw`;
-  // Start below the viewport and move up
-  sparkle.style.top = `${100 + Math.random() * 20}vh`;
-  sparkle.style.animationDuration = `${10 + Math.random() * 8}s`;
-  sparkle.style.animationDelay = `${Math.random() * 5}s`;
-  elements.heroSparkleContainer.appendChild(sparkle);
-  // Remove sparkle after animation ends to prevent DOM clutter
-  sparkle.addEventListener("animationend", () => sparkle.remove());
+/* New Decorative Underline for H2 */
+h2::after {
+  content: '';
+  position: absolute;
+  bottom: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 2px;
+  background: var(--gradient-rose); /* Use rose gradient for elegance */
+  border-radius: 1px;
+  transition: width var(--transition-medium);
+}
+h2:hover::after {
+  width: 100px; /* Expands wider on hover */
 }
 
-// ------------------ UI: Gallery ------------------
-
-// --- ENHANCEMENT: Separate Lazy Loading from Video Playback ---
-function initGalleryObservers() {
-  // Observer for lazy loading (Images and initial video source setting)
-  const lazyLoadObserver = new IntersectionObserver(
-    (entries, observer) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const itemEl = entry.target;
-          const mediaEl = itemEl.querySelector("img, video");
-          const itemData = getGalleryItemData(itemEl);
-
-          if (itemData && mediaEl) {
-            // Set the source to load the asset
-            if (itemData.type === "image") {
-              mediaEl.src = itemData.src;
-            } else if (itemData.type === "video") {
-              mediaEl.src = itemData.src; // Just set source for lazy load
-            }
-          }
-          itemEl.classList.add("loaded");
-          observer.unobserve(itemEl);
-        }
-      });
-    },
-    { threshold: 0.1 } // Load when 10% is visible
-  );
-
-  // ENHANCEMENT: Observer for Video Playback (Play/Pause when centered)
-  // Use a higher threshold (0.8) to only play when the video is mostly in view
-  videoObserver = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        const videoEl = entry.target.querySelector("video");
-        if (!videoEl) return;
-
-        if (entry.isIntersecting) {
-          // Play if it's highly visible (e.g., 80% or more)
-          videoEl.play().catch((e) => console.log("Video autoplay failed:", e));
-        } else {
-          // Pause when it's largely out of view
-          videoEl.pause();
-        }
-      });
-    },
-    { threshold: 0.8 } // Trigger when 80% of element is visible
-  );
-
-  // Apply observers to all gallery items created later
-  return { lazyLoadObserver, videoObserver };
+.section-title {
+  position: relative;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: var(--color-primary); /* Default to primary color */
+  font-family: var(--font-heading);
+  font-weight: 600;
 }
 
-function createGalleryItem(item) {
-  const itemEl = document.createElement("div");
-  itemEl.className = "gallery-item";
-  itemEl.tabIndex = 0; // Make focusable
-  itemEl.setAttribute("role", "button");
-  itemEl.setAttribute(
-    "aria-label",
-    `Open ${item.type} with caption: ${item.caption}`
-  );
-  // Store the original source for lightbox access
-  itemEl.dataset.src = getAssetPath(item.src);
-  itemEl.dataset.type = item.type;
-  itemEl.dataset.caption = item.caption;
-
-  const mediaEl = document.createElement(
-    item.type === "image" ? "img" : "video"
-  );
-
-  if (item.type === "image") {
-    mediaEl.alt = item.caption;
-  } else {
-    // Video attributes
-    mediaEl.muted = true;
-    mediaEl.loop = true; // Videos should loop in the grid view
-    mediaEl.playsInline = true;
-    mediaEl.poster = getAssetPath(item.poster);
-
-    const overlay = document.createElement("div");
-    overlay.className = "video-overlay"; // For the play icon
-    itemEl.appendChild(overlay);
-  }
-
-  // Set placeholder/empty src for lazy loading to handle the load event
-  mediaEl.src = "";
-
-  itemEl.appendChild(mediaEl);
-
-  // Get the observers initialized earlier
-  const { lazyLoadObserver, videoObserver } = window.galleryObservers;
-
-  // Apply lazy load observer
-  lazyLoadObserver.observe(itemEl);
-
-  // Apply video play/pause observer
-  if (item.type === "video") {
-    videoObserver.observe(itemEl);
-  }
-
-  return itemEl;
+.section-title::before { /* Added a pre-title element (can be a small icon or accent) */
+  content: '✦';
+  display: block;
+  font-size: 1.5rem;
+  color: var(--color-secondary);
+  margin-bottom: 5px;
 }
 
-function loadGallery() {
-  // Initialize and store observers globally for use in createGalleryItem
-  window.galleryObservers = initGalleryObservers();
-
-  // 1. Load Videos First
-  const videosFragment = document.createDocumentFragment();
-  siteConfig.videos.forEach((video) => {
-    videosFragment.appendChild(createGalleryItem(video));
-  });
-  elements.videosGrid.appendChild(videosFragment);
-
-  // 2. Load Photos Second
-  const photosFragment = document.createDocumentFragment();
-  siteConfig.photos.forEach((photo) => {
-    photosFragment.appendChild(createGalleryItem(photo));
-  });
-  elements.photosGrid.appendChild(photosFragment);
+.section-title::after {
+  content: '';
+  display: block;
+  width: 70px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--gradient-pink);
+  margin: 10px auto 0;
+  box-shadow: var(--shadow-light);
 }
 
-function getGalleryItemData(target) {
-  // Ensure we get the root gallery-item element
-  const itemEl = target.closest(".gallery-item");
-  if (!itemEl) return null;
-  return {
-    src: itemEl.dataset.src,
-    type: itemEl.dataset.type,
-    caption: itemEl.dataset.caption,
-    // Safely get the poster from the inner video element
-    poster: itemEl.querySelector("video")?.poster,
-  };
+/* New: Accent Text Style */
+p.accent-text {
+  font-family: var(--font-script);
+  font-size: 1.5rem;
+  color: var(--color-secondary);
+  text-align: center;
+  margin: 1.5rem auto 3rem;
+  max-width: 700px;
+  font-style: italic;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.15);
 }
 
-// ------------------ UI: Lightbox ------------------
-// ENHANCEMENT: Explicit type check inside openLightbox
-function openLightbox(itemData, index) {
-  if (!itemData || !itemData.type) {
-    console.error("Invalid item data provided to lightbox.");
-    return;
-  }
 
-  state.currentLightboxIndex = index;
-  elements.lightbox.classList.add("is-open");
-  document.body.style.overflow = "hidden"; // Prevent background scrolling
-
-  // Hide both elements first
-  elements.lightboxImg.style.display = "none";
-  elements.lightboxVideo.style.display = "none";
-  elements.lightboxVideo.pause();
-  elements.lightboxVideo.currentTime = 0;
-  elements.lightboxVideo.src = "";
-  elements.lightboxImg.src = "";
-
-  if (itemData.type === "image") {
-    elements.lightboxImg.src = itemData.src;
-    elements.lightboxImg.alt = itemData.caption;
-    elements.lightboxImg.style.display = "block";
-  } else if (itemData.type === "video") {
-    elements.lightboxVideo.src = itemData.src;
-    // Poster is useful for the initial video load screen
-    elements.lightboxVideo.poster = itemData.poster || "";
-    elements.lightboxVideo.style.display = "block";
-    elements.lightboxVideo.controls = true;
-    elements.lightboxVideo.loop = false; // Lightbox videos should not loop
-
-    // Attempt to play, catching the common autoplay error
-    elements.lightboxVideo
-      .play()
-      .catch((e) => console.log("Video playback failed:", e));
-  } else {
-    console.warn(`Unknown media type: ${itemData.type}`);
-  }
-
-  elements.lightboxCaption.textContent = itemData.caption;
-
-  // Accessibility: Focus on close button when lightbox opens
-  elements.lightboxClose.focus();
+/* ------------------ Custom Cursor ------------------ */
+.custom-cursor {
+  position: fixed;
+  width: 30px;
+  height: 30px;
+  border: 2px solid var(--color-secondary);
+  border-radius: 50%;
+  pointer-events: none;
+  transition: width 0.3s, height 0.3s, opacity 0.3s, border-color 0.3s, transform 0.1s ease-out; /* Added transform for smoother follow */
+  z-index: 9999;
+  mix-blend-mode: difference;
+  opacity: 0.8;
+  display: flex; /* For inner dot */
+  justify-content: center;
+  align-items: center;
+}
+.custom-cursor::after { /* Inner dot */
+  content: '';
+  width: 6px;
+  height: 6px;
+  background-color: var(--color-secondary);
+  border-radius: 50%;
+  opacity: 0.7;
+  transition: all 0.3s;
+}
+.custom-cursor.hover {
+  width: 50px;
+  height: 50px;
+  border-color: var(--color-primary);
+  opacity: 1;
+  transform: scale(1.2);
+  box-shadow: var(--shadow-glow);
+}
+.custom-cursor.hover::after {
+  background-color: var(--color-primary);
+  transform: scale(0); /* Hide inner dot on hover */
+}
+@media (max-width: 768px) {
+  .custom-cursor { display: none; }
+  body { cursor: default; }
 }
 
-function closeLightbox() {
-  elements.lightbox.classList.remove("is-open");
-  document.body.style.overflow = "";
-  elements.lightboxImg.src = "";
-  elements.lightboxVideo.src = "";
-  elements.lightboxVideo.pause();
-  elements.lightboxVideo.currentTime = 0;
-
-  // Optional: Restore focus to the element that opened the lightbox if tracked
-  document.activeElement.blur();
+/* ------------------ Loader ------------------ */
+.loader-container {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-color: var(--color-background-light);
+  display: flex; justify-content: center; align-items: center;
+  z-index: 10000;
+  opacity: 1;
+  transition: opacity var(--transition-medium) var(--transition-slow); /* Use medium for timing */
+}
+.loader-container.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+.loader {
+  border: 8px solid #eee;
+  border-top: 8px solid var(--color-secondary);
+  border-radius: 50%;
+  width: 60px; height: 60px;
+  animation: spin 1s linear infinite, glow 2s ease-in-out infinite alternate; /* Added glow */
+  box-shadow: 0 0 12px rgba(247,183,199,0.5);
+}
+@keyframes spin {
+  0% { transform: rotate(0deg);}
+  100% { transform: rotate(360deg);}
+}
+@keyframes glow {
+  0% { box-shadow: 0 0 10px var(--color-secondary), 0 0 20px var(--color-accent); }
+  100% { box-shadow: 0 0 20px var(--color-primary), 0 0 30px var(--color-secondary); }
 }
 
-function nextItem() {
-  state.currentLightboxIndex =
-    (state.currentLightboxIndex + 1) % state.currentLightboxItems.length;
-  openLightbox(
-    state.currentLightboxItems[state.currentLightboxIndex],
-    state.currentLightboxIndex
-  );
+/* ------------------ Header ------------------ */
+.site-header {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 1rem 3vw;
+  background: rgba(255, 250, 251, 0.95); /* Increased opacity */
+  backdrop-filter: blur(15px); /* Increased blur */
+  box-shadow: var(--shadow-light); /* Use defined shadow */
+  z-index: 1000;
+  transition: transform var(--transition-slow), opacity var(--transition-slow), padding var(--transition-fast);
+}
+.site-header.hide { transform: translateY(-100%); opacity: 0; }
+
+/* New: Header Scroll Effect */
+.site-header.scrolled {
+  padding: 0.8rem 3vw;
+  box-shadow: var(--shadow-medium);
 }
 
-function prevItem() {
-  state.currentLightboxIndex =
-    (state.currentLightboxIndex - 1 + state.currentLightboxItems.length) %
-    state.currentLightboxItems.length;
-  openLightbox(
-    state.currentLightboxItems[state.currentLightboxIndex],
-    state.currentLightboxIndex
-  );
+.logo {
+  font-size: 1.8rem;
+  font-family: var(--font-script);
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color var(--transition-fast), transform var(--transition-fast);
+}
+.logo:hover {
+  color: var(--color-secondary);
+  transform: scale(1.05) rotate(-2deg); /* Subtle spin */
 }
 
-// ------------------ UI: Mobile Gallery Switch ------------------
-function switchGallery(targetId) {
-  // Note: 'videos-grid' is now the expected default/first
-  const isVideos = targetId === "videos-grid";
+.main-nav a {
+  color: var(--color-text-light); /* Changed to text-light for better contrast */
+  text-decoration: none;
+  margin-left: 20px;
+  font-weight: 600;
+  font-family: var(--font-body);
+  position: relative;
+  transition: color 0.3s ease, transform 0.2s ease; /* Added transform */
+  padding: 5px 0;
+}
+.main-nav a:hover {
+  color: var(--color-secondary);
+  transform: translateY(-2px);
+}
+.main-nav a::after {
+  content: '';
+  position: absolute;
+  width: 0; height: 2px;
+  background: var(--gradient-rose); /* Used rose gradient */
+  left: 0; bottom: -5px;
+  transition: width var(--transition-fast);
+}
+.main-nav a:hover::after { width: 100%; }
 
-  // Toggle active class on the grid containers based on the target (CRITICAL FOR MOBILE CSS)
-  elements.videosGrid.classList.toggle("active", isVideos);
-  elements.photosGrid.classList.toggle("active", !isVideos);
-
-  // Pause all videos when switching away from the videos grid
-  if (!isVideos && videoObserver) {
-    document.querySelectorAll("#videos-grid video").forEach((v) => {
-      v.pause();
-      v.currentTime = 0;
-    });
-  }
-
-  // Toggle active class on the mobile buttons
-  elements.galleryToggleButtons.forEach((b) =>
-    b.classList.toggle("active", b.dataset.target === targetId)
-  );
-
-  // Set the source data for the lightbox navigation
-  state.currentLightboxItems = isVideos ? siteConfig.videos : siteConfig.photos;
+/* ------------------ Music Button ------------------ */
+.music-btn {
+  background: none;
+  border: 2px solid var(--color-primary);
+  border-radius: 50%;
+  width: 42px; height: 42px;
+  font-size: 1rem;
+  cursor: pointer;
+  color: var(--color-primary);
+  transition: all var(--transition-fast);
+  display: flex; justify-content: center; align-items: center;
+}
+.music-btn:hover {
+  background: var(--gradient-hover); /* Use new hover gradient */
+  color: var(--color-background-dark);
+  transform: scale(1.1);
+  box-shadow: var(--shadow-glow);
+}
+.music-btn.playing {
+  background: var(--color-secondary);
+  border-color: var(--color-secondary);
+  color: var(--color-background-light);
+  animation: pulse 1.5s infinite, rotate 3s linear infinite; /* Added subtle rotate */
+}
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(247,183,199,0.6); }
+  70% { box-shadow: 0 0 0 14px rgba(247,183,199,0); }
+  100% { box-shadow: 0 0 0 0 rgba(247,183,199,0); }
+}
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
-// ------------------ Custom Cursor ------------------
-function handleCursor(e) {
-  if (state.reducedMotion || window.innerWidth <= 768) {
-    return;
-  }
-  // Smooth movement by translating the cursor to the mouse position
-  elements.customCursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -50%)`;
 
-  // Check if the element being hovered is interactive
-  const isHoverable = e.target.closest("a, button, .gallery-item");
-  elements.customCursor.classList.toggle("hover", isHoverable);
+/* ------------------ Hero Section ------------------ */
+.hero-section {
+  position: relative;
+  height: 100vh;
+  display: flex; justify-content: center; align-items: center;
+  text-align: center;
+  color: var(--color-background-light);
+  overflow: hidden;
+}
+.hero-bg-image {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 110%;
+  background-size: cover;
+  background-position: center 30%;
+  filter: brightness(0.5) saturate(1.2) contrast(1.1); /* Enhanced filter */
+  transform: scale(1.1);
+  transition: background-image 1s ease, filter 0.8s ease;
+}
+/* New: Dark overlay for text readability */
+.hero-bg-image::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: linear-gradient(to top, rgba(26,26,26,0.4) 0%, rgba(26,26,26,0) 50%, rgba(26,26,26,0.6) 100%);
+}
+.hero-content {
+  position: relative;
+  z-index: 5;
+  padding: 1rem;
+  animation: fadeInDown 1s var(--transition-medium) forwards; /* Intro animation */
+  opacity: 0;
+}
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.hero-title {
+  color: var(--color-background-light);
+  margin-bottom: 0.5rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+.hero-subtitle {
+  font-size: clamp(1.2rem, 2vw, 1.6rem);
+  font-family: var(--font-script);
+  font-weight: 400;
+  max-width: 650px;
+  margin: 0 auto 3rem;
+  text-shadow: 1px 1px 6px rgba(0,0,0,0.8); /* Stronger shadow */
+  color: var(--color-secondary);
+  animation: fadeIn 1.5s 0.5s forwards;
+  opacity: 0;
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
-// ------------------ Event Listeners & Init ------------------
-function initEvents() {
-  // Gallery controls for mobile
-  elements.galleryToggleButtons.forEach((btn) => {
-    btn.addEventListener("click", (e) =>
-      switchGallery(e.target.dataset.target)
-    );
-  });
+/* New: Scroll Indicator */
+.scroll-indicator {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 35px;
+  border: 2px solid var(--color-text-dark);
+  border-radius: 20px;
+  z-index: 5;
+  opacity: 0.8;
+}
+.scroll-indicator::after {
+  content: '';
+  position: absolute;
+  top: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  background: var(--color-secondary);
+  border-radius: 50%;
+  animation: scroll-mouse 1.5s infinite;
+}
+@keyframes scroll-mouse {
+  0% { transform: translate(-50%, 0); opacity: 1; }
+  100% { transform: translate(-50%, 15px); opacity: 0; }
+}
 
-  // Music control
-  elements.musicBtn.addEventListener("click", toggleMusic);
-
-  // Smooth scroll to gallery from CTA button
-  elements.scrollBtn.addEventListener("click", () => {
-    // Scroll to the videos-gallery section, which is now the first content section
-    document
-      .getElementById("videos-gallery") // Changed to target videos-gallery
-      .scrollIntoView({ behavior: "smooth" });
-  });
-
-  // Header & Parallax
-  window.addEventListener("scroll", handleHeaderScroll);
-  window.addEventListener("scroll", handleParallax);
-
-  // Lightbox controls
-  elements.lightboxClose.addEventListener("click", closeLightbox);
-  elements.nextBtn.addEventListener("click", nextItem);
-  elements.prevBtn.addEventListener("click", prevItem);
-
-  // Close lightbox when clicking the backdrop
-  elements.lightbox.addEventListener("click", (e) => {
-    if (e.target === elements.lightbox) closeLightbox();
-  });
-
-  // Keyboard navigation for lightbox
-  document.addEventListener("keydown", (e) => {
-    if (!elements.lightbox.classList.contains("is-open")) return;
-    if (e.key === "Escape") closeLightbox();
-    if (e.key === "ArrowRight") nextItem();
-    if (e.key === "ArrowLeft") prevItem();
-  });
-
-  // Open lightbox from gallery
-  document.addEventListener("click", (e) => {
-    const itemEl = e.target.closest(".gallery-item");
-    if (itemEl) {
-      const itemSrc = itemEl.dataset.src;
-      const itemType = itemEl.dataset.type;
-
-      // Determine the full list of items for navigation
-      const currentItems =
-        itemType === "video" ? siteConfig.videos : siteConfig.photos;
-
-      // Find the index of the clicked item using the full path
-      const itemIndex = currentItems.findIndex(
-        (item) => getAssetPath(item.src) === itemSrc
-      );
-
-      const itemData = getGalleryItemData(e.target);
-      if (itemData) {
-        state.currentLightboxItems = currentItems;
-        openLightbox(itemData, itemIndex);
-      }
-    }
-  });
-
-  // Initialize music state on interaction
-  if (state.isMusicPlaying) {
-    // The play() call is a suggestion; actual playback requires user interaction
-    // but we'll try to play if a user setting persists.
-    elements.bgMusic
-      .play()
-      .catch((e) => console.error("Autoplay was prevented:", e));
-    elements.musicBtn.classList.add("playing");
-    elements.musicIcon.textContent = "🔊";
-  }
-
-  // Initial gallery display for mobile (now defaulting to videos-grid)
-  if (window.innerWidth <= 768) {
-    switchGallery("videos-grid");
-  }
-
-  // Custom cursor for desktop
-  if (window.innerWidth > 768) {
-    document.addEventListener("mousemove", handleCursor);
-    document.body.style.cursor = "none";
+/* ------------------ Call To Action Button ------------------ */
+.cta-button {
+  background: var(--gradient-rose);
+  color: var(--color-background-light);
+  border: none;
+  padding: 16px 40px; /* Slightly larger */
+  font-size: 1.15rem;
+  font-weight: 700;
+  border-radius: 50px;
+  cursor: pointer;
+  font-family: var(--font-body);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 15px rgba(176,114,109,0.3);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-medium);
+  position: relative;
+  overflow: hidden; /* For ripple effect */
+}
+.cta-button:hover {
+  transform: scale(1.08) translateY(-3px); /* Pronounced lift */
+  box-shadow: 0 8px 25px rgba(176,114,109,0.45);
+  background: var(--gradient-hover); /* New gradient on hover */
+}
+/* New: Subtle Ripple Effect (Requires JS) */
+.cta-button .ripple {
+  position: absolute;
+  border-radius: 50%;
+  transform: scale(0);
+  animation: ripple-effect 0.6s linear;
+  background-color: rgba(255, 255, 255, 0.7);
+}
+@keyframes ripple-effect {
+  to {
+    transform: scale(4);
+    opacity: 0;
   }
 }
 
-function initialize() {
-  preCacheAssets();
-  loadGallery();
-  window.addEventListener("load", hideLoader);
-  initEvents();
-  // Enhanced Hero Title Text
-  typeHeroTitle("Our Memory Lane");
+/* ------------------ Sparkles ------------------ */
+.hero-sparkle-container {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 4;
+}
+.hero-sparkle {
+  position: absolute;
+  background: radial-gradient(circle at center, var(--color-secondary) 0%, var(--color-accent) 50%, transparent 100%); /* Radial gradient for sparkle */
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--color-accent), 0 0 15px rgba(247,183,199,0.7);
+  opacity: 0.6;
+  animation: twinkle var(--transition-slow) infinite ease-out;
+}
+@keyframes twinkle {
+  0% { transform: translateY(0) scale(0.8); opacity: 0; }
+  20% { opacity: 1; transform: translateY(-10%) scale(1.2); }
+  80% { opacity: 1; }
+  100% { transform: translateY(-100vh) scale(0.5); opacity: 0; }
+}
+/* Diverse sparkle animations */
+.hero-sparkle:nth-child(even) { animation-duration: 4s; animation-delay: 0.5s; opacity: 0.7; }
+.hero-sparkle:nth-child(odd) { animation-duration: 3s; animation-delay: 1s; opacity: 0.5; }
 
-  if (!state.reducedMotion) {
-    // Start sparkle animation only if motion isn't reduced
-    state.sparklesInterval = setInterval(createHeroSparkle, 500);
-  }
+
+/* ------------------ Gallery Section ------------------ */
+.gallery-section { padding: 5rem 0 8rem; }
+.gallery-section.dark { background-color: var(--color-background-light); }
+.gallery-section.dark .section-title { color: var(--color-background-dark); }
+.gallery-section.dark .section-title::after { background: var(--gradient-pink); }
+
+.gallery-grid-container {
+  overflow: hidden;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Larger min-width */
+  gap: 25px; /* Increased gap */
+}
+.gallery-item {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--border-radius-base); /* Used variable */
+  box-shadow: var(--shadow-light);
+  cursor: pointer;
+  aspect-ratio: 1/1;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+  border: 3px solid transparent; /* Decorative border */
+}
+.gallery-item:hover {
+  transform: translateY(-8px) scale(1.03); /* More pronounced lift */
+  box-shadow: var(--shadow-medium), var(--shadow-glow);
+  border-color: var(--color-secondary);
+}
+.gallery-item img,
+.gallery-item video {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  opacity: 0;
+  transition: opacity var(--transition-slow), filter 0.5s ease;
+}
+.gallery-item.loaded img,
+.gallery-item.loaded video { opacity: 1; }
+.gallery-item:hover img, .gallery-item:hover video {
+  filter: brightness(1.1) saturate(1.05);
 }
 
-document.addEventListener("DOMContentLoaded", initialize);
+.video-overlay {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.4);
+  display: flex; justify-content: center; align-items: center;
+  transition: background var(--transition-fast);
+}
+.video-overlay::before {
+  content: '▶';
+  font-size: 3.5rem; /* Larger icon */
+  color: var(--color-secondary);
+  opacity: 0.8;
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
+}
+.gallery-item:hover .video-overlay { background: rgba(0,0,0,0.55); }
+.gallery-item:hover .video-overlay::before { opacity: 1; transform: scale(1.1); }
+
+/* New: Hover Caption */
+.gallery-item-caption {
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 100%;
+  background: linear-gradient(to top, rgba(26,26,26,0.8) 0%, rgba(26,26,26,0) 100%);
+  color: var(--color-text-dark);
+  padding: 15px 10px;
+  font-family: var(--font-script);
+  font-size: 1.2rem;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(100%);
+  transition: opacity var(--transition-medium), transform var(--transition-medium);
+  pointer-events: none;
+}
+.gallery-item:hover .gallery-item-caption {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+/* ------------------ About Section ------------------ */
+.about-section {
+  background-color: var(--color-background-dark);
+  color: var(--color-text-dark);
+  padding: 5rem 0 8rem; /* Increased padding */
+}
+.about-section h2 { color: var(--color-background-light); }
+.about-section .section-title { color: var(--color-background-light); }
+.about-section .section-title::after { background: var(--gradient-pink); }
+.about-content {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 60px; /* Increased gap */
+  padding: 0 3vw;
+}
+.about-text-container { flex: 1; }
+.about-text-container p {
+  font-size: 1.15rem; /* Larger text */
+  line-height: 1.9;
+  color: var(--color-text-dark);
+  font-family: var(--font-body);
+  margin-bottom: 1.2rem;
+}
+.about-image-container {
+  flex: 0 0 380px; /* Larger container */
+  max-width: 380px;
+  border-radius: var(--border-radius-base);
+  overflow: hidden;
+  box-shadow: var(--shadow-heavy);
+  position: relative;
+  border: 4px solid var(--color-secondary); /* Decorative border */
+  transition: transform var(--transition-medium), box-shadow var(--transition-medium);
+}
+.about-image-container:hover {
+  transform: scale(1.03) rotate(1deg);
+  box-shadow: 0 15px 45px rgba(0,0,0,0.5), var(--shadow-glow);
+}
+.about-image {
+  width: 100%; height: auto; display: block;
+  filter: grayscale(0.2) contrast(1.05);
+  transition: filter var(--transition-medium);
+}
+.about-image-container:hover .about-image {
+  filter: grayscale(0) contrast(1.1);
+}
+
+/* ------------------ Footer ------------------ */
+.site-footer {
+  background: var(--gradient-rose);
+  color: var(--color-background-light);
+  padding: 4rem 2rem; /* Increased padding */
+  text-align: center;
+  font-family: var(--font-body);
+  box-shadow: 0 -5px 20px rgba(0,0,0,0.2);
+  position: relative;
+  overflow: hidden;
+}
+/* New: Subtle dotted pattern on footer */
+.site-footer::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="1.5" fill="%23FFFFFF" opacity="0.1" /><circle cx="80" cy="80" r="1.5" fill="%23FFFFFF" opacity="0.1" /><circle cx="20" cy="80" r="1.5" fill="%23FFFFFF" opacity="0.1" /><circle cx="80" cy="20" r="1.5" fill="%23FFFFFF" opacity="0.1" /></svg>');
+  background-repeat: repeat;
+  background-size: 80px;
+  opacity: 0.3;
+  z-index: 0;
+}
+
+
+.footer-content {
+  max-width: 1100px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.footer-logo {
+  font-family: var(--font-script);
+  font-size: 2.2rem;
+  margin-bottom: 1.5rem;
+  display: inline-block;
+  color: var(--color-background-light);
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+}
+.footer-logo:hover { color: var(--color-accent); }
+
+.footer-links {
+  margin: 1rem 0 2rem;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 25px;
+}
+.footer-links a {
+  color: var(--color-background-light);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color var(--transition-fast), transform var(--transition-fast);
+  position: relative;
+}
+.footer-links a:hover {
+  color: var(--color-secondary);
+  transform: translateY(-2px);
+}
+.footer-links a::after { /* Underline on hover for footer links */
+  content: '';
+  position: absolute;
+  width: 0; height: 1px;
+  background: var(--color-secondary);
+  left: 0; bottom: -3px;
+  transition: width var(--transition-fast);
+}
+.footer-links a:hover::after { width: 100%; }
+
+.footer-socials {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 1.5rem;
+}
+.footer-socials a {
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  border: 2px solid var(--color-background-light);
+  color: var(--color-background-light);
+  font-size: 1.3rem;
+  transition: all var(--transition-fast);
+}
+.footer-socials a:hover {
+  background: var(--color-background-light);
+  color: var(--color-primary);
+  transform: scale(1.15) rotate(5deg);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.footer-bottom {
+  font-size: 0.95rem;
+  opacity: 0.95;
+  margin-top: 1rem;
+}
+
+
+/* ------------------ Lightbox ------------------ */
+.lightbox {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(26,26,26,0.98); /* Darker and more opaque */
+  display: flex; justify-content: center; align-items: center;
+  z-index: 9000;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity var(--transition-medium), visibility var(--transition-medium);
+}
+.lightbox.is-open { visibility: visible; opacity: 1; }
+.lightbox-stage {
+  position: relative;
+  max-width: 95vw; max-height: 95vh;
+  display: flex; flex-direction: column; align-items: center;
+  transform: scale(0.95);
+  transition: transform var(--transition-medium) cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Springy entrance */
+}
+.lightbox.is-open .lightbox-stage {
+  transform: scale(1);
+}
+.lightbox-media-container {
+  flex-grow: 1;
+  display: flex; justify-content: center; align-items: center;
+  max-width: 100%; max-height: calc(100vh - 120px);
+  padding: 10px;
+}
+#lightbox-img, #lightbox-video {
+  max-width: 100%; max-height: 100%;
+  object-fit: contain;
+  border-radius: 10px; /* Larger radius */
+  box-shadow: 0 0 30px rgba(0,0,0,0.5);
+}
+.lightbox-caption {
+  color: var(--color-secondary);
+  margin-top: 15px;
+  font-size: 1.3rem;
+  font-family: var(--font-script);
+  text-align: center;
+  max-width: 90%;
+  line-height: 1.6;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+}
+
+/* New: Lightbox Controls Polish */
+.lightbox-close,
+.lightbox-prev,
+.lightbox-next {
+  position: absolute;
+  background: rgba(0,0,0,0.6);
+  border: none;
+  color: var(--color-text-dark);
+  font-size: 2rem;
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex; justify-content: center; align-items: center;
+  z-index: 9100;
+  backdrop-filter: blur(5px);
+}
+
+/* Close button at top-right */
+.lightbox-close {
+  top: 20px;
+  right: 20px;
+  transform: none;
+  font-size: 2.2rem;
+  background: rgba(0,0,0,0.7);
+}
+.lightbox-close:hover {
+  background: var(--color-secondary);
+  color: var(--color-background-dark);
+  transform: scale(1.1);
+}
+
+/* Prev/Next */
+.lightbox-prev { left: 20px; top: 50%; transform: translateY(-50%); }
+.lightbox-next { right: 20px; top: 50%; transform: translateY(-50%); }
+.lightbox-prev:hover, .lightbox-next:hover {
+  background: var(--color-secondary);
+  color: var(--color-background-dark);
+  transform: translateY(-50%) scale(1.1);
+}
+
+/* ------------------ Responsive ------------------ */
+@media (max-width: 1024px) {
+  /* About Section Stacking */
+  .about-content {
+    flex-direction: column;
+    gap: 40px;
+    text-align: center;
+  }
+  .about-text-container p {
+    text-align: left; /* Keep body text left-aligned for readability */
+  }
+  .about-image-container {
+    flex: none; order: -1; margin-bottom: 2rem;
+    max-width: 80%;
+  }
+
+  /* Lightbox Controls Adjustment */
+  .lightbox-close { top: 10px; right: 10px; width: 40px; height: 40px; font-size: 1.8rem; }
+  .lightbox-prev, .lightbox-next {
+    top: auto; bottom: 20px;
+    width: 40px; height: 40px;
+    font-size: 1.6rem;
+    transform: none;
+  }
+  .lightbox-prev { left: 20px; }
+  .lightbox-next { right: 20px; }
+}
+
+@media (max-width: 768px) {
+  .site-header { padding: 0.8rem 5vw; }
+  .main-nav { display: none; }
+  .music-btn { margin-left: auto; } /* Push button to the right */
+
+  h1 { font-size: clamp(2rem, 8vw, 3rem); }
+
+  .gallery-grid {
+    grid-template-columns: 1fr; /* Single column on small screens */
+    gap: 15px;
+  }
+
+  /* Mobile Gallery Controls (Enhanced) */
+  .mobile-gallery-controls {
+    display: flex; justify-content: center;
+    padding: 1rem 0;
+    background: var(--color-background-light);
+    border-bottom: 1px solid #eee;
+    position: sticky; top: 0; z-index: 50;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05); /* Subtle shadow for sticky effect */
+  }
+  .gallery-toggle-btn {
+    background: none;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--color-text-light);
+    transition: all var(--transition-fast);
+    border-bottom: 2px solid transparent;
+    margin: 0 10px;
+  }
+  .gallery-toggle-btn.active {
+    color: var(--color-primary);
+    border-bottom-color: var(--color-primary);
+    transform: translateY(-2px);
+    text-shadow: 0 0 5px rgba(176,114,109,0.3);
+  }
+  /* Ensure grids are hidden/shown based on JS activation */
+  #photos-grid, #videos-grid { display: none; }
+  #photos-grid.active, #videos-grid.active { display: grid; }
+}
